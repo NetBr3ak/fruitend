@@ -1,0 +1,32 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.section-one {
+    height: 350px;
+    background-color: #1F2937;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+}
+
+.topnav {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.links-header a {
+    margin-right: 15px;
+    font-size: 18px;
+    color: #E5E7EB;
+}
+
+.logo {
+    font-size: 24px;
+    color: #F9FAF8;
+}
