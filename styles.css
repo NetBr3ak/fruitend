@@ -47,6 +47,7 @@ body {
 
 .left,
 .right {
+    font-size: 18px;
     display: flex;
     flex: 1;
     flex-direction: column;
