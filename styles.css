@@ -5,8 +5,9 @@ body {
 }
 
 .section-one {
-    background-color: #FFAF45;
-    min-height: 475px;
+    background: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), linear-gradient(#FFA732, #EF4040);
+    /* Przyciemniony gradient + gradient tła */
+    min-height: 450px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -24,7 +25,7 @@ body {
 .logo {
     font-weight: 700;
     text-decoration: none;
-    color: #FB6D48;
+    color: #000000;
 }
 
 .logo {
@@ -55,9 +56,14 @@ body {
 }
 
 .right {
-    color: #FFAF45;
+    margin-left: 10px;
+    color: #FFA732;
     font-weight: 700;
-    background-color: #FB6D48;
+    background: linear-gradient(145deg, #711DB0, #C21292);
+}
+
+.left {
+    margin-right: 10px;
 }
 
 .bold {
@@ -76,17 +82,17 @@ body {
 
 .sign-up {
     font-weight: 700;
-    color: #FFFFFF;
+    color: #FFA732;
     text-decoration: none;
     padding: 7px 30px;
     border-radius: 11px;
-    background-color: #1a1950;
+    background: linear-gradient(145deg, #711DB0, #C21292);
     align-self: flex-start;
 }
 
 .content-section-two {
-    background-color: #FFC477;
-    min-height: 425px;
+    background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), linear-gradient(#EF4040, #C21292);
+    min-height: 450px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -96,7 +102,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 5px 50px 0 25px;
+    margin: 0px 50px 0px 0px;
 }
 
 .boxes-with-description {
@@ -104,19 +110,30 @@ body {
 }
 
 .main-information {
+    color: #000000;
     margin: 30px;
     font-size: 36px;
     font-weight: 700;
 }
 
 .box {
+
     width: 150px;
     height: 150px;
-    border: 5px solid #FB6D48;
-    border-radius: 10px;
+    border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+    background: #FFC477;
     background-size: contain;
     background-position: center;
     background-repeat: no-repeat;
+}
+
+.content-section-three {
+    background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), linear-gradient(#C21292, #711DB0);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 450px;
 }
 
 .description {
@@ -125,5 +142,38 @@ body {
 }
 
 .box img {
-    border-radius: 5px;
+    border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+}
+
+.content-section-three {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.quote-signature-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 65%;
+}
+
+.quote {
+    font-size: 36px;
+    font-style: italic;
+    font-weight: 100;
+    text-align: center;
+    margin: 0;
+    background: linear-gradient(to right, #EF4040, #FFA732);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.signature {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0;
+    background: linear-gradient(to right, #EF4040, #FFA732);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
