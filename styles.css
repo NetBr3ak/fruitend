@@ -1,5 +1,5 @@
 body {
-    font-family: 'Roboto', sans-serif;
+    font-family: "Roboto", sans-serif;
     margin: 0;
     padding: 0;
 }
@@ -11,11 +11,11 @@ body {
     align-items: baseline;
 }
 
-.logo,
-.links a {
+.links a,
+.logo {
     font-weight: 700;
     text-decoration: none;
-    color: #000000;
+    color: #000;
 }
 
 .logo {
@@ -27,7 +27,7 @@ body {
     font-size: 18px;
 }
 
-[class^="sec-"] {
+[class^=sec-] {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -36,24 +36,22 @@ body {
 
 .sec-1 {
     min-height: 450px;
-    background: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), linear-gradient(#FFA732, #EF4040);
+    background: linear-gradient(rgba(0, 0, 0, .1), rgba(0, 0, 0, .1)), linear-gradient(#ffa732, #ef4040);
 }
 
 .sec-2 {
     min-height: 425px;
-    background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), linear-gradient(#EF4040, #C21292);
+    background: linear-gradient(rgba(0, 0, 0, .2), rgba(0, 0, 0, .2)), linear-gradient(#ef4040, #c21292);
 }
-
-
 
 .sec-3 {
     min-height: 400px;
-    background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), linear-gradient(#C21292, #711DB0);
+    background: linear-gradient(rgba(0, 0, 0, .3), rgba(0, 0, 0, .3)), linear-gradient(#c21292, #711db0);
 }
 
 .sec-4 {
     min-height: 375px;
-    background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), linear-gradient(#711DB0, #001A66);
+    background: linear-gradient(rgba(0, 0, 0, .4), rgba(0, 0, 0, .4)), linear-gradient(#711db0, #001a66);
 }
 
 .content-1 {
@@ -80,9 +78,9 @@ body {
 
 .right {
     margin-left: 40px;
-    color: #FFA732;
+    color: #ffa732;
     font-weight: 700;
-    background: linear-gradient(145deg, #711DB0, #C21292);
+    background: linear-gradient(145deg, #711db0, #c21292);
 }
 
 .bold {
@@ -94,17 +92,16 @@ body {
 
 .subtext {
     text-align: left;
-    margin: 0;
-    margin-bottom: 20px;
+    margin: 0 0 20px;
 }
 
 .sign-up {
     font-weight: 700;
-    color: #FFA732;
+    color: #ffa732;
     text-decoration: none;
     padding: 7px 30px;
     border-radius: 11px;
-    background: linear-gradient(145deg, #711DB0, #C21292);
+    background: linear-gradient(145deg, #711db0, #c21292);
     align-self: flex-start;
 }
 
@@ -115,34 +112,45 @@ body {
 }
 
 .box-desc {
-    display: flex;
     flex-direction: column;
-    margin: 0px 50px 0px 50px;
+    margin: 0 50px;
 }
 
+.box-desc,
 .boxes {
     display: flex;
 }
 
 .box img {
-    width: 150px;
     height: 150px;
     border-radius: 100%;
-    background: #FFC477;
-    box-shadow: 0px 0px 10px #000000;
+    background: #ffc477;
+    box-shadow: 0 0 10px #000;
 }
 
+.desc,
+footer {
+    text-align: center;
+}
+
+.box img,
 .desc {
     width: 150px;
-    text-align: center;
 }
 
 .quote {
     display: flex;
-
     flex-direction: column;
     align-items: center;
     width: 65%;
+}
+
+.author,
+.quote-text {
+    margin: 0;
+    background: linear-gradient(to right, #ef4040, #ffa732);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 .quote-text {
@@ -150,26 +158,18 @@ body {
     font-style: italic;
     font-weight: 100;
     text-align: center;
-    margin: 0;
-    background: linear-gradient(to right, #EF4040, #FFA732);
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
 }
 
 .author {
     font-size: 18px;
     font-weight: 700;
-    margin: 0;
-    background: linear-gradient(to right, #EF4040, #FFA732);
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
 }
 
 .container {
     display: flex;
     justify-content: center;
     align-items: center;
-    background: linear-gradient(145deg, #711DB0, #C21292);
+    background: linear-gradient(145deg, #711db0, #c21292);
     width: 65%;
     height: 150px;
     border-radius: 20px;
@@ -180,29 +180,31 @@ body {
     flex-direction: row;
 }
 
-.main-info-4 {
+.main-info-4,
+.sign-up-container {
     display: flex;
+    align-items: center;
+    height: 60px;
+}
+
+.main-info-4 {
     flex-direction: column;
     justify-content: center;
-    align-items: center;
     width: 600px;
-    height: 60px;
     text-align: left;
-    background: linear-gradient(to right, #EF4040, #FFA732);
+    background: linear-gradient(to right, #ef4040, #ffa732);
     background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
 .sign-up-container {
-    display: flex;
     justify-content: flex-end;
-    align-items: center;
     width: 200px;
-    height: 60px;
     text-align: right;
 }
 
-.bold-text {
+.bold-text,
+.cta-text {
     margin: 0;
     font-size: 24px;
     font-weight: 700;
@@ -210,10 +212,8 @@ body {
 }
 
 .cta-text {
-    margin: 0;
     font-size: 18px;
     font-weight: 100;
-    align-self: flex-start;
 }
 
 .sign-up-btn {
@@ -221,13 +221,81 @@ body {
     text-decoration: none;
     padding: 7px 30px;
     border-radius: 11px;
-    border: 2px solid #FFA732;
-    color: #FFA732;
+    border: 2px solid #ffa732;
+    color: #ffa732;
 }
 
 footer {
-    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), linear-gradient(#001A66, #000000);
+    background: linear-gradient(rgba(0, 0, 0, .5), rgba(0, 0, 0, .5)), linear-gradient(#001a66, #000);
     color: #fff;
     padding: 20px;
-    text-align: center;
+}
+
+/* Dodanie responsywności */
+@media only screen and (max-width: 768px) {
+    .top-nav {
+        width: 90%;
+        /* Elastyczna szerokość dla mniejszych ekranów */
+    }
+
+    .links a {
+        font-size: 16px;
+        /* Zmniejszenie rozmiaru fontu */
+    }
+
+    .logo {
+        font-size: 20px;
+        /* Zmniejszenie rozmiaru fontu */
+    }
+
+    .content-1 {
+        flex-direction: column;
+        /* Zmiana układu dla mniejszych ekranów */
+        align-items: center;
+        /* Wyśrodkowanie zawartości */
+    }
+
+    .left,
+    .right {
+        margin: 20px 0;
+        /* Zwiększenie odstępu między sekcjami */
+    }
+
+    .main-info {
+        font-size: 24px;
+        /* Zmniejszenie rozmiaru fontu */
+    }
+
+    .box-desc {
+        margin: 20px 0;
+        /* Zwiększenie odstępu między sekcjami */
+    }
+
+    .box img,
+    .desc {
+        width: 100px;
+        /* Zmniejszenie rozmiaru obrazków */
+        height: 100px;
+        /* Zmniejszenie rozmiaru obrazków */
+    }
+
+    .quote {
+        width: 90%;
+        /* Elastyczna szerokość dla mniejszych ekranów */
+    }
+
+    .container {
+        width: 90%;
+        /* Elastyczna szerokość dla mniejszych ekranów */
+    }
+
+    .main-info-4 {
+        width: 90%;
+        /* Elastyczna szerokość dla mniejszych ekranów */
+    }
+
+    .sign-up-container {
+        width: 90%;
+        /* Elastyczna szerokość dla mniejszych ekranów */
+    }
 }
