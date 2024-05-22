@@ -71,11 +71,11 @@ fruitend/
 
 The project uses the following color gradients to create a visually appealing design:
 
-- **Section 1**: Linear gradient from #ffa732 to #ef4040.
-- **Section 2**: Linear gradient from #ef4040 to #c21292.
-- **Section 3**: Linear gradient from #c21292 to #711db0. 
-- **Section 4**: Linear gradient from #711db0 to #001a66.
-- **Footer**: Linear gradient from #001a66 to black.
+- **Section 1**: Linear gradient from #ffa732 to #ef4040. ![#ffa732](https://placehold.co/15x15/ffa732/ffa732.png)![#ef4040](https://placehold.co/15x15/ef4040/ef4040.png)
+- **Section 2**: Linear gradient from #ef4040 to #c21292. ![#ef4040](https://placehold.co/15x15/ef4040/ef4040.png)![#c21292](https://placehold.co/15x15/c21292/c21292.png)
+- **Section 3**: Linear gradient from #c21292 to #711db0. ![#c21292](https://placehold.co/15x15/c21292/c21292.png)![#711db0](https://placehold.co/15x15/711db0/711db0.png)
+- **Section 4**: Linear gradient from #711db0 to #001a66. ![#711db0](https://placehold.co/15x15/711db0/711db0.png)![#001a66](https://placehold.co/15x15/001a66/001a66.png)
+- **Footer**: Linear gradient from #001a66 to #000000. ![#711db0](https://placehold.co/15x15/711db0/711db0.png)![#000000](https://placehold.co/15x15/000000/000000.png)
 
 ## 📸 Images
 
