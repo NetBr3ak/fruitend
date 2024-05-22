@@ -71,11 +71,11 @@ fruitend/
 
 The project uses the following color gradients to create a visually appealing design:
 
-- **Section 1**: Linear gradient from #ffa732 to #ef4040. 🌅
-- **Section 2**: Linear gradient from #ef4040 to #c21292. 🌞
-- **Section 3**: Linear gradient from #c21292 to #711db0. 🌥️
-- **Section 4**: Linear gradient from #711db0 to #001a66. 🌄
-- **Footer**: Linear gradient from #001a66 to black. 🌙
+- **Section 1**: Linear gradient from #ffa732 to #ef4040.
+- **Section 2**: Linear gradient from #ef4040 to #c21292.
+- **Section 3**: Linear gradient from #c21292 to #711db0. 
+- **Section 4**: Linear gradient from #711db0 to #001a66.
+- **Footer**: Linear gradient from #001a66 to black.
 
 ## 📸 Images
 
