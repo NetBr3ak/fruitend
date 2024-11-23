@@ -22,7 +22,7 @@ Follow these steps to get a copy of this project up and running on your local ma
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/your-username/fruitend.git
+   git clone https://github.com/NetBr3ak/fruitend.git
    ```
 
 2. **Navigate to the project directory**:
