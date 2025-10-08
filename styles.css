@@ -286,6 +286,11 @@ footer {
         /* Zmniejszenie rozmiaru fontu */
     }
 
+    .boxes {
+        flex-wrap: wrap;
+        /* Zawijanie elementów na mniejszych ekranach */
+    }
+
     .box-desc {
         margin: 20px 0;
         /* Zwiększenie odstępu między sekcjami */
