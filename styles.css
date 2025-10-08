@@ -233,6 +233,11 @@ footer {
     border-radius: 11px;
     border: 2px solid #ffa732;
     color: #ffa732;
+    transition: transform 0.2s ease;
+}
+
+.sign-up-btn:hover {
+    transform: scale(1.05);
 }
 
 footer {
