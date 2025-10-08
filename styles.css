@@ -49,6 +49,7 @@ body {
 
 .sec-1 {
     min-height: 450px;
+    padding: 40px 0;
     background: linear-gradient(rgba(0, 0, 0, .1), rgba(0, 0, 0, .1)), linear-gradient(#ffa732, #ef4040);
 }
 
@@ -265,7 +266,7 @@ footer {
 footer {
     background: linear-gradient(rgba(0, 0, 0, .5), rgba(0, 0, 0, .5)), linear-gradient(#001a66, #000);
     color: #fff;
-    padding: 20px;
+    padding: 60px 20px;
 }
 
 /* Dodanie responsywności */
