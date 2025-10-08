@@ -1,11 +1,13 @@
 html {
     scroll-behavior: smooth;
+    background: #000;
 }
 
 body {
     font-family: "Roboto", sans-serif;
     margin: 0;
     padding: 0;
+    background: linear-gradient(#ffa732, #ef4040, #c21292, #711db0, #001a66, #000);
 }
 
 .top-nav {
