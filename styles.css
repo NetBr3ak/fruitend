@@ -136,6 +136,11 @@ body {
     border-radius: 100%;
     background: #ffc477;
     box-shadow: 0 0 10px #000;
+    transition: transform 0.3s ease;
+}
+
+.box img:hover {
+    transform: rotate(5deg) scale(1.05);
 }
 
 .desc,
