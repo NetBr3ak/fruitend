@@ -314,6 +314,12 @@ footer {
         /* Elastyczna szerokość dla mniejszych ekranów */
     }
 
+    .text-center {
+        flex-direction: column;
+        /* Zmiana układu dla mniejszych ekranów */
+        align-items: center;
+    }
+
     .main-info-4 {
         width: 90%;
         /* Elastyczna szerokość dla mniejszych ekranów */
@@ -322,5 +328,7 @@ footer {
     .sign-up-container {
         width: 90%;
         /* Elastyczna szerokość dla mniejszych ekranów */
+        justify-content: center;
+        margin-top: 10px;
     }
 }
