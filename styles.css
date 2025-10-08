@@ -108,6 +108,11 @@ body {
     border-radius: 11px;
     background: linear-gradient(145deg, #711db0, #c21292);
     align-self: flex-start;
+    transition: transform 0.2s ease;
+}
+
+.sign-up:hover {
+    transform: scale(1.05);
 }
 
 .main-info {
