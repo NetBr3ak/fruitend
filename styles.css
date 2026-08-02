@@ -269,13 +269,11 @@ footer {
     padding: 60px 20px;
 }
 
-/* Dodanie responsywności */
 @media only screen and (max-width: 768px) {
     .top-nav {
         width: 90%;
         flex-direction: column;
         align-items: center;
-        /* Elastyczna szerokość dla mniejszych ekranów */
     }
 
     .links {
@@ -285,74 +283,59 @@ footer {
     .links a {
         font-size: 16px;
         margin: 0 8px;
-        /* Zmniejszenie rozmiaru fontu */
     }
 
     .logo {
         font-size: 20px;
-        /* Zmniejszenie rozmiaru fontu */
     }
 
     .content-1 {
         flex-direction: column;
-        /* Zmiana układu dla mniejszych ekranów */
         align-items: center;
-        /* Wyśrodkowanie zawartości */
     }
 
     .left,
     .right {
         margin: 20px 0;
-        /* Zwiększenie odstępu między sekcjami */
     }
 
     .main-info {
         font-size: 24px;
-        /* Zmniejszenie rozmiaru fontu */
     }
 
     .boxes {
         flex-wrap: wrap;
-        /* Zawijanie elementów na mniejszych ekranach */
     }
 
     .box-desc {
         margin: 20px 0;
-        /* Zwiększenie odstępu między sekcjami */
     }
 
     .box img,
     .desc {
         width: 100px;
-        /* Zmniejszenie rozmiaru obrazków */
         height: 100px;
-        /* Zmniejszenie rozmiaru obrazków */
     }
 
     .quote {
         width: 90%;
-        /* Elastyczna szerokość dla mniejszych ekranów */
     }
 
     .container {
         width: 90%;
-        /* Elastyczna szerokość dla mniejszych ekranów */
     }
 
     .text-center {
         flex-direction: column;
-        /* Zmiana układu dla mniejszych ekranów */
         align-items: center;
     }
 
     .main-info-4 {
         width: 90%;
-        /* Elastyczna szerokość dla mniejszych ekranów */
     }
 
     .sign-up-container {
         width: 90%;
-        /* Elastyczna szerokość dla mniejszych ekranów */
         justify-content: center;
         margin-top: 10px;
     }

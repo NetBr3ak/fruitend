@@ -11,7 +11,3 @@ If you discover a potential security issue, please report it to us as soon as po
 Once we receive your report, we will investigate the issue and work to promptly release a fix. We appreciate your help in keeping **Fruitend** secure for everyone.
 
 Thank you!
-
----
-
-Please note that this project is released with a [Contributor Code of Conduct](CODE_OF_CONDUCT.md). By participating in this project, you agree to abide by its terms.
