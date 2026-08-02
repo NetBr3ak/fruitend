@@ -1,46 +1,56 @@
 # 🍎 Fruitend
 
-A vibrant, fruit-themed website with colorful gradients and engaging content.
+Read this in: **English** | [Polski](README.pl.md)
+
+A fruit-themed demo landing page. It shows colorful gradients and a simple layout.
+
+## What this is
+
+Fruitend is a static demo page. It is not a real product. The nav links and the "Sign Up" buttons do not go anywhere. Each one shows a popup message instead. This is a template for practicing layout and styling.
 
 ## Features
 
-- Responsive design for all devices
+- Works on phones, tablets, and desktops
 - Colorful gradient backgrounds
-- Smooth animations and hover effects
-- Interactive navigation
+- Hover animations on links, buttons, and images
+- Smooth scroll behavior
 
-## Getting Started
+## Getting started
 
-Clone the repository and open `index.html` in your browser:
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/NetBr3ak/fruitend.git
+   cd fruitend
+   ```
+2. Open `index.html` in any modern browser.
 
-```bash
-git clone https://github.com/NetBr3ak/fruitend.git
-cd fruitend
-```
+No build step. No dependencies. No install command needed.
 
-Then just open `index.html` in any modern browser.
-
-## Project Structure
+## Project structure
 
 ```
 fruitend/
-├── images/          # Fruit images
+├── images/          # Fruit photos used on the page
 ├── styles.css       # All styling
-├── script.js        # Click handlers
+├── script.js        # Click handlers for the demo links
 ├── index.html       # Main page
 └── README.md
 ```
 
-## Built With
+## Built with
 
 - HTML5
-- CSS3 (with gradient backgrounds)
-- Vanilla JavaScript
+- CSS3 (gradient backgrounds)
+- Vanilla JavaScript (no framework, no build tool)
 
 ## Contributing
 
-Feel free to open a pull request or issue if you have suggestions.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for how to open a pull request or an issue.
+
+## Security
+
+See [SECURITY.md](SECURITY.md) for how to report a security issue.
 
 ## License
 
-MIT License
+This project uses the MIT License. See [LICENSE](LICENSE) for the full text.

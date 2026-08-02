@@ -1,0 +1,56 @@
+# 🍎 Fruitend
+
+Czytaj w: [English](README.md) | **Polski**
+
+Strona demo w owocowym motywie. Ma kolorowe gradienty i prosty układ.
+
+## Czym to jest
+
+Fruitend to statyczna strona demo. To nie jest prawdziwy produkt. Linki w menu i przyciski "Sign Up" nigdzie nie prowadzą. Każdy z nich pokazuje tylko okienko z komunikatem. To szablon do ćwiczenia układu strony i stylowania.
+
+## Funkcje
+
+- Działa na telefonach, tabletach i komputerach
+- Kolorowe tła z gradientem
+- Animacje po najechaniu na linki, przyciski i zdjęcia
+- Płynne przewijanie strony
+
+## Jak zacząć
+
+1. Sklonuj repozytorium:
+   ```bash
+   git clone https://github.com/NetBr3ak/fruitend.git
+   cd fruitend
+   ```
+2. Otwórz plik `index.html` w dowolnej nowoczesnej przeglądarce.
+
+Nie trzeba niczego budować. Nie ma żadnych zależności. Nie trzeba nic instalować.
+
+## Struktura projektu
+
+```
+fruitend/
+├── images/          # Zdjęcia owoców użyte na stronie
+├── styles.css       # Cały styl strony
+├── script.js        # Obsługa kliknięć w linki demo
+├── index.html       # Strona główna
+└── README.md
+```
+
+## Zbudowano w
+
+- HTML5
+- CSS3 (tła z gradientem)
+- Czysty JavaScript (bez frameworka, bez narzędzi budujących)
+
+## Współpraca
+
+Zobacz [CONTRIBUTING.md](CONTRIBUTING.md), jak zgłosić pull request lub issue (plik po angielsku).
+
+## Bezpieczeństwo
+
+Zobacz [SECURITY.md](SECURITY.md), jak zgłosić problem z bezpieczeństwem (plik po angielsku).
+
+## Licencja
+
+Projekt jest na licencji MIT. Pełny tekst jest w pliku [LICENSE](LICENSE) (po angielsku).
