@@ -1,21 +1,65 @@
-// Demo page: nav/CTA links have no real destination, so clicks show an alert instead.
+// Demo page: nothing here has a real destination, so clicks report that in a toast.
 document.addEventListener('DOMContentLoaded', function () {
-	document.querySelectorAll('.links a').forEach(link => {
+	let node, timer;
+
+	function toast(message) {
+		if (!node) {
+			node = document.createElement('div');
+			node.className = 'toast';
+			node.setAttribute('role', 'status');
+			node.setAttribute('aria-live', 'polite');
+		}
+		// Dismissing detaches the node without clearing this reference, so re-attach it
+		// rather than trusting that it is still in the document.
+		if (!node.isConnected) document.body.appendChild(node);
+		node.textContent = message;
+		clearTimeout(timer);
+		timer = setTimeout(() => node.remove(), 2600);
+	}
+
+	document.addEventListener('keydown', e => {
+		if (e.key === 'Escape' && node) {
+			clearTimeout(timer);
+			node.remove();
+		}
+	});
+
+	document.querySelectorAll('.bar-links a, .ghost-link').forEach(link => {
 		link.addEventListener('click', function (e) {
 			e.preventDefault();
-			alert(`You clicked: ${this.textContent}\nThis is just a template link!`);
+			toast(`"${this.textContent.trim()}" is a demo link, it goes nowhere.`);
 		});
 	});
 
-	document.querySelectorAll('.sign-up, .sign-up-btn').forEach(button => {
+	document.querySelectorAll('.pill-ink, .press').forEach(button => {
 		button.addEventListener('click', function (e) {
 			e.preventDefault();
-			alert('Sign Up clicked!\nThis would take you to a registration page.');
+			toast('Sign up is a demo, nothing was sent.');
 		});
 	});
 
-	document.querySelector('.logo')?.addEventListener('click', function (e) {
+	document.querySelector('.wordmark')?.addEventListener('click', function (e) {
 		e.preventDefault();
-		alert('Home link clicked!\nThis would refresh the page or go to homepage.');
+		window.scrollTo({ top: 0 });
 	});
+
+	const bar = document.querySelector('.bar');
+	addEventListener('scroll', () => bar.classList.toggle('compact', scrollY > 80), { passive: true });
+
+	const reveal = document.querySelectorAll('[data-reveal]');
+
+	if ('IntersectionObserver' in window && reveal.length) {
+		const seen = new IntersectionObserver((entries, obs) => {
+			entries.forEach(entry => {
+				if (!entry.isIntersecting) return;
+				entry.target.classList.add('in');
+				obs.unobserve(entry.target);
+			});
+		}, { rootMargin: '0px 0px -12% 0px' });
+
+		// The hiding class goes on only once the observer exists, so a script failure
+		// anywhere above this line leaves the content visible instead of blank.
+		document.documentElement.classList.add('js');
+		reveal.forEach(el => seen.observe(el));
+	}
 });

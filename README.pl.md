@@ -2,17 +2,18 @@
 
 Czytaj w: [English](README.md) | **Polski**
 
-Strona demo w owocowym motywie. Ma kolorowe gradienty i prosty układ.
+Strona demo w owocowym motywie. Prowadzi przez sześć bloków w płaskich kolorach, od południa do północy.
 
 ## Czym to jest
 
-Fruitend to statyczna strona demo. To nie jest prawdziwy produkt. Linki w menu i przyciski "Sign Up" nigdzie nie prowadzą. Każdy z nich pokazuje tylko okienko z komunikatem. To szablon do ćwiczenia układu strony i stylowania.
+Fruitend to statyczna strona demo. To nie jest prawdziwy produkt. Linki w menu i przyciski "Sign Up" nigdzie nie prowadzą. Każdy z nich pokazuje tylko krótki komunikat na dole ekranu. To szablon do ćwiczenia układu strony i stylowania.
 
 ## Funkcje
 
 - Działa na telefonach, tabletach i komputerach
-- Kolorowe tła z gradientem
-- Animacje po najechaniu na linki, przyciski i zdjęcia
+- Sześć bloków w płaskich kolorach, od południa do północy
+- Plaster cytrusa narysowany w CSS, bez pliku graficznego
+- Animacje pojawiania się i najechania, wyłączane przy ustawieniu ograniczonego ruchu
 - Płynne przewijanie strony
 
 ## Jak zacząć
@@ -45,7 +46,7 @@ fruitend/
 ## Zbudowano w
 
 - HTML5
-- CSS3 (tła z gradientem)
+- CSS3 (płaskie bloki kolorów, plaster cytrusa narysowany w CSS)
 - Czysty JavaScript (bez frameworka, bez narzędzi budujących)
 
 ## Współpraca

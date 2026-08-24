@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta name="description"
-        content="Fruitend is a static demo landing page on a fruit theme: gradient sections, four fruit cards, and buttons that only show a popup.">
+        content="Fruitend is a static demo landing page on a fruit theme: six flat color blocks, four fruit photos, and buttons that only show a message.">
 
     <title>Fruitend - a fruit-themed demo landing page</title>
     <link href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍎</text></svg>"
@@ -14,110 +14,147 @@
     <link href="styles.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com" rel="preconnect">
     <link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&family=Hanken+Grotesk:wght@300..900&family=Martian+Mono:wdth,wght@75..112,300..800&display=swap"
+        rel="stylesheet">
 </head>
 
 <body>
-    <main>
-        <section class="sec-1">
-            <nav aria-label="Main" class="top-nav">
-                <a class="logo" href="#">Fruitend 🍎</a>
+    <a class="skip-link" href="#main">Skip to content</a>
 
-                <div class="links">
-                    <a href="#">Fruits</a> <a href="#">About</a> <a href="#">Sign up</a>
+    <header class="bar" id="top">
+        <nav aria-label="Main" class="bar-inner">
+            <a class="wordmark" href="#">
+                <svg aria-hidden="true" class="mark" focusable="false" viewBox="0 0 24 24">
+                    <path d="M12 7.6C10.3 6.2 8.4 6 6.8 7.1 4.3 8.7 3.4 12.3 4.9 15.9c1 2.5 2.6 4.4 4.3 4.4.9 0 1.4-.4 2.8-.4s1.9.4 2.8.4c1.7 0 3.3-1.9 4.3-4.4 1.5-3.6.6-7.2-1.9-8.8-1.6-1.1-3.5-.9-5.2.5Z"
+                        fill="currentColor" />
+                    <path d="M12 7.6c.1-1.9 1.4-3.4 3.2-3.9" fill="none" stroke="currentColor" stroke-linecap="round"
+                        stroke-width="1.7" />
+                </svg>
+                Fruitend
+            </a>
+
+            <ul class="bar-links">
+                <li><a href="#">Fruits</a></li>
+                <li><a href="#">About</a></li>
+            </ul>
+
+            <a class="pill-ink" href="#">Sign up</a>
+        </nav>
+    </header>
+
+    <main id="main">
+        <section class="hero">
+            <div class="wrap hero-grid">
+                <div class="hero-copy">
+                    <h1 class="hero-title">
+                        <span class="line">This site</span>
+                        <span class="line">is</span>
+                        <span class="line juicy">Juicy</span>
+                    </h1>
+
+                    <p class="lead">One page, four fruits, and a color run that goes from noon to midnight.</p>
+
+                    <div class="hero-actions">
+                        <a class="pill-ink big" href="#">Sign up</a>
+                        <a class="ghost-link" href="#">See the fruits</a>
+                    </div>
                 </div>
-            </nav>
 
-
-            <div class="content-1">
-                <div class="left">
-                    <h1 class="bold">This Site is Juicy!</h1>
-
-
-                    <p class="subtext">One page, four fruits, and a gradient that runs from noon to midnight. Every
-                        button here is a demo.</p>
-                    <a class="sign-up" href="#">Sign Up</a>
+                <div class="hero-disc">
+                    <span aria-hidden="true" class="citrus"></span>
                 </div>
             </div>
         </section>
 
+        <div class="ticker">
+            <div class="ticker-track">
+                <p class="ticker-run">Kiwi &middot; Pineapple &middot; Strawberries &middot; Blueberries &middot; Every
+                    button here is a demo &middot;</p>
+                <p aria-hidden="true" class="ticker-run">Kiwi &middot; Pineapple &middot; Strawberries &middot;
+                    Blueberries &middot; Every button here is a demo &middot;</p>
+                <p aria-hidden="true" class="ticker-run">Kiwi &middot; Pineapple &middot; Strawberries &middot;
+                    Blueberries &middot; Every button here is a demo &middot;</p>
+                <p aria-hidden="true" class="ticker-run">Kiwi &middot; Pineapple &middot; Strawberries &middot;
+                    Blueberries &middot; Every button here is a demo &middot;</p>
+            </div>
+        </div>
 
-        <section class="sec-2">
-            <h2 class="main-info">Today's four fruits</h2>
+        <section class="fruits">
+            <div class="wrap">
+                <h2 class="fruits-title" data-reveal>Today&rsquo;s <span class="numeral">4</span> fruits</h2>
 
-
-            <div class="boxes">
-                <div class="box-desc">
-                    <div class="box"><img alt="Kiwi slices" decoding="async" height="150" loading="lazy"
-                            src="images/kiwi_slices.jpg" width="150">
-                    </div>
-
-
-                    <p class="desc">Kiwi: tart, green, full of seeds</p>
-                </div>
-
-
-                <div class="box-desc">
-                    <div class="box"><img alt="Pineapple slices" decoding="async" height="150" loading="lazy"
-                            src="images/pineapple_slices.jpg" width="150">
-                    </div>
-
-
-                    <p class="desc">Pineapple: sweet, sharp, sticky</p>
-                </div>
-
-
-                <div class="box-desc">
-                    <div class="box"><img alt="Strawberries" decoding="async" height="150" loading="lazy"
+                <div class="bento">
+                    <article class="blk blk-tall" data-reveal style="--i:0">
+                        <img alt="Strawberries" class="sticker rot-a" decoding="async" height="150" loading="lazy"
                             src="images/strawberries.jpg" width="150">
-                    </div>
+                        <h3>Strawberries</h3>
+                        <p>The first of summer. Gone in a weekend, every year.</p>
+                    </article>
 
+                    <article class="blk blk-kiwi" data-reveal style="--i:1">
+                        <img alt="Kiwi slices" class="sticker rot-b" decoding="async" height="150" loading="lazy"
+                            src="images/kiwi_slices.jpg" width="150">
+                        <h3>Kiwi</h3>
+                        <p>Tart, green, full of seeds.</p>
+                    </article>
 
-                    <p class="desc">Strawberries: the first of summer</p>
-                </div>
+                    <article class="blk blk-lemon" data-reveal style="--i:2">
+                        <img alt="Pineapple slices" class="sticker rot-c" decoding="async" height="150" loading="lazy"
+                            src="images/pineapple_slices.jpg" width="150">
+                        <h3>Pineapple</h3>
+                        <p>Sweet, sharp, sticky.</p>
+                    </article>
 
-
-                <div class="box-desc">
-                    <div class="box"><img alt="Blueberries" decoding="async" height="150" loading="lazy"
+                    <article class="blk blk-wide" data-reveal style="--i:3">
+                        <img alt="Blueberries" class="sticker rot-d" decoding="async" height="150" loading="lazy"
                             src="images/blueberries.jpg" width="150">
-                    </div>
-
-
-                    <p class="desc">Blueberries: gone by the handful</p>
+                        <div>
+                            <h3>Blueberries</h3>
+                            <p>Gone by the handful, straight out of the box.</p>
+                        </div>
+                    </article>
                 </div>
             </div>
         </section>
 
+        <section class="files">
+            <div class="wrap files-grid">
+                <h2 class="files-title" data-reveal>Three files. No framework, no build step, nothing to install.</h2>
 
-        <section class="sec-3">
-            <div class="quote">
-                <p class="quote-text">Three files. No framework, no build step, nothing to install.</p>
+                <ol class="chips" data-reveal>
+                    <li>index.html</li>
+                    <li>styles.css</li>
+                    <li>script.js</li>
+                </ol>
             </div>
         </section>
 
+        <section class="cta">
+            <div class="wrap cta-grid">
+                <h2 class="cta-title" data-reveal>Sign up for the fruit list</h2>
 
-        <section class="sec-4">
-            <div class="container">
-                <div class="text-center">
-                    <div class="main-info-4">
-                        <h2 class="bold-text">Sign up for the fruit list</h2>
-
-
-                        <p class="cta-text">One email a week, all fruit. The button is a demo, so nothing is sent.</p>
-                    </div>
-
-
-                    <div class="sign-up-container">
-                        <a class="sign-up-btn" href="#">Sign Up</a>
-                    </div>
+                <div class="cta-side" data-reveal>
+                    <a aria-describedby="cta-note" class="press" href="#">Sign up</a>
+                    <p class="note" id="cta-note">The button is a demo, nothing is sent.</p>
                 </div>
             </div>
         </section>
     </main>
 
-
     <footer>
-        <p>&copy; Fruitend 2026</p>
+        <div class="wrap foot-grid">
+            <ul class="foot-links">
+                <li><a href="https://github.com/NetBr3ak/fruitend">GitHub repository</a></li>
+                <li><a href="README.pl.md">README po polsku</a></li>
+                <li><a href="LICENSE">MIT license</a></li>
+            </ul>
+
+            <p class="foot-copy">&copy; Fruitend 2026</p>
+        </div>
+
+        <div class="foot-mark">
+            <span aria-hidden="true">Fruitend</span>
+        </div>
     </footer>
 
     <script src="script.js"></script>

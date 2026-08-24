@@ -2,17 +2,18 @@
 
 Read this in: **English** | [Polski](README.pl.md)
 
-A fruit-themed demo landing page. It shows colorful gradients and a simple layout.
+A fruit-themed demo landing page. It runs through six flat color blocks, from noon to midnight.
 
 ## What this is
 
-Fruitend is a static demo page. It is not a real product. The nav links and the "Sign Up" buttons do not go anywhere. Each one shows a popup message instead. This is a template for practicing layout and styling.
+Fruitend is a static demo page. It is not a real product. The nav links and the "Sign Up" buttons do not go anywhere. Each one shows a short message at the bottom of the screen instead. This is a template for practicing layout and styling.
 
 ## Features
 
 - Works on phones, tablets, and desktops
-- Colorful gradient backgrounds
-- Hover animations on links, buttons, and images
+- Six flat color blocks that run from noon to midnight
+- A citrus slice drawn in CSS, no image file
+- Reveal and hover animations that stop when the system asks for reduced motion
 - Smooth scroll behavior
 
 ## Getting started
@@ -45,7 +46,7 @@ fruitend/
 ## Built with
 
 - HTML5
-- CSS3 (gradient backgrounds)
+- CSS3 (flat color blocks, CSS-drawn citrus slice)
 - Vanilla JavaScript (no framework, no build tool)
 
 ## Contributing
