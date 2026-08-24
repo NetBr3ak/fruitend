@@ -30,11 +30,16 @@ No build step. No dependencies. No install command needed.
 
 ```
 fruitend/
+├── .github/         # Issue templates
 ├── images/          # Fruit photos used on the page
+├── index.html       # Main page
 ├── styles.css       # All styling
 ├── script.js        # Click handlers for the demo links
-├── index.html       # Main page
-└── README.md
+├── CONTRIBUTING.md  # How to open a pull request or an issue
+├── SECURITY.md      # How to report a security issue
+├── LICENSE          # Full MIT license text
+├── README.md
+└── README.pl.md     # Polish version of this file
 ```
 
 ## Built with

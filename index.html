@@ -6,9 +6,11 @@
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta name="description"
-        content="Fruitend - A vibrant, fruit-themed website with colorful visuals and engaging content">
+        content="Fruitend is a static demo landing page on a fruit theme: gradient sections, four fruit cards, and buttons that only show a popup.">
 
-    <title>Fruitend</title>
+    <title>Fruitend - a fruit-themed demo landing page</title>
+    <link href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍎</text></svg>"
+        rel="icon">
     <link href="styles.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com" rel="preconnect">
     <link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
@@ -16,114 +18,106 @@
 </head>
 
 <body>
-    <div class="sec-1">
-        <div class="top-nav">
-            <a class="logo" href="#">Fruitend 🍎</a>
+    <main>
+        <section class="sec-1">
+            <nav aria-label="Main" class="top-nav">
+                <a class="logo" href="#">Fruitend 🍎</a>
 
-            <div class="links">
-                <a href="#">Apple Alpha Link</a> <a href="#">Berry Beta Link</a> <a href="#">Grape Gamma Link</a>
-            </div>
-        </div>
-
-
-        <div class="content-1">
-            <div class="left">
-                <h1 class="bold">This Site is Juicy!</h1>
+                <div class="links">
+                    <a href="#">Fruits</a> <a href="#">About</a> <a href="#">Sign up</a>
+                </div>
+            </nav>
 
 
-                <p class="subtext">Down the juicy road of our main title, you'll stumble upon some quirky subtext, a tad
-                    smaller but bursting with flavor! And hey, don't miss the berry button just below</p>
-                <a class="sign-up" href="#">Sign Up</a>
-            </div>
+            <div class="content-1">
+                <div class="left">
+                    <h1 class="bold">This Site is Juicy!</h1>
 
 
-            <div class="right">
-                <div>
-                    This is a placeholder for an image
+                    <p class="subtext">One page, four fruits, and a gradient that runs from noon to midnight. Every
+                        button here is a demo.</p>
+                    <a class="sign-up" href="#">Sign Up</a>
                 </div>
             </div>
-        </div>
-    </div>
+        </section>
 
 
-    <div class="sec-2">
-        <p class="main-info">Look at that Fruitend!</p>
+        <section class="sec-2">
+            <h2 class="main-info">Today's four fruits</h2>
 
 
-        <div class="boxes">
-            <div class="box-desc">
-                <div class="box"><img alt="kiwi slices" src="images/kiwi_slices.jpg">
-                </div>
+            <div class="boxes">
+                <div class="box-desc">
+                    <div class="box"><img alt="Kiwi slices" decoding="async" height="150" loading="lazy"
+                            src="images/kiwi_slices.jpg" width="150">
+                    </div>
 
 
-                <p class="desc">Below each fruity box, text awaits, as inviting as the fresh kiwi, ready for discovery
-                </p>
-            </div>
-
-
-            <div class="box-desc">
-                <div class="box"><img alt="pineapple slices" src="images/pineapple_slices.jpg">
+                    <p class="desc">Kiwi: tart, green, full of seeds</p>
                 </div>
 
 
-                <p class="desc">Adding fruity visuals brings a refreshing twist, evoking joy on a tropical breeze</p>
-            </div>
+                <div class="box-desc">
+                    <div class="box"><img alt="Pineapple slices" decoding="async" height="150" loading="lazy"
+                            src="images/pineapple_slices.jpg" width="150">
+                    </div>
 
 
-            <div class="box-desc">
-                <div class="box"><img alt="strawberries" src="images/strawberries.jpg">
+                    <p class="desc">Pineapple: sweet, sharp, sticky</p>
                 </div>
 
 
-                <p class="desc">Like a market's bounty, each box is spaced with care, inviting you to savor the
-                    sweetness</p>
-            </div>
+                <div class="box-desc">
+                    <div class="box"><img alt="Strawberries" decoding="async" height="150" loading="lazy"
+                            src="images/strawberries.jpg" width="150">
+                    </div>
 
 
-            <div class="box-desc">
-                <div class="box"><img alt="blueberries" src="images/blueberries.jpg">
+                    <p class="desc">Strawberries: the first of summer</p>
                 </div>
 
 
-                <p class="desc">Balanced spacing ensures browsing fruitsite is as enjoyable as picking ripe blueberries
-                </p>
-            </div>
-        </div>
-    </div>
+                <div class="box-desc">
+                    <div class="box"><img alt="Blueberries" decoding="async" height="150" loading="lazy"
+                            src="images/blueberries.jpg" width="150">
+                    </div>
 
 
-    <div class="sec-3">
-        <div class="quote">
-            <p class="quote-text">Life is a bit like a fruit salad; each experience adds a different flavor, and the mix
-                makes it all the more delicious.</p>
-
-
-            <p class="author">- Maya Angelou, Writer</p>
-        </div>
-    </div>
-
-
-    <div class="sec-4">
-        <div class="container">
-            <div class="text-center">
-                <div class="main-info-4">
-                    <p class="bold-text">Call to action! It's time!</p>
-
-
-                    <p class="cta-text">Sign up for our product by clicking this button right over there!</p>
-                </div>
-
-
-                <div class="sign-up-container">
-                    <a class="sign-up-btn" href="#">Sign Up</a>
+                    <p class="desc">Blueberries: gone by the handful</p>
                 </div>
             </div>
-        </div>
-    </div>
+        </section>
+
+
+        <section class="sec-3">
+            <div class="quote">
+                <p class="quote-text">Three files. No framework, no build step, nothing to install.</p>
+            </div>
+        </section>
+
+
+        <section class="sec-4">
+            <div class="container">
+                <div class="text-center">
+                    <div class="main-info-4">
+                        <h2 class="bold-text">Sign up for the fruit list</h2>
+
+
+                        <p class="cta-text">One email a week, all fruit. The button is a demo, so nothing is sent.</p>
+                    </div>
+
+
+                    <div class="sign-up-container">
+                        <a class="sign-up-btn" href="#">Sign Up</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
 
 
     <footer>
-        <p>&copy; Fruitend 2025</p>
+        <p>&copy; Fruitend 2026</p>
     </footer>
 
     <script src="script.js"></script>

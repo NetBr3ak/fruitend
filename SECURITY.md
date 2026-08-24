@@ -1,13 +1,9 @@
 # Security Policy
 
-🔒 **Security Vulnerability Disclosure Policy**
-
-At **Fruitend**, we take security seriously. We appreciate your efforts to responsibly disclose any security vulnerabilities you may find in our project.
-
 ## Reporting a Vulnerability
 
-If you discover a potential security issue, please report it to us as soon as possible. We request that you do not publicly disclose the issue until we have had a chance to address it.
+Fruitend is a static page. It has no server, no accounts, and no stored data, so the attack surface is small.
 
-Once we receive your report, we will investigate the issue and work to promptly release a fix. We appreciate your help in keeping **Fruitend** secure for everyone.
+If you still find a security issue, report it on the repository's **Security** tab with **Report a vulnerability**. That opens a private GitHub advisory.
 
-Thank you!
+Please do not open a public issue for it first. You will get a reply with either a fix or a reason why it is not a problem here.

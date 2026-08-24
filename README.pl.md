@@ -30,11 +30,16 @@ Nie trzeba niczego budować. Nie ma żadnych zależności. Nie trzeba nic instal
 
 ```
 fruitend/
+├── .github/         # Szablony zgłoszeń
 ├── images/          # Zdjęcia owoców użyte na stronie
+├── index.html       # Strona główna
 ├── styles.css       # Cały styl strony
 ├── script.js        # Obsługa kliknięć w linki demo
-├── index.html       # Strona główna
-└── README.md
+├── CONTRIBUTING.md  # Jak zgłosić pull request lub issue
+├── SECURITY.md      # Jak zgłosić problem z bezpieczeństwem
+├── LICENSE          # Pełny tekst licencji MIT
+├── README.md        # Angielska wersja tego pliku
+└── README.pl.md
 ```
 
 ## Zbudowano w
