@@ -9,13 +9,17 @@
         content="Fruitend is a static demo landing page on a fruit theme: six flat color blocks, four fruit photos, and buttons that only show a message.">
 
     <title>Fruitend - a fruit-themed demo landing page</title>
+
+    <meta content="website" property="og:type">
+    <meta content="Fruitend - a fruit-themed demo landing page" property="og:title">
+    <meta content="A static demo page: six flat color blocks that run from noon to midnight, four fruit photos, and buttons that only show a message."
+        property="og:description">
+    <meta content="summary" name="twitter:card">
+
     <link href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍎</text></svg>"
         rel="icon">
+    <link as="font" crossorigin href="fonts/bricolage-grotesque.woff2" rel="preload" type="font/woff2">
     <link href="styles.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com" rel="preconnect">
-    <link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
-    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&family=Hanken+Grotesk:wght@300..900&family=Martian+Mono:wdth,wght@75..112,300..800&display=swap"
-        rel="stylesheet">
 </head>
 
 <body>
@@ -23,7 +27,7 @@
 
     <header class="bar" id="top">
         <nav aria-label="Main" class="bar-inner">
-            <a class="wordmark" href="#">
+            <a class="wordmark" href="#top">
                 <svg aria-hidden="true" class="mark" focusable="false" viewBox="0 0 24 24">
                     <path d="M12 7.6C10.3 6.2 8.4 6 6.8 7.1 4.3 8.7 3.4 12.3 4.9 15.9c1 2.5 2.6 4.4 4.3 4.4.9 0 1.4-.4 2.8-.4s1.9.4 2.8.4c1.7 0 3.3-1.9 4.3-4.4 1.5-3.6.6-7.2-1.9-8.8-1.6-1.1-3.5-.9-5.2.5Z"
                         fill="currentColor" />
@@ -33,7 +37,7 @@
                 Fruitend
             </a>
 
-            <ul class="bar-links">
+            <ul class="bar-links" role="list">
                 <li><a href="#">Fruits</a></li>
                 <li><a href="#">About</a></li>
             </ul>
@@ -61,21 +65,34 @@
                 </div>
 
                 <div class="hero-disc">
-                    <span aria-hidden="true" class="citrus"></span>
+                    <div aria-describedby="clock-note" aria-label="Time of day" aria-valuemax="720" aria-valuemin="0"
+                        aria-valuenow="0" aria-valuetext="12:00" class="citrus" id="clock" role="slider"
+                        tabindex="0"></div>
+
+                    <p class="disc-note" id="clock-note">The slice is a clock. Drag it or use the arrow keys, and the
+                        whole page travels from noon to midnight.</p>
                 </div>
             </div>
         </section>
 
         <div class="ticker">
-            <div class="ticker-track">
-                <p class="ticker-run">Kiwi &middot; Pineapple &middot; Strawberries &middot; Blueberries &middot; Every
-                    button here is a demo &middot;</p>
-                <p aria-hidden="true" class="ticker-run">Kiwi &middot; Pineapple &middot; Strawberries &middot;
-                    Blueberries &middot; Every button here is a demo &middot;</p>
-                <p aria-hidden="true" class="ticker-run">Kiwi &middot; Pineapple &middot; Strawberries &middot;
-                    Blueberries &middot; Every button here is a demo &middot;</p>
-                <p aria-hidden="true" class="ticker-run">Kiwi &middot; Pineapple &middot; Strawberries &middot;
-                    Blueberries &middot; Every button here is a demo &middot;</p>
+            <div class="ticker-marquee">
+                <div class="ticker-track">
+                    <p class="ticker-run">Kiwi &middot; Pineapple &middot; Strawberries &middot; Blueberries &middot;
+                        Every button here is a demo &middot;</p>
+                    <p aria-hidden="true" class="ticker-run">Kiwi &middot; Pineapple &middot; Strawberries &middot;
+                        Blueberries &middot; Every button here is a demo &middot;</p>
+                    <p aria-hidden="true" class="ticker-run">Kiwi &middot; Pineapple &middot; Strawberries &middot;
+                        Blueberries &middot; Every button here is a demo &middot;</p>
+                    <p aria-hidden="true" class="ticker-run">Kiwi &middot; Pineapple &middot; Strawberries &middot;
+                        Blueberries &middot; Every button here is a demo &middot;</p>
+                </div>
+            </div>
+
+            <div class="ticker-ctls">
+                <button class="ticker-ctl" id="ticker-toggle" type="button">Pause</button>
+                <button aria-controls="probe" aria-pressed="false" class="ticker-ctl" id="probe-toggle"
+                    type="button">Inspect</button>
             </div>
         </div>
 
@@ -84,30 +101,30 @@
                 <h2 class="fruits-title" data-reveal>Today&rsquo;s <span class="numeral">4</span> fruits</h2>
 
                 <div class="bento">
-                    <article class="blk blk-tall" data-reveal style="--i:0">
-                        <img alt="Strawberries" class="sticker rot-a" decoding="async" height="150" loading="lazy"
-                            src="images/strawberries.jpg" width="150">
+                    <article class="blk blk-tall" data-reveal>
+                        <img alt="Strawberries" class="sticker rot-a" decoding="async" height="360" loading="lazy"
+                            src="images/strawberries.webp" width="360">
                         <h3>Strawberries</h3>
                         <p>The first of summer. Gone in a weekend, every year.</p>
                     </article>
 
-                    <article class="blk blk-kiwi" data-reveal style="--i:1">
-                        <img alt="Kiwi slices" class="sticker rot-b" decoding="async" height="150" loading="lazy"
-                            src="images/kiwi_slices.jpg" width="150">
+                    <article class="blk blk-kiwi" data-reveal>
+                        <img alt="Kiwi slices" class="sticker rot-b" decoding="async" height="360" loading="lazy"
+                            src="images/kiwi_slices.webp" width="360">
                         <h3>Kiwi</h3>
                         <p>Tart, green, full of seeds.</p>
                     </article>
 
-                    <article class="blk blk-lemon" data-reveal style="--i:2">
-                        <img alt="Pineapple slices" class="sticker rot-c" decoding="async" height="150" loading="lazy"
-                            src="images/pineapple_slices.jpg" width="150">
+                    <article class="blk blk-lemon" data-reveal>
+                        <img alt="Pineapple slices" class="sticker rot-c" decoding="async" height="360" loading="lazy"
+                            src="images/pineapple_slices.webp" width="360">
                         <h3>Pineapple</h3>
                         <p>Sweet, sharp, sticky.</p>
                     </article>
 
-                    <article class="blk blk-wide" data-reveal style="--i:3">
-                        <img alt="Blueberries" class="sticker rot-d" decoding="async" height="150" loading="lazy"
-                            src="images/blueberries.jpg" width="150">
+                    <article class="blk blk-wide" data-reveal>
+                        <img alt="Blueberries" class="sticker rot-d" decoding="async" height="360" loading="lazy"
+                            src="images/blueberries.webp" width="360">
                         <div>
                             <h3>Blueberries</h3>
                             <p>Gone by the handful, straight out of the box.</p>
@@ -121,11 +138,11 @@
             <div class="wrap files-grid">
                 <h2 class="files-title" data-reveal>Three files. No framework, no build step, nothing to install.</h2>
 
-                <ol class="chips" data-reveal>
+                <ul class="chips" data-reveal role="list">
                     <li>index.html</li>
                     <li>styles.css</li>
                     <li>script.js</li>
-                </ol>
+                </ul>
             </div>
         </section>
 
@@ -143,9 +160,9 @@
 
     <footer>
         <div class="wrap foot-grid">
-            <ul class="foot-links">
+            <ul class="foot-links" role="list">
                 <li><a href="https://github.com/NetBr3ak/fruitend">GitHub repository</a></li>
-                <li><a href="README.pl.md">README po polsku</a></li>
+                <li><a href="README.pl.md" hreflang="pl" lang="pl">README po polsku</a></li>
                 <li><a href="LICENSE">MIT license</a></li>
             </ul>
 
@@ -156,6 +173,20 @@
             <span aria-hidden="true">Fruitend</span>
         </div>
     </footer>
+
+    <div class="toast" id="toast" popover="manual">
+        <p class="toast-msg" role="status"></p>
+        <button aria-label="Dismiss message" class="toast-close" popovertarget="toast" popovertargetaction="hide"
+            type="button">&times;</button>
+    </div>
+
+    <div aria-hidden="true" class="probe-halo" id="probe-halo" popover="manual"></div>
+
+    <aside aria-label="Element inspector" class="probe" id="probe" popover="manual">
+        <p class="probe-target"></p>
+        <p class="probe-box"></p>
+        <pre class="probe-rules"></pre>
+    </aside>
 
     <script src="script.js"></script>
 </body>

@@ -11,10 +11,15 @@ Fruitend is a static demo page. It is not a real product. The nav links and the 
 ## Features
 
 - Works on phones, tablets, and desktops
-- Six flat color blocks that run from noon to midnight
-- A citrus slice drawn in CSS, no image file
+- Six flat color blocks that run from noon to midnight, set by the time on your own clock
+- A citrus slice drawn in CSS, no image file. It is also the clock: drag it or use the arrow keys and the whole palette travels
+- An **Inspect** button that shows the real CSS rules behind whatever you point at
+- A ticker you can pause
 - Reveal and hover animations that stop when the system asks for reduced motion
 - Smooth scroll behavior
+
+Add `?t=23` to the address to pin the palette at a given hour. The run starts at noon, so
+earlier hours stay at noon.
 
 ## Getting started
 
@@ -25,28 +30,43 @@ Fruitend is a static demo page. It is not a real product. The nav links and the 
    ```
 2. Open `index.html` in any modern browser.
 
-No build step. No dependencies. No install command needed.
+No build step. No dependencies. No install command needed. The page makes no request to any
+other server: the three fonts ship with it.
+
+One thing works better over http than off the disk. **Inspect** reads the page's own
+stylesheet, and a browser treats a local file as a separate origin, so `cssRules` is blocked
+there. Off the disk you get the measurements; over http you also get the source rules. Any
+static server does it, for example `python3 -m http.server`.
 
 ## Project structure
 
 ```
 fruitend/
-├── .github/         # Issue templates
-├── images/          # Fruit photos used on the page
-├── index.html       # Main page
-├── styles.css       # All styling
-├── script.js        # Click handlers for the demo links
-├── CONTRIBUTING.md  # How to open a pull request or an issue
-├── SECURITY.md      # How to report a security issue
-├── LICENSE          # Full MIT license text
+├── .github/            # Issue templates
+├── fonts/              # The three fonts, subset and self-hosted
+├── images/             # Fruit photos used on the page
+├── index.html          # Main page
+├── styles.css          # All styling
+├── script.js           # Toast, clock dial, ticker, inspector
+├── check-palette.mjs   # node check-palette.mjs: contrast guard for the palette
+├── CONTRIBUTING.md     # How to open a pull request or an issue
+├── SECURITY.md         # How to report a security issue
+├── LICENSE             # Full MIT license text
 ├── README.md
-└── README.pl.md     # Polish version of this file
+└── README.pl.md        # Polish version of this file
 ```
+
+## The palette is one number
+
+Every block color comes from `--tod`, a single number where 0 is noon and 1 is midnight. CSS
+derives all six colors from it with `oklch()` relative colors, so moving the clock moves the
+whole page and no JavaScript touches a color. `check-palette.mjs` walks that whole range and
+fails if any text pair drops under its WCAG contrast floor.
 
 ## Built with
 
 - HTML5
-- CSS3 (flat color blocks, CSS-drawn citrus slice)
+- CSS3 (flat color blocks, CSS-drawn citrus slice, `oklch()` relative colors, `@property`)
 - Vanilla JavaScript (no framework, no build tool)
 
 ## Contributing
@@ -60,3 +80,7 @@ See [SECURITY.md](SECURITY.md) for how to report a security issue.
 ## License
 
 This project uses the MIT License. See [LICENSE](LICENSE) for the full text.
+
+The fruit photos are CC0 (public domain), from StockSnap, Rawpixel, and Wikimedia Commons.
+The three fonts are Bricolage Grotesque, Hanken Grotesk, and Martian Mono, all under the SIL
+Open Font License. See [fonts/OFL.txt](fonts/OFL.txt).

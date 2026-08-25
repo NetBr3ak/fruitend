@@ -1,10 +1,47 @@
+/* Self-hosted so the page really has no third-party request, the way the README claims.
+   Subset to the characters this page uses; anything outside the range falls back to the
+   stacks declared on --display / --text / --micro. */
+@font-face {
+    font-family: "Bricolage Grotesque";
+    src: url("fonts/bricolage-grotesque.woff2") format("woff2");
+    font-weight: 200 800;
+    font-stretch: 75% 100%;
+    font-display: swap;
+    unicode-range: U+0020-007E, U+00A0, U+00A9, U+00B0, U+00B7, U+00D7, U+2018-201D, U+2026;
+}
+
+@font-face {
+    font-family: "Hanken Grotesk";
+    src: url("fonts/hanken-grotesk.woff2") format("woff2");
+    font-weight: 100 900;
+    font-display: swap;
+    unicode-range: U+0020-007E, U+00A0, U+00A9, U+00B0, U+00B7, U+00D7, U+2018-201D, U+2026;
+}
+
+@font-face {
+    font-family: "Martian Mono";
+    src: url("fonts/martian-mono.woff2") format("woff2");
+    font-weight: 100 800;
+    font-stretch: 75% 112.5%;
+    font-display: swap;
+    unicode-range: U+0020-007E, U+00A0, U+00A9, U+00B0, U+00B7, U+00D7, U+2018-201D, U+2026;
+}
+
+/* 0 is noon, 1 is midnight. Registered, so the browser interpolates it and every colour
+   below cross-fades from a single assignment. Unregistered custom properties do not. */
+@property --tod {
+    syntax: "<number>";
+    inherits: true;
+    initial-value: 0;
+}
+
 :root {
+    /* Noon values, and the fallback wherever relative colour is missing. */
     --mango: #ffa732;
     --lemon: #ffd166;
     --cream: #ffe9cf;
     --straw: #ef4040;
     --magenta: #c21292;
-    --grape: #711db0;
     --midnight: #001a66;
     --plum: #0b0510;
     --cocoa: #1a0c05;
@@ -16,6 +53,27 @@
 
     --ease: cubic-bezier(.16, 1, .3, 1);
     --wrap: min(100% - 8vw, 1240px);
+}
+
+/* The whole ramp is one number. Warm hues cool and deepen as --tod runs to 1; the dark end
+   is already midnight, so --midnight, --plum and --cocoa stay put and the rest travel to
+   meet them. Every text pair on this ramp is checked by check-palette.mjs. */
+@supports (color: oklch(from red l c h)) {
+    :root {
+        --mango: oklch(from #ffa732 calc(l - var(--tod) * .13) calc(c - var(--tod) * .035) calc(h - var(--tod) * 18));
+        --lemon: oklch(from #ffd166 calc(l - var(--tod) * .12) calc(c - var(--tod) * .03) calc(h - var(--tod) * 14));
+        --cream: oklch(from #ffe9cf calc(l - var(--tod) * .02) calc(c - var(--tod) * .02) calc(h - var(--tod) * 60));
+        --straw: oklch(from #ef4040 calc(l - var(--tod) * .01) calc(c - var(--tod) * .01) calc(h - var(--tod) * 14));
+        --magenta: oklch(from #c21292 calc(l - var(--tod) * .035) calc(c - var(--tod) * .02) calc(h - var(--tod) * 12));
+        --kiwi: oklch(from #5ce1a0 calc(l - var(--tod) * .06) calc(c - var(--tod) * .02) calc(h + var(--tod) * 26));
+
+        transition: --tod .6s var(--ease);
+    }
+
+    /* A live drag must not trail 600ms behind the pointer. */
+    :root.scrubbing {
+        transition: none;
+    }
 }
 
 *,
@@ -69,20 +127,38 @@ ol {
     margin-inline: auto;
 }
 
-a {
-    cursor: pointer;
+/* Martian Mono always runs one step narrow. Bricolage narrows as it grows instead:
+   100 by default, 85 on the section titles, 75 on the two oversized words. */
+.skip-link,
+.bar-links a,
+.pill-ink,
+.ghost-link,
+.ticker-run,
+.ticker-ctl,
+.disc-note,
+.chips li,
+.press,
+.note,
+.foot-links a,
+.foot-copy,
+.toast,
+.probe {
+    font-variation-settings: "wdth" 87.5;
 }
 
-/* Ring color flips with the ground: cocoa on the light blocks, cream on the dark ones. */
-a:focus-visible {
+/* Ring color flips with the ground: cocoa on the light blocks, cream on the dark ones.
+   No border-radius here: this rule outranks .pill-ink and .ticker-ctl, so setting one
+   squared off every pill the moment it took focus. The outline follows each element's
+   own radius on its own. */
+:is(a, button):focus-visible {
     outline: 3px solid var(--cocoa);
     outline-offset: 4px;
-    border-radius: 2px;
 }
 
 .cta a:focus-visible,
 footer a:focus-visible,
-.ticker a:focus-visible {
+.ticker button:focus-visible,
+.toast button:focus-visible {
     outline-color: var(--cream);
 }
 
@@ -103,6 +179,11 @@ footer a:focus-visible,
 
 .skip-link:focus {
     left: 0;
+}
+
+/* Without this the skip link lands behind the sticky bar it was meant to skip. */
+#main {
+    scroll-margin-top: 96px;
 }
 
 /* ---------- bar ---------- */
@@ -138,7 +219,6 @@ footer a:focus-visible,
     font-family: var(--display);
     font-size: 1.5rem;
     font-weight: 800;
-    font-variation-settings: "wdth" 87.5;
     letter-spacing: -.02em;
     text-decoration: none;
     color: var(--cocoa);
@@ -152,7 +232,7 @@ footer a:focus-visible,
 
 .bar-links {
     display: flex;
-    gap: 22px;
+    gap: 24px;
 }
 
 .bar-links a {
@@ -160,7 +240,6 @@ footer a:focus-visible,
     padding: 15px 0;
     font-family: var(--micro);
     font-size: .75rem;
-    font-variation-settings: "wdth" 87.5;
     text-transform: uppercase;
     letter-spacing: .12em;
     text-decoration: none;
@@ -169,7 +248,7 @@ footer a:focus-visible,
 }
 
 .bar-links a:hover {
-    color: var(--straw);
+    color: var(--midnight);
 }
 
 .pill-ink {
@@ -183,6 +262,7 @@ footer a:focus-visible,
     text-transform: uppercase;
     letter-spacing: .12em;
     text-decoration: none;
+    white-space: nowrap;
     color: var(--cream);
     background: var(--cocoa);
     border-radius: 999px;
@@ -224,6 +304,7 @@ footer a:focus-visible,
     letter-spacing: -.03em;
     text-transform: uppercase;
     font-variation-settings: "wdth" 75;
+    text-wrap: balance;
     color: var(--cocoa);
 }
 
@@ -266,26 +347,77 @@ footer a:focus-visible,
 }
 
 .ghost-link:hover {
-    color: var(--straw);
+    color: var(--midnight);
 }
 
 .hero-disc {
     grid-column: 8 / -1;
     justify-self: end;
-    margin-right: -14vw;
 }
 
+/* The bleed rides the dial, not the wrapper: on .hero-disc it dragged .disc-note off the
+   page edge with it and clipped the first letter of every line. Small enough a bleed that
+   the whole dial stays inside the viewport and grabbable. */
 .citrus {
+    position: relative;
     display: block;
     width: clamp(260px, 34vw, 520px);
     aspect-ratio: 1;
+    margin-right: -4vw;
     border: 12px solid var(--straw);
     border-radius: 50%;
+    cursor: grab;
+    touch-action: none;
     /* closest-side, so 100% lands on the circle edge and not on the square's far corner */
     background:
-        radial-gradient(circle closest-side, var(--cream) 0 24%, rgba(255, 233, 207, 0) 24%),
-        radial-gradient(circle closest-side, rgba(255, 233, 207, 0) 0 88%, var(--cream) 88% 100%),
+        radial-gradient(circle closest-side, var(--cream) 0 24%, transparent 24%),
+        radial-gradient(circle closest-side, transparent 0 88%, var(--cream) 88% 100%),
         repeating-conic-gradient(from -15deg, var(--mango) 0 30deg, var(--lemon) 0 60deg);
+}
+
+.citrus:active {
+    cursor: grabbing;
+}
+
+.citrus:focus-visible {
+    outline: 3px solid var(--cocoa);
+    outline-offset: 8px;
+}
+
+/* Twelve wedges: it was already a clock face. The hand sweeps one turn from noon to midnight. */
+.citrus::before {
+    content: "";
+    position: absolute;
+    left: calc(50% - 2px);
+    bottom: 50%;
+    width: 4px;
+    height: 34%;
+    border-radius: 999px;
+    background: var(--cocoa);
+    transform-origin: 50% 100%;
+    transform: rotate(calc(var(--tod) * 360deg));
+    pointer-events: none;
+}
+
+/* The straw border doubles as the progress track. */
+.citrus::after {
+    content: "";
+    position: absolute;
+    inset: -12px;
+    border-radius: 50%;
+    background: conic-gradient(var(--cocoa) calc(var(--tod) * 360deg), transparent 0);
+    mask: radial-gradient(circle closest-side, transparent 0 calc(100% - 12px), #000 calc(100% - 12px));
+    pointer-events: none;
+}
+
+.disc-note {
+    max-width: 26rem;
+    margin-top: 24px;
+    font-family: var(--micro);
+    font-size: .75rem;
+    line-height: 1.7;
+    letter-spacing: .12em;
+    color: var(--cocoa);
 }
 
 /* ---------- ticker ---------- */
@@ -294,8 +426,15 @@ footer a:focus-visible,
     height: 68px;
     display: flex;
     align-items: center;
+    gap: 20px;
     overflow: hidden;
     background: var(--cocoa);
+}
+
+.ticker-marquee {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
 }
 
 .ticker-track {
@@ -304,14 +443,45 @@ footer a:focus-visible,
 }
 
 .ticker-run {
+    flex: none;
+    /* Four copies, and the loop shifts by exactly one of them. The floor keeps the three
+       that stay behind wider than any viewport, so the track never runs out of content. */
+    min-width: 34vw;
     padding-right: 2ch;
     white-space: nowrap;
     font-family: var(--micro);
     font-size: .8125rem;
-    font-variation-settings: "wdth" 87.5;
     text-transform: uppercase;
     letter-spacing: .12em;
     color: var(--cream);
+}
+
+.ticker-ctls {
+    flex: none;
+    display: flex;
+    gap: 8px;
+    padding-right: max(4vw, 16px);
+}
+
+.ticker-ctl {
+    min-height: 36px;
+    padding: 0 16px;
+    font-family: var(--micro);
+    font-size: .75rem;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    color: var(--cream);
+    background: transparent;
+    border: 2px solid var(--cream);
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background .2s ease, color .2s ease;
+}
+
+.ticker-ctl:hover,
+.ticker-ctl[aria-pressed="true"] {
+    color: var(--cocoa);
+    background: var(--cream);
 }
 
 /* ---------- fruits ---------- */
@@ -326,6 +496,7 @@ footer a:focus-visible,
     line-height: .95;
     letter-spacing: -.02em;
     font-variation-settings: "wdth" 85;
+    text-wrap: balance;
     color: var(--cocoa);
 }
 
@@ -347,7 +518,7 @@ footer a:focus-visible,
     padding: 32px;
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 20px;
     border-radius: 28px;
 }
 
@@ -392,6 +563,7 @@ footer a:focus-visible,
     height: 160px;
     flex: none;
     display: block;
+    object-fit: cover;
     border-radius: 50%;
     border: 4px solid var(--cocoa);
     box-shadow: 8px 8px 0 var(--cocoa);
@@ -443,15 +615,17 @@ footer a:focus-visible,
     line-height: .98;
     letter-spacing: -.025em;
     font-variation-settings: "wdth" 85;
+    text-wrap: balance;
 }
 
 .chips li {
     width: fit-content;
     padding: 16px 24px;
     border: 2px solid var(--cocoa);
+    border-radius: 999px;
     font-family: var(--micro);
     font-size: .8125rem;
-    letter-spacing: .04em;
+    letter-spacing: .12em;
     color: var(--cocoa);
 }
 
@@ -486,6 +660,7 @@ footer a:focus-visible,
     line-height: .95;
     letter-spacing: -.025em;
     font-variation-settings: "wdth" 85;
+    text-wrap: balance;
     color: var(--cream);
 }
 
@@ -511,7 +686,12 @@ footer a:focus-visible,
     transition: transform .18s ease, box-shadow .18s ease;
 }
 
-.press:hover,
+/* Hover leans on the button, the press seats it flat. */
+.press:hover {
+    transform: translate(4px, 4px);
+    box-shadow: 4px 4px 0 var(--cocoa);
+}
+
 .press:active {
     transform: translate(8px, 8px);
     box-shadow: 0 0 0 var(--cocoa);
@@ -586,20 +766,124 @@ footer {
 
 /* ---------- toast ---------- */
 
+/* A popover paints in the top layer, so no overflow:clip and no future stacking context can
+   shave it the way the hero animation was shaving its own focus ring. display and overlay
+   need allow-discrete to survive the close; overlay is not Baseline yet, so the exit may snap. */
 .toast {
     position: fixed;
-    left: 50%;
-    bottom: 24px;
+    inset: auto auto 24px 50%;
+    translate: -50% 0;
     z-index: 30;
-    transform: translateX(-50%);
     max-width: min(92vw, 30rem);
-    padding: 14px 20px;
-    border-left: 4px solid var(--kiwi);
+    padding: 14px 14px 14px 20px;
+    align-items: center;
+    gap: 16px;
+    border: 2px solid var(--kiwi);
+    border-radius: 28px;
     background: var(--cocoa);
     color: var(--cream);
     font-family: var(--micro);
     font-size: .8125rem;
     line-height: 1.5;
+    opacity: 0;
+    transition:
+        opacity .2s var(--ease),
+        translate .2s var(--ease),
+        overlay .2s allow-discrete,
+        display .2s allow-discrete;
+}
+
+.toast:popover-open {
+    display: flex;
+    opacity: 1;
+}
+
+@starting-style {
+    .toast:popover-open {
+        opacity: 0;
+        translate: -50% 12px;
+    }
+}
+
+.toast-msg {
+    flex: 1;
+}
+
+.toast-close {
+    flex: none;
+    width: 32px;
+    height: 32px;
+    font-size: 1.125rem;
+    line-height: 1;
+    color: var(--cream);
+    background: transparent;
+    border: 2px solid var(--cream);
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background .2s ease, color .2s ease;
+}
+
+.toast-close:hover {
+    color: var(--cocoa);
+    background: var(--cream);
+}
+
+/* ---------- inspector ---------- */
+
+.probe {
+    position: fixed;
+    inset: auto 24px 24px auto;
+    margin: 0;
+    width: min(92vw, 30rem);
+    max-height: min(60vh, 32rem);
+    overflow: auto;
+    padding: 20px;
+    border: 2px solid var(--kiwi);
+    border-radius: 28px;
+    background: var(--cocoa);
+    color: var(--cream);
+    font-family: var(--micro);
+    font-size: .75rem;
+    line-height: 1.6;
+}
+
+.probe:popover-open {
+    display: block;
+}
+
+.probe-target {
+    color: var(--kiwi);
+    text-transform: uppercase;
+    letter-spacing: .12em;
+}
+
+.probe-box {
+    margin-top: 12px;
+}
+
+.probe-rules {
+    margin: 12px 0 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+    font: inherit;
+    color: var(--cream);
+    opacity: .82;
+}
+
+.probe-halo {
+    position: fixed;
+    inset: 0 auto auto 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    outline: 2px dashed var(--kiwi);
+    outline-offset: 1px;
+    pointer-events: none;
+}
+
+.probe-halo:popover-open {
+    display: block;
 }
 
 /* ---------- responsive ---------- */
@@ -616,12 +900,12 @@ footer {
 
     .hero-disc {
         justify-self: start;
-        margin-right: 0;
-        margin-left: -18vw;
     }
 
     .citrus {
         width: clamp(240px, 56vw, 420px);
+        margin-right: 0;
+        margin-left: -6vw;
     }
 
     .files-grid,
@@ -659,26 +943,31 @@ footer {
 }
 
 @media (max-width: 640px) {
+    /* Three items in a 390px bar: every one of these is what keeps "Sign up" on one line. */
     .bar-inner {
         min-height: 72px;
-        gap: 14px;
+        gap: 12px;
     }
 
     .bar-links {
-        gap: 14px;
+        gap: 12px;
     }
 
     .wordmark {
         font-size: 1.25rem;
     }
 
-    .bar-links a,
-    .pill-ink {
-        font-size: .6875rem;
+    .mark {
+        width: 24px;
+        height: 24px;
     }
 
     .pill-ink {
-        padding: 0 16px;
+        padding: 0 14px;
+    }
+
+    .ticker-ctls {
+        padding-right: 16px;
     }
 
     .blk {
@@ -727,7 +1016,9 @@ footer {
         }
 
         to {
-            clip-path: inset(0 0 0 0);
+            /* Ends outside the box on purpose. Landing on inset(0) leaves a permanent clip
+               that shaves the focus ring off anything focusable inside. */
+            clip-path: inset(-25% -15%);
             transform: none;
         }
     }
@@ -756,15 +1047,9 @@ footer {
         }
     }
 
-    @keyframes roll {
-        to {
-            transform: rotate(1turn);
-        }
-    }
-
     @keyframes slide {
         to {
-            transform: translateX(-50%);
+            transform: translateX(-25%);
         }
     }
 
@@ -805,12 +1090,12 @@ footer {
         animation: disc-in .9s var(--ease) 200ms both;
     }
 
-    .citrus {
-        animation: roll 90s linear infinite;
-    }
-
     .ticker-track {
         animation: slide 26s linear infinite;
+    }
+
+    .ticker.paused .ticker-track {
+        animation-play-state: paused;
     }
 
     .js [data-reveal] {
@@ -822,7 +1107,22 @@ footer {
         opacity: 1;
         transform: none;
         transition: opacity .6s var(--ease), transform .6s var(--ease);
-        transition-delay: calc(var(--i, 0) * 80ms);
+    }
+
+    /* Staggering only pays off while the cards share a row. In one column each card is
+       already on screen when it fires, so the delay is dead waiting time. */
+    @media (min-width: 1001px) {
+        .js .bento .blk:nth-child(2).in {
+            transition-delay: 80ms;
+        }
+
+        .js .bento .blk:nth-child(3).in {
+            transition-delay: 160ms;
+        }
+
+        .js .bento .blk:nth-child(4).in {
+            transition-delay: 240ms;
+        }
     }
 }
 
@@ -835,7 +1135,5 @@ footer {
     *::before,
     *::after {
         transition-duration: .01ms !important;
-        animation-duration: .01ms !important;
-        animation-iteration-count: 1 !important;
     }
 }
