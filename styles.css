@@ -409,7 +409,7 @@ footer a:focus-visible,
 }
 
 /* Twelve wedges: it was already a clock face. The hand sweeps one turn from noon to midnight.
-   The knob on its tip says "grab here"; the stem stops at the pith, where the time is written. */
+   The stem stops at the pith, where the time is written; .knob sits on its tip. */
 .citrus::before {
     content: "";
     position: absolute;
@@ -417,12 +417,26 @@ footer a:focus-visible,
     bottom: 50%;
     width: 20px;
     height: 34%;
-    background:
-        radial-gradient(circle at 50% 10px, var(--cocoa) 9px, transparent 10px),
-        linear-gradient(var(--cocoa) 0 0) 50% 0 / 4px 62% no-repeat;
+    /* Starts under the dot's centre: from the very tip its square end poked out of the dot. */
+    background: linear-gradient(var(--cocoa) 0 0) 50% 10px / 4px calc(62% - 10px) no-repeat;
     transform-origin: 50% 100%;
     transform: rotate(calc(var(--tod) * 360deg));
     pointer-events: none;
+}
+
+/* A real element, not part of ::before, so a finger on it gets touch-action: none. With the
+   dial's pan-y alone, dragging the knob at three or nine o'clock (where it moves straight down)
+   scrolled the page 44 px and left the time alone. 44 px is the touch target; the dot is 18. */
+.knob {
+    position: absolute;
+    left: calc(50% - 22px);
+    top: calc(50% - 22px);
+    width: 44px;
+    height: 44px;
+    /* The hand's tip: 34% of the dial out from the centre, less the dot's 10 px radius. */
+    transform: rotate(calc(var(--tod) * 360deg)) translateY(calc(10px - 34cqi));
+    background: radial-gradient(circle, var(--cocoa) 9px, transparent 10px);
+    touch-action: none;
 }
 
 /* The straw border doubles as the progress track. */

@@ -81,11 +81,24 @@ document.addEventListener('DOMContentLoaded', function () {
 		return (angle * 180 / Math.PI + 360) % 360 / 360 * 720;
 	}
 
+	// Past twelve the drag stops at the end it reached: wrapping round would flip the
+	// whole page between midnight and noon in one frame.
+	function follow(e) {
+		let next = minutesAt(e);
+		if (Math.abs(next - tod) > 360) next = tod > 360 ? 720 : 0;
+		setTod(next);
+	}
+
 	clock.addEventListener('pointerdown', e => {
 		clock.setPointerCapture(e.pointerId);
 		root.classList.add('scrubbing');
-		touchStart = e.pointerType === 'touch' ? [e.clientX, e.clientY] : null;
-		if (!touchStart) setTod(minutesAt(e));
+		// On the knob the drag rule holds from the first touch, so grabbing it just left of twelve
+		// at noon does not jump to midnight. A press anywhere else jumps to that time; a touch off
+		// the knob may still turn into a page scroll.
+		const onKnob = e.target.closest('.knob');
+		touchStart = e.pointerType === 'touch' && !onKnob ? [e.clientX, e.clientY] : null;
+		if (onKnob) follow(e);
+		else if (!touchStart) setTod(minutesAt(e));
 	});
 
 	clock.addEventListener('pointermove', e => {
@@ -100,11 +113,7 @@ document.addEventListener('DOMContentLoaded', function () {
 			setTod(minutesAt(e));
 			return;
 		}
-		let next = minutesAt(e);
-		// Past twelve the drag stops at the end it reached: wrapping round would flip the
-		// whole page between midnight and noon in one frame.
-		if (Math.abs(next - tod) > 360) next = tod > 360 ? 720 : 0;
-		setTod(next);
+		follow(e);
 	});
 
 	// A tap: the finger lifted before it went sideways.
