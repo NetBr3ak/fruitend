@@ -281,7 +281,7 @@ footer a:focus-visible,
 
 .hero {
     background: var(--mango);
-    padding: clamp(48px, 9vw, 104px) 0 clamp(56px, 10vw, 120px);
+    padding: clamp(40px, 5vw, 64px) 0 clamp(56px, 10vw, 120px);
 }
 
 .hero-grid {
@@ -295,8 +295,9 @@ footer a:focus-visible,
     grid-column: 1 / 8;
 }
 
+/* 21vh keeps the two hero buttons above the fold on a 1280x800 or 1366x768 laptop. */
 .hero-title {
-    font-size: clamp(4rem, 26vw, 12rem);
+    font-size: clamp(4rem, min(26vw, 21vh), 11rem);
     line-height: .86;
     letter-spacing: -.03em;
     text-transform: uppercase;
@@ -314,7 +315,7 @@ footer a:focus-visible,
 }
 
 .lead {
-    max-width: 30rem;
+    max-width: 34rem;
     margin-top: 28px;
     font-size: clamp(1.125rem, 1.6vw, 1.375rem);
     line-height: 1.45;
