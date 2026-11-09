@@ -42,15 +42,13 @@ static server does it, for example `python3 -m http.server`.
 
 ```
 fruitend/
-├── .github/            # Issue templates
+├── .github/            # CI workflow that runs the palette check
 ├── fonts/              # The three fonts, subset and self-hosted
 ├── images/             # Fruit photos used on the page
 ├── index.html          # Main page
 ├── styles.css          # All styling
 ├── script.js           # Toast, clock dial, ticker, inspector
 ├── check-palette.mjs   # node check-palette.mjs: contrast guard for the palette
-├── CONTRIBUTING.md     # How to open a pull request or an issue
-├── SECURITY.md         # How to report a security issue
 ├── LICENSE             # Full MIT license text
 ├── README.md
 └── README.pl.md        # Polish version of this file
@@ -68,14 +66,6 @@ fails if any text pair drops under its WCAG contrast floor.
 - HTML5
 - CSS3 (flat color blocks, CSS-drawn citrus slice, `oklch()` relative colors, `@property`)
 - Vanilla JavaScript (no framework, no build tool)
-
-## Contributing
-
-See [CONTRIBUTING.md](CONTRIBUTING.md) for how to open a pull request or an issue.
-
-## Security
-
-See [SECURITY.md](SECURITY.md) for how to report a security issue.
 
 ## License
 

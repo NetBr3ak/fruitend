@@ -42,15 +42,13 @@ statyczny, na przykład `python3 -m http.server`.
 
 ```
 fruitend/
-├── .github/            # Szablony zgłoszeń
+├── .github/            # Workflow CI, który uruchamia sprawdzenie palety
 ├── fonts/              # Trzy fonty, okrojone i hostowane lokalnie
 ├── images/             # Zdjęcia owoców użyte na stronie
 ├── index.html          # Strona główna
 ├── styles.css          # Cały styl strony
 ├── script.js           # Komunikat, tarcza zegara, pasek, inspektor
 ├── check-palette.mjs   # node check-palette.mjs: strażnik kontrastu palety
-├── CONTRIBUTING.md     # Jak zgłosić pull request lub issue
-├── SECURITY.md         # Jak zgłosić problem z bezpieczeństwem
 ├── LICENSE             # Pełny tekst licencji MIT
 ├── README.md           # Angielska wersja tego pliku
 └── README.pl.md
@@ -68,14 +66,6 @@ cały ten zakres i zgłasza błąd, jeśli któraś para tekstu spadnie poniżej
 - HTML5
 - CSS3 (płaskie bloki kolorów, plaster cytrusa narysowany w CSS, kolory względne `oklch()`, `@property`)
 - Czysty JavaScript (bez frameworka, bez narzędzi budujących)
-
-## Współpraca
-
-Zobacz [CONTRIBUTING.md](CONTRIBUTING.md), jak zgłosić pull request lub issue (plik po angielsku).
-
-## Bezpieczeństwo
-
-Zobacz [SECURITY.md](SECURITY.md), jak zgłosić problem z bezpieczeństwem (plik po angielsku).
 
 ## Licencja
 
