@@ -28,6 +28,17 @@
     unicode-range: U+0020-007E, U+00A0, U+00A9, U+00B0, U+00B7, U+00D7, U+2018-201D, U+2026;
 }
 
+/* Arial Black runs about twice as wide as Bricolage at wdth 75, so until the font arrived
+   "This site" broke onto two lines and the hero jumped when it swapped (CLS 0.05 with the fonts
+   1.5 s late). At 55% the fallback keeps every hero line whole. Android has no Arial Black:
+   local() fails there and the stack goes on as before. */
+@font-face {
+    font-family: "Bricolage fallback";
+    src: local("Arial Black"), local("Arial-Black");
+    font-weight: 800;
+    size-adjust: 55%;
+}
+
 /* 0 is noon, 1 is midnight. Registered, so the browser interpolates it and every colour
    below cross-fades from a single assignment. Unregistered custom properties do not. */
 @property --tod {
@@ -48,7 +59,7 @@
     --cocoa: #1a0c05;
     --kiwi: #5ce1a0;
 
-    --display: "Bricolage Grotesque", "Arial Black", sans-serif;
+    --display: "Bricolage Grotesque", "Bricolage fallback", "Arial Black", sans-serif;
     --text: "Hanken Grotesk", system-ui, sans-serif;
     --micro: "Martian Mono", ui-monospace, monospace;
 
