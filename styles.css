@@ -416,9 +416,8 @@ footer a:focus-visible,
     max-width: 26rem;
     margin-top: 24px;
     font-family: var(--micro);
-    font-size: .75rem;
+    font-size: .8125rem;
     line-height: 1.7;
-    letter-spacing: .12em;
     color: var(--cocoa);
 }
 
@@ -558,6 +557,12 @@ footer a:focus-visible,
     align-items: center;
     gap: 28px;
     background: var(--mango);
+}
+
+/* The heading and copy sit in their own box here, so they need the gap the other cards get from .blk. */
+.blk-wide > div {
+    display: grid;
+    gap: 20px;
 }
 
 .sticker {
@@ -907,7 +912,6 @@ footer {
     .citrus {
         width: clamp(240px, 56vw, 420px);
         margin-right: 0;
-        margin-left: -6vw;
     }
 
     .files-grid,
