@@ -1,75 +1,74 @@
-# 🍎 Fruitend
+# Fruitend
 
 Read this in: **English** | [Polski](README.pl.md)
 
-A fruit-themed demo landing page. It runs through six flat color blocks, from noon to midnight.
+A static demo landing page on a fruit theme. The citrus slice in the hero is drawn in CSS and is
+also a clock: drag it, and the six color blocks of the page shift from noon to midnight.
 
-## What this is
+Live page: https://netbr3ak.github.io/fruitend/
 
-Fruitend is a static demo page. It is not a real product. The nav links and the "Sign Up" buttons do not go anywhere. Each one shows a short message at the bottom of the screen instead. This is a template for practicing layout and styling.
+![The Fruitend page at 17:00 on a 1280 px laptop screen and a 375 px phone screen](images/preview.png)
 
-## Features
+## What the page does
 
-- Works on phones, tablets, and desktops
-- Six flat color blocks that run from noon to midnight, set by the time on your own clock
-- A citrus slice drawn in CSS, no image file. It is also the clock: drag it or use the arrow keys and the whole palette travels
-- An **Inspect** button that shows the real CSS rules behind whatever you point at
-- A ticker you can pause
-- Reveal and hover animations that stop when the system asks for reduced motion
-- Smooth scroll behavior
+- One number, `--tod`, drives the palette. 0 is noon and 1 is midnight. CSS derives six colors
+  from it with `oklch()` relative colors. JavaScript sets only that number.
+- The citrus slice is a slider (`role="slider"`). Drag it, or focus it with Tab and use the
+  keys: each arrow moves 15 minutes, Page Up and Page Down move an hour, Home and End jump to
+  noon and midnight.
+- On load the clock shows your local time. The ramp starts at noon, so an hour before noon
+  shows noon. Add `?t=21` to the address to pin the page at 21:00.
+- **Inspect** shows the size, padding, text contrast and matching CSS rules of the element
+  you hover or focus.
+- The ticker has a Pause button. If your system asks for reduced motion, the page does not
+  animate.
+- The nav links and "See the fruits" jump to sections of this page. "Sign up" is a demo: there
+  is no list to join, so the button shows a short message and sends nothing.
 
-Add `?t=23` to the address to pin the palette at a given hour. The run starts at noon, so
-earlier hours stay at noon.
+There is no framework, no build step and no request to another server. The fonts ship with
+the page.
 
-## Getting started
+## Run it
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/NetBr3ak/fruitend.git
-   cd fruitend
-   ```
-2. Open `index.html` in any modern browser.
+```bash
+git clone https://github.com/NetBr3ak/fruitend.git
+cd fruitend
+python3 -m http.server 8000
+```
 
-No build step. No dependencies. No install command needed. The page makes no request to any
-other server: the three fonts ship with it.
+Then open http://localhost:8000/. Opening `index.html` straight from the disk also works, with
+one gap: the browser treats a local file as a separate origin and blocks `cssRules`, so
+**Inspect** shows the measurements but not the source rules.
 
-One thing works better over http than off the disk. **Inspect** reads the page's own
-stylesheet, and a browser treats a local file as a separate origin, so `cssRules` is blocked
-there. Off the disk you get the measurements; over http you also get the source rules. Any
-static server does it, for example `python3 -m http.server`.
+## Check the palette
 
-## Project structure
+```bash
+node check-palette.mjs
+```
+
+The script walks `--tod` from 0 to 1 in 21 steps. At each step it checks 12 text and background
+pairs against their WCAG contrast floor: 4.5:1, or 3:1 for display-size text. It exits with
+code 1 if any pair falls short. CI runs it on every push to `main` and on every pull request.
+
+## Files
 
 ```
 fruitend/
-├── .github/            # CI workflow that runs the palette check
-├── fonts/              # The three fonts, subset and self-hosted
-├── images/             # Fruit photos used on the page
-├── index.html          # Main page
-├── styles.css          # All styling
-├── script.js           # Toast, clock dial, ticker, inspector
-├── check-palette.mjs   # node check-palette.mjs: contrast guard for the palette
-├── LICENSE             # Full MIT license text
+├── .github/workflows/  # CI: runs check-palette.mjs
+├── fonts/              # The three fonts, subset to the characters the page uses, and OFL.txt
+├── images/             # The four fruit photos and the preview image above
+├── index.html          # The page
+├── styles.css          # All styles, including the palette
+├── script.js           # Toast, clock, ticker, inspector
+├── check-palette.mjs   # Contrast check for the whole palette ramp
+├── favicon.svg
+├── sitemap.xml
+├── LICENSE
 ├── README.md
-└── README.pl.md        # Polish version of this file
+└── README.pl.md        # This file in Polish
 ```
 
-## The palette is one number
-
-Every block color comes from `--tod`, a single number where 0 is noon and 1 is midnight. CSS
-derives all six colors from it with `oklch()` relative colors, so moving the clock moves the
-whole page and no JavaScript touches a color. `check-palette.mjs` walks that whole range and
-fails if any text pair drops under its WCAG contrast floor.
-
-## Built with
-
-- HTML5
-- CSS3 (flat color blocks, CSS-drawn citrus slice, `oklch()` relative colors, `@property`)
-- Vanilla JavaScript (no framework, no build tool)
-
-## License
-
-This project uses the MIT License. See [LICENSE](LICENSE) for the full text.
+## Credits
 
 The four fruit photos come from Wikimedia Commons. Each one is cropped to a 360 px square.
 
@@ -80,5 +79,10 @@ The four fruit photos come from Wikimedia Commons. Each one is cropped to a 360 
 | `images/pineapple.webp` | [Canned Pineapple Chunks](https://commons.wikimedia.org/wiki/File:Canned_Pineapple_Chunks.jpg) | Alabama Extension | CC0 1.0 |
 | `images/blueberries.webp` | [Aberdeenshire blueberries](https://commons.wikimedia.org/wiki/File:Aberdeenshire_blueberries.jpg) | Mx. Granger | CC0 1.0 |
 
-The three fonts are Bricolage Grotesque, Hanken Grotesk, and Martian Mono, all under the SIL
-Open Font License. See [fonts/OFL.txt](fonts/OFL.txt).
+The three fonts are Bricolage Grotesque, Hanken Grotesk and Martian Mono, all under the SIL Open
+Font License. See [fonts/OFL.txt](fonts/OFL.txt).
+
+## License
+
+The code is under the MIT License. See [LICENSE](LICENSE). The photos and fonts keep the
+licences listed in Credits.
