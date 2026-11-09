@@ -300,14 +300,15 @@ footer a:focus-visible,
 .hero-title {
     font-size: clamp(4rem, min(26vw, 21vh), 11rem);
     line-height: .86;
-    letter-spacing: -.03em;
+    letter-spacing: 0;
     text-transform: uppercase;
     font-variation-settings: "wdth" 75;
     text-wrap: balance;
     color: var(--cocoa);
 }
 
-.hero-title .line {
+.hero-title .line,
+.files-title .line {
     display: block;
 }
 
@@ -778,7 +779,7 @@ footer {
     font-size: var(--mark);
     font-weight: 800;
     line-height: .78;
-    letter-spacing: -.04em;
+    letter-spacing: -.01em;
     text-transform: uppercase;
     font-variation-settings: "wdth" 75;
     color: var(--mango);
