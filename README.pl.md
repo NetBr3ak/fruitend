@@ -81,6 +81,14 @@ Zobacz [SECURITY.md](SECURITY.md), jak zgłosić problem z bezpieczeństwem (pli
 
 Projekt jest na licencji MIT. Pełny tekst jest w pliku [LICENSE](LICENSE) (po angielsku).
 
-Zdjęcia owoców są na CC0 (domena publiczna), ze StockSnap, Rawpixel i Wikimedia Commons.
+Cztery zdjęcia owoców pochodzą z Wikimedia Commons. Każde jest przycięte do kwadratu 360 px.
+
+| Plik | Zdjęcie | Autor | Licencja |
+|---|---|---|---|
+| `images/strawberries.webp` | [Strawberries in basket 2018 G1](https://commons.wikimedia.org/wiki/File:Strawberries_in_basket_2018_G1.jpg) | George Chernilevsky | domena publiczna |
+| `images/kiwi.webp` | [Kiwi-halbiert](https://commons.wikimedia.org/wiki/File:Kiwi-halbiert.jpg) | MartinThoma | CC0 1.0 |
+| `images/pineapple.webp` | [Canned Pineapple Chunks](https://commons.wikimedia.org/wiki/File:Canned_Pineapple_Chunks.jpg) | Alabama Extension | CC0 1.0 |
+| `images/blueberries.webp` | [Aberdeenshire blueberries](https://commons.wikimedia.org/wiki/File:Aberdeenshire_blueberries.jpg) | Mx. Granger | CC0 1.0 |
+
 Trzy fonty to Bricolage Grotesque, Hanken Grotesk i Martian Mono, wszystkie na licencji SIL
 Open Font License. Zobacz [fonts/OFL.txt](fonts/OFL.txt).
