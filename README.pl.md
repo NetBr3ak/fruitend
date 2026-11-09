@@ -74,7 +74,7 @@ fruitend/
 ## Źródła
 
 Cztery zdjęcia owoców pochodzą z Wikimedia Commons. Każde jest przycięte do kwadratu 360 px,
-z kopią 200 px (`*-200.webp`) dla ekranów, którym tyle wystarczy.
+z kopiami 300 px i 200 px (`*-300.webp`, `*-200.webp`) dla ekranów, którym tyle wystarczy.
 
 | Plik | Zdjęcie | Autor | Licencja |
 |---|---|---|---|
