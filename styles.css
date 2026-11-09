@@ -257,8 +257,11 @@ footer a:focus-visible,
     transition: color .2s ease;
 }
 
-.bar-links a:hover {
-    color: var(--midnight);
+/* Hover rules sit behind (hover: hover): on a touch screen a tapped link kept its hover colour. */
+@media (hover: hover) {
+    .bar-links a:hover {
+        color: var(--midnight);
+    }
 }
 
 .pill-ink {
@@ -279,9 +282,11 @@ footer a:focus-visible,
     transition: background .2s ease, color .2s ease;
 }
 
-.pill-ink:hover {
-    background: var(--straw);
-    color: var(--cocoa);
+@media (hover: hover) {
+    .pill-ink:hover {
+        background: var(--straw);
+        color: var(--cocoa);
+    }
 }
 
 .pill-ink.big {
@@ -358,8 +363,10 @@ footer a:focus-visible,
     transition: color .2s ease;
 }
 
-.ghost-link:hover {
-    color: var(--midnight);
+@media (hover: hover) {
+    .ghost-link:hover {
+        color: var(--midnight);
+    }
 }
 
 .hero-disc {
@@ -505,10 +512,17 @@ footer a:focus-visible,
     transition: background .2s ease, color .2s ease;
 }
 
-.ticker-ctl:hover,
 .ticker-ctl[aria-pressed="true"] {
     color: var(--cocoa);
     background: var(--cream);
+}
+
+/* A stuck hover made Inspect look pressed after a tap had turned it off. */
+@media (hover: hover) {
+    .ticker-ctl:hover {
+        color: var(--cocoa);
+        background: var(--cream);
+    }
 }
 
 /* ---------- fruits ---------- */
@@ -720,9 +734,11 @@ footer a:focus-visible,
 }
 
 /* Hover leans on the button, the press seats it flat. */
-.press:hover {
-    transform: translate(4px, 4px);
-    box-shadow: 4px 4px 0 var(--cocoa);
+@media (hover: hover) {
+    .press:hover {
+        transform: translate(4px, 4px);
+        box-shadow: 4px 4px 0 var(--cocoa);
+    }
 }
 
 .press:active {
