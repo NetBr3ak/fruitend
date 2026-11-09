@@ -30,15 +30,6 @@ document.addEventListener('DOMContentLoaded', function () {
 		});
 	});
 
-	/* ---------- bar ---------- */
-
-	const bar = document.querySelector('.bar');
-	const compact = () => bar.classList.toggle('compact', scrollY > 80);
-
-	addEventListener('scroll', compact, { passive: true });
-	// A reload part-way down the page restores the scroll position but fires no scroll event.
-	compact();
-
 	/* ---------- reveal ---------- */
 
 	const reveal = document.querySelectorAll('[data-reveal]');
