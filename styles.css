@@ -183,10 +183,8 @@ footer a:focus-visible,
     left: 0;
 }
 
-/* Without this a jump to an anchor lands behind the sticky bar. */
-#main,
-#fruits,
-#about {
+/* Without this the skip link lands behind the sticky bar it was meant to skip. */
+#main {
     scroll-margin-top: calc(var(--bar) + 6px);
 }
 

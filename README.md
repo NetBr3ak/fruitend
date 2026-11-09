@@ -22,8 +22,8 @@ Live page: https://netbr3ak.github.io/fruitend/
   you hover or focus.
 - The ticker has a Pause button. If your system asks for reduced motion, the page does not
   animate.
-- The nav links and "See the fruits" jump to sections of this page. "Sign up" is a demo: there
-  is no list to join, so the button shows a short message and sends nothing.
+- The nav links, "See the fruits" and "Sign up" are demos. They lead nowhere: a click shows a
+  short message and sends nothing.
 
 There is no framework, no build step and no request to another server. The fonts ship with
 the page.

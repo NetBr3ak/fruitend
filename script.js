@@ -1,4 +1,4 @@
-// Demo page: sign-up has nowhere to send anything, so a click reports that in a toast.
+// Demo page: the nav links, "See the fruits" and sign-up lead nowhere, so a click reports that in a toast.
 document.addEventListener('DOMContentLoaded', function () {
 	const root = document.documentElement;
 	const pad = n => String(n).padStart(2, '0');
@@ -22,6 +22,13 @@ document.addEventListener('DOMContentLoaded', function () {
 		clearTimeout(timer);
 		timer = setTimeout(() => close(toast), 2600);
 	}
+
+	document.querySelectorAll('.bar-links a, .ghost-link').forEach(link => {
+		link.addEventListener('click', function (e) {
+			e.preventDefault();
+			say(`"${this.textContent.trim()}" is a demo link, it goes nowhere.`);
+		});
+	});
 
 	document.querySelectorAll('.pill-ink, .press').forEach(button => {
 		button.addEventListener('click', function (e) {

@@ -23,9 +23,8 @@ Strona na żywo: https://netbr3ak.github.io/fruitend/
   kursorem albo z fokusem.
 - Pasek z tekstem ma przycisk Pause. Jeśli system prosi o ograniczenie ruchu, strona nie
   ma animacji.
-- Linki w menu i "See the fruits" przewijają do sekcji tej strony. "Sign up" to atrapa: nie ma
-  listy, do której można się zapisać, więc przycisk pokazuje krótki komunikat i niczego nie
-  wysyła.
+- Linki w menu, "See the fruits" i "Sign up" to atrapy. Nigdzie nie prowadzą: kliknięcie
+  pokazuje krótki komunikat i niczego nie wysyła.
 
 Nie ma frameworka, budowania ani zapytań do innego serwera. Fonty leżą obok strony.
 
