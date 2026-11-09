@@ -13,15 +13,16 @@ Live page: https://netbr3ak.github.io/fruitend/
 
 - One number, `--tod`, drives the palette. 0 is noon and 1 is midnight. CSS derives six colors
   from it with `oklch()` relative colors. JavaScript sets only that number.
-- The citrus slice is a slider (`role="slider"`). Drag it, or focus it with Tab and use the
-  keys: each arrow moves 15 minutes, Page Up and Page Down move an hour, Home and End jump to
-  noon and midnight.
+- The citrus slice is a slider (`role="slider"`) and shows the time in its middle. Drag it, or
+  focus it with Tab and use the keys: each arrow moves 15 minutes, Page Up and Page Down move
+  an hour, Home and End jump to noon and midnight. A drag past twelve stops at noon or
+  midnight. On a touch screen, tap the slice or drag sideways; a vertical swipe scrolls the page.
 - On load the clock shows your local time. The ramp starts at noon, so an hour before noon
   shows noon. Add `?t=21` to the address to pin the page at 21:00.
 - **Inspect** shows the size, padding, text contrast and matching CSS rules of the element
   you hover or focus.
-- The ticker has a Pause button. If your system asks for reduced motion, the page does not
-  animate.
+- The ticker has a Pause button. If your system asks for reduced motion, nothing on the page
+  moves and the Pause button is hidden.
 - The nav links, "See the fruits" and "Sign up" are demos. They lead nowhere: a click shows a
   short message and sends nothing.
 
