@@ -902,8 +902,10 @@ footer {
     padding: 0;
     border: 0;
     background: transparent;
+    /* Kiwi dashes alone vanished on the kiwi card; the cocoa ring under them shows on every light block. */
     outline: 2px dashed var(--kiwi);
     outline-offset: 1px;
+    box-shadow: 0 0 0 3px var(--cocoa);
     pointer-events: none;
 }
 

@@ -134,6 +134,9 @@ document.addEventListener('DOMContentLoaded', function () {
 	const ticker = document.querySelector('.ticker');
 	const tickerBtn = document.getElementById('ticker-toggle');
 	let paused = false;
+	// Inspect stops a running ticker so a hover target holds still; leaving Inspect starts it
+	// again, unless the visitor pressed Pause or Play in between.
+	let resumeTicker = false;
 
 	function setPaused(on) {
 		paused = on;
@@ -141,7 +144,10 @@ document.addEventListener('DOMContentLoaded', function () {
 		tickerBtn.textContent = paused ? 'Play' : 'Pause';
 	}
 
-	tickerBtn.addEventListener('click', () => setPaused(!paused));
+	tickerBtn.addEventListener('click', () => {
+		resumeTicker = false;
+		setPaused(!paused);
+	});
 
 	/* ---------- inspector ---------- */
 
@@ -209,6 +215,8 @@ document.addEventListener('DOMContentLoaded', function () {
 		halo.style.translate = `${r.left}px ${r.top}px`;
 		halo.style.width = `${r.width}px`;
 		halo.style.height = `${r.height}px`;
+		// Opened here, not with the panel: before the first element it was a dot at the top left.
+		open(halo);
 
 		probeTarget.textContent = el.tagName.toLowerCase() + [...el.classList].map(c => '.' + c).join('');
 		probeBox.textContent = [
@@ -240,12 +248,17 @@ document.addEventListener('DOMContentLoaded', function () {
 		document[bind]('pointerover', look);
 		document[bind]('focusin', look);
 
-		if (!on) return close(probe), close(halo);
+		if (!on) {
+			close(probe);
+			close(halo);
+			if (resumeTicker) setPaused(false);
+			return;
+		}
 		probeTarget.textContent = 'Point at anything';
 		probeBox.textContent = 'Hover or tab to an element and its real box lands here.';
 		probeRules.textContent = '';
 		open(probe);
-		open(halo);
+		resumeTicker = !paused;
 		setPaused(true);
 	}
 
