@@ -1096,16 +1096,44 @@ footer {
         grid-column: 1;
     }
 
-    .blk-tall,
-    .blk-wide {
+    .blk-tall {
         flex-direction: column;
         align-items: flex-start;
     }
 
-    .sticker,
     .blk-tall .sticker {
         width: 150px;
         height: 150px;
+    }
+
+    /* Strawberries stay the one large card; the other three turn into compact rows, photo on the
+       left. Four cards of one shape took 1484 px and read as a template. At 1.5rem "Blueberries"
+       is 130 px wide, which still fits beside a 96 px photo on a 320 px screen. */
+    .blk:not(.blk-tall) {
+        display: grid;
+        grid-template-columns: clamp(88px, 30vw, 112px) minmax(0, 1fr);
+        gap: 8px 16px;
+    }
+
+    .blk-wide > div {
+        display: contents;
+    }
+
+    .blk:not(.blk-tall) .sticker {
+        grid-row: span 2;
+        align-self: center;
+        width: 100%;
+        height: auto;
+        aspect-ratio: 1;
+    }
+
+    .blk:not(.blk-tall) h3 {
+        align-self: end;
+        font-size: 1.5rem;
+    }
+
+    .blk:not(.blk-tall) p {
+        align-self: start;
     }
 
     /* Bottom sheet: at 60% of a 812 px screen the panel hid most of what it was describing. */
