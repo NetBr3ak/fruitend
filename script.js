@@ -59,6 +59,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	/* ---------- the citrus slice is the clock ---------- */
 
 	const clock = document.getElementById('clock');
+	const clockTime = clock.querySelector('.clock-time');
 	const STEP = { ArrowUp: 15, ArrowRight: 15, ArrowDown: -15, ArrowLeft: -15, PageUp: 60, PageDown: -60 };
 	let tod = 0; // minutes past noon, 0 to 720
 
@@ -66,25 +67,32 @@ document.addEventListener('DOMContentLoaded', function () {
 		tod = Math.min(720, Math.max(0, Math.round(minutes)));
 		root.style.setProperty('--tod', (tod / 720).toFixed(4));
 		const wall = (720 + tod) % 1440;
+		const time = `${pad(Math.floor(wall / 60))}:${pad(wall % 60)}`;
 		clock.setAttribute('aria-valuenow', tod);
-		clock.setAttribute('aria-valuetext', `${pad(Math.floor(wall / 60))}:${pad(wall % 60)}`);
+		clock.setAttribute('aria-valuetext', time);
+		clockTime.textContent = time;
 	}
 
-	function scrub(e) {
+	// Minutes past noon under the pointer, read clockwise from twelve.
+	function minutesAt(e) {
 		const r = clock.getBoundingClientRect();
 		const angle = Math.atan2(e.clientX - r.left - r.width / 2, r.top + r.height / 2 - e.clientY);
-		// ponytail: the dial wraps at twelve o'clock rather than tracking a second turn.
-		setTod((angle * 180 / Math.PI + 360) % 360 / 360 * 720);
+		return (angle * 180 / Math.PI + 360) % 360 / 360 * 720;
 	}
 
 	clock.addEventListener('pointerdown', e => {
 		clock.setPointerCapture(e.pointerId);
 		root.classList.add('scrubbing');
-		scrub(e);
+		setTod(minutesAt(e));
 	});
 
 	clock.addEventListener('pointermove', e => {
-		if (clock.hasPointerCapture(e.pointerId)) scrub(e);
+		if (!clock.hasPointerCapture(e.pointerId)) return;
+		let next = minutesAt(e);
+		// Past twelve the drag stops at the end it reached: wrapping round would flip the
+		// whole page between midnight and noon in one frame.
+		if (Math.abs(next - tod) > 360) next = tod > 360 ? 720 : 0;
+		setTod(next);
 	});
 
 	['pointerup', 'pointercancel'].forEach(type => {

@@ -138,6 +138,7 @@ ol {
 .ticker-run,
 .ticker-ctl,
 .disc-note,
+.clock-time,
 .chips li,
 .press,
 .note,
@@ -366,6 +367,8 @@ footer a:focus-visible,
     border-radius: 50%;
     cursor: grab;
     touch-action: none;
+    /* The time in the middle is sized in cqi, so it scales with the dial. */
+    container-type: inline-size;
     /* closest-side, so 100% lands on the circle edge and not on the square's far corner */
     background:
         radial-gradient(circle closest-side, var(--cream) 0 24%, transparent 24%),
@@ -382,16 +385,18 @@ footer a:focus-visible,
     outline-offset: 8px;
 }
 
-/* Twelve wedges: it was already a clock face. The hand sweeps one turn from noon to midnight. */
+/* Twelve wedges: it was already a clock face. The hand sweeps one turn from noon to midnight.
+   The knob on its tip says "grab here"; the stem stops at the pith, where the time is written. */
 .citrus::before {
     content: "";
     position: absolute;
-    left: calc(50% - 2px);
+    left: calc(50% - 10px);
     bottom: 50%;
-    width: 4px;
+    width: 20px;
     height: 34%;
-    border-radius: 999px;
-    background: var(--cocoa);
+    background:
+        radial-gradient(circle at 50% 10px, var(--cocoa) 9px, transparent 10px),
+        linear-gradient(var(--cocoa) 0 0) 50% 0 / 4px 62% no-repeat;
     transform-origin: 50% 100%;
     transform: rotate(calc(var(--tod) * 360deg));
     pointer-events: none;
@@ -406,6 +411,16 @@ footer a:focus-visible,
     background: conic-gradient(var(--cocoa) calc(var(--tod) * 360deg), transparent 0);
     mask: radial-gradient(circle closest-side, transparent 0 calc(100% - 12px), #000 calc(100% - 12px));
     pointer-events: none;
+}
+
+.clock-time {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    font-family: var(--micro);
+    font-size: max(.75rem, 5.5cqi);
+    color: var(--cocoa);
 }
 
 .disc-note {
