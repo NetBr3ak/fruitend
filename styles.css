@@ -366,7 +366,9 @@ footer a:focus-visible,
     border: 12px solid var(--straw);
     border-radius: 50%;
     cursor: grab;
-    touch-action: none;
+    /* At 375 px the dial is 64% of the width, so a thumb scrolling the page often starts on it.
+       pan-y keeps that scroll; a sideways drag and a tap still reach script.js. */
+    touch-action: pan-y pinch-zoom;
     /* The time in the middle is sized in cqi, so it scales with the dial. */
     container-type: inline-size;
     /* closest-side, so 100% lands on the circle edge and not on the square's far corner */

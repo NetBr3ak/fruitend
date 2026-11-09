@@ -62,6 +62,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	const clockTime = clock.querySelector('.clock-time');
 	const STEP = { ArrowUp: 15, ArrowRight: 15, ArrowDown: -15, ArrowLeft: -15, PageUp: 60, PageDown: -60 };
 	let tod = 0; // minutes past noon, 0 to 720
+	let touchStart = null; // [x, y] of a touch that has not set the time yet
 
 	function setTod(minutes) {
 		tod = Math.min(720, Math.max(0, Math.round(minutes)));
@@ -83,16 +84,32 @@ document.addEventListener('DOMContentLoaded', function () {
 	clock.addEventListener('pointerdown', e => {
 		clock.setPointerCapture(e.pointerId);
 		root.classList.add('scrubbing');
-		setTod(minutesAt(e));
+		touchStart = e.pointerType === 'touch' ? [e.clientX, e.clientY] : null;
+		if (!touchStart) setTod(minutesAt(e));
 	});
 
 	clock.addEventListener('pointermove', e => {
 		if (!clock.hasPointerCapture(e.pointerId)) return;
+		if (touchStart) {
+			// touch-action: pan-y turns a mostly vertical swipe into a page scroll, but Chromium
+			// still sends about three pointermoves (20 px) before its pointercancel. Until the
+			// finger goes sideways the time stays put, or every scroll would flash the palette.
+			const [x, y] = touchStart;
+			if (Math.abs(e.clientY - y) >= Math.abs(e.clientX - x)) return;
+			touchStart = null;
+			setTod(minutesAt(e));
+			return;
+		}
 		let next = minutesAt(e);
 		// Past twelve the drag stops at the end it reached: wrapping round would flip the
 		// whole page between midnight and noon in one frame.
 		if (Math.abs(next - tod) > 360) next = tod > 360 ? 720 : 0;
 		setTod(next);
+	});
+
+	// A tap: the finger lifted before it went sideways.
+	clock.addEventListener('pointerup', e => {
+		if (touchStart) setTod(minutesAt(e));
 	});
 
 	['pointerup', 'pointercancel'].forEach(type => {
