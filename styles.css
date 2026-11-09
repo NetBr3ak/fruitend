@@ -181,11 +181,12 @@ footer a:focus-visible,
     left: 0;
 }
 
-/* Without this a jump to an anchor lands behind the sticky bar. */
+/* Without this a jump to an anchor lands behind the sticky bar. 70px is the compact bar:
+   64px plus its 6px border. */
 #main,
 #fruits,
 #about {
-    scroll-margin-top: 96px;
+    scroll-margin-top: 70px;
 }
 
 /* ---------- bar ---------- */
