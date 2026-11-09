@@ -940,22 +940,17 @@ footer {
     opacity: .82;
 }
 
+/* Not a popover: in the top layer it painted over the panel whenever it opened after it. Below
+   the top layer it sits under the panel and the toast, and z-index 15 keeps it over the bar. */
 .probe-halo {
     position: fixed;
     inset: 0 auto auto 0;
-    margin: 0;
-    padding: 0;
-    border: 0;
-    background: transparent;
+    z-index: 15;
     /* Kiwi dashes alone vanished on the kiwi card; the cocoa ring under them shows on every light block. */
     outline: 2px dashed var(--kiwi);
     outline-offset: 1px;
     box-shadow: 0 0 0 3px var(--cocoa);
     pointer-events: none;
-}
-
-.probe-halo:popover-open {
-    display: block;
 }
 
 /* ---------- responsive ---------- */
@@ -1096,6 +1091,13 @@ footer {
     .blk-tall .sticker {
         width: 150px;
         height: 150px;
+    }
+
+    /* Bottom sheet: at 60% of a 812 px screen the panel hid most of what it was describing. */
+    .probe {
+        inset: auto 8px 8px;
+        width: auto;
+        max-height: 40vh;
     }
 
     .chips li:nth-child(2) {

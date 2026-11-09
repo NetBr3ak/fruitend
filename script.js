@@ -168,6 +168,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	const probeRules = probe.querySelector('.probe-rules');
 	const swatch = document.createElement('canvas').getContext('2d', { willReadFrequently: true });
 	let inspecting = false;
+	let inspected = null;
 
 	const lin = c => c <= .04045 ? c / 12.92 : ((c + .055) / 1.055) ** 2.4;
 	const luminance = ([r, g, b]) => .2126 * lin(r) + .7152 * lin(g) + .0722 * lin(b);
@@ -216,16 +217,26 @@ document.addEventListener('DOMContentLoaded', function () {
 		});
 	}
 
+	// The halo is position: fixed, and a scroll by finger fires no pointerover or focusin, so
+	// it is placed again on every scroll or it stays where the element used to be.
+	function place() {
+		const r = inspected.getBoundingClientRect();
+		halo.style.translate = `${r.left}px ${r.top}px`;
+		halo.style.width = `${r.width}px`;
+		halo.style.height = `${r.height}px`;
+		// Shown here, not with the panel: before the first element it was a dot at the top left.
+		halo.hidden = false;
+	}
+
+	const track = () => { if (inspected) place(); };
+
 	function describe(el) {
 		const s = getComputedStyle(el);
 		const r = el.getBoundingClientRect();
 		const matched = authoredRules(el);
 
-		halo.style.translate = `${r.left}px ${r.top}px`;
-		halo.style.width = `${r.width}px`;
-		halo.style.height = `${r.height}px`;
-		// Opened here, not with the panel: before the first element it was a dot at the top left.
-		open(halo);
+		inspected = el;
+		place();
 
 		probeTarget.textContent = el.tagName.toLowerCase() + [...el.classList].map(c => '.' + c).join('');
 		probeBox.textContent = [
@@ -256,10 +267,12 @@ document.addEventListener('DOMContentLoaded', function () {
 		const bind = on ? 'addEventListener' : 'removeEventListener';
 		document[bind]('pointerover', look);
 		document[bind]('focusin', look);
+		document[bind]('scroll', track, { passive: true });
 
 		if (!on) {
 			close(probe);
-			close(halo);
+			halo.hidden = true;
+			inspected = null;
 			if (resumeTicker) setPaused(false);
 			return;
 		}
