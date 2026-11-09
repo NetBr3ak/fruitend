@@ -469,6 +469,15 @@ footer a:focus-visible,
     color: var(--cocoa);
 }
 
+/* The note is about keys, and on a phone its three lines fell across the bottom edge of the first
+   screen. The slider's aria-describedby still reads it: accname 1.2 counts a hidden node that a
+   relation points to directly. */
+@media (hover: none) and (pointer: coarse) {
+    .disc-note {
+        display: none;
+    }
+}
+
 /* ---------- ticker ---------- */
 
 .ticker {
@@ -1162,41 +1171,37 @@ footer {
         }
     }
 
+    /* Everything has landed by 600 ms, and the dial the lead asks you to drag by 500 ms; it used
+       to come last, at 1100 ms (NN/g response-time limits: 1 s keeps the flow). */
     .bar,
     .hero-title .line,
     .lead,
-    .hero-actions,
-    .hero-disc {
-        animation: rise .52s var(--ease) both;
+    .hero-actions {
+        animation: rise .4s var(--ease) both;
     }
 
     .bar {
         animation-name: fade-up;
-        animation-duration: .4s;
-    }
-
-    .hero-title .line:nth-child(1) {
-        animation-delay: 120ms;
     }
 
     .hero-title .line:nth-child(2) {
-        animation-delay: 200ms;
+        animation-delay: 60ms;
     }
 
     .hero-title .line:nth-child(3) {
-        animation-delay: 280ms;
+        animation-delay: 120ms;
     }
 
     .lead {
-        animation-delay: 380ms;
+        animation-delay: 160ms;
     }
 
     .hero-actions {
-        animation-delay: 460ms;
+        animation-delay: 200ms;
     }
 
     .hero-disc {
-        animation: disc-in .9s var(--ease) 200ms both;
+        animation: disc-in .5s var(--ease) both;
     }
 
     .ticker-track {
