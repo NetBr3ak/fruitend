@@ -655,8 +655,10 @@ footer a:focus-visible,
     transform: rotate(7deg);
 }
 
-.blk:hover .sticker {
-    transform: rotate(0) scale(1.04);
+@media (hover: hover) {
+    .blk:hover .sticker {
+        transform: rotate(0) scale(1.04);
+    }
 }
 
 /* ---------- files ---------- */
@@ -796,10 +798,12 @@ footer {
     transition: color .2s ease;
 }
 
-.foot-links a:hover {
-    color: var(--mango);
-    text-decoration: underline;
-    text-underline-offset: 4px;
+@media (hover: hover) {
+    .foot-links a:hover {
+        color: var(--mango);
+        text-decoration: underline;
+        text-underline-offset: 4px;
+    }
 }
 
 /* The links carry 12 px of padding; without the same here the copy sat 12 px below their baseline. */
@@ -893,9 +897,11 @@ footer {
     transition: background .2s ease, color .2s ease;
 }
 
-.toast-close:hover {
-    color: var(--cocoa);
-    background: var(--cream);
+@media (hover: hover) {
+    .toast-close:hover {
+        color: var(--cocoa);
+        background: var(--cream);
+    }
 }
 
 /* ---------- inspector ---------- */
