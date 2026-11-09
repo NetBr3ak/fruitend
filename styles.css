@@ -1,10 +1,12 @@
 /* Self-hosted so the page really has no third-party request, the way the README claims.
    Subset to the characters this page uses; anything outside the range falls back to the
-   stacks declared on --display / --text / --micro. */
+   stacks declared on --display / --text / --micro. Each family is also cut (fontTools
+   instancer) to the one weight the page sets: 138.5 kB became 65.6 kB. Bricolage keeps its
+   width and optical-size axes; Martian Mono is fixed at the 87.5 width every mono rule asks for. */
 @font-face {
     font-family: "Bricolage Grotesque";
     src: url("fonts/bricolage-grotesque.woff2") format("woff2");
-    font-weight: 200 800;
+    font-weight: 800;
     font-stretch: 75% 100%;
     font-display: swap;
     unicode-range: U+0020-007E, U+00A0, U+00A9, U+00B0, U+00B7, U+00D7, U+2018-201D, U+2026;
@@ -13,7 +15,7 @@
 @font-face {
     font-family: "Hanken Grotesk";
     src: url("fonts/hanken-grotesk.woff2") format("woff2");
-    font-weight: 100 900;
+    font-weight: 400;
     font-display: swap;
     unicode-range: U+0020-007E, U+00A0, U+00A9, U+00B0, U+00B7, U+00D7, U+2018-201D, U+2026;
 }
@@ -21,8 +23,7 @@
 @font-face {
     font-family: "Martian Mono";
     src: url("fonts/martian-mono.woff2") format("woff2");
-    font-weight: 100 800;
-    font-stretch: 75% 112.5%;
+    font-weight: 400;
     font-display: swap;
     unicode-range: U+0020-007E, U+00A0, U+00A9, U+00B0, U+00B7, U+00D7, U+2018-201D, U+2026;
 }

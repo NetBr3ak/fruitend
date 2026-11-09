@@ -56,7 +56,7 @@ requeście.
 ```
 fruitend/
 ├── .github/workflows/  # CI: uruchamia check-palette.mjs
-├── fonts/              # Trzy fonty, okrojone do znaków ze strony, i OFL.txt
+├── fonts/              # Trzy fonty, okrojone do znaków i jednej grubości ze strony, i OFL.txt
 ├── images/             # Cztery zdjęcia owoców i obraz podglądu powyżej
 ├── index.html          # Strona
 ├── styles.css          # Wszystkie style, razem z paletą

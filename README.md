@@ -55,7 +55,7 @@ code 1 if any pair falls short. CI runs it on every push to `main` and on every 
 ```
 fruitend/
 ├── .github/workflows/  # CI: runs check-palette.mjs
-├── fonts/              # The three fonts, subset to the characters the page uses, and OFL.txt
+├── fonts/              # The three fonts, cut to the characters and the one weight the page uses, and OFL.txt
 ├── images/             # The four fruit photos and the preview image above
 ├── index.html          # The page
 ├── styles.css          # All styles, including the palette
