@@ -13,14 +13,19 @@ document.addEventListener('DOMContentLoaded', function () {
 	const toastMsg = toast.querySelector('.toast-msg');
 	let timer;
 
+	// 5 s (2.6 s was short for two lines), and held while the pointer or focus is on it.
+	function closeLater() {
+		clearTimeout(timer);
+		timer = setTimeout(() => toast.matches(':hover, :focus-within') ? closeLater() : close(toast), 5000);
+	}
+
 	function say(message) {
 		// Writing the same string twice is not a DOM mutation, so the live region would
 		// stay silent on a repeat click. Clearing first forces the announcement.
 		toastMsg.textContent = '';
 		requestAnimationFrame(() => { toastMsg.textContent = message; });
 		open(toast);
-		clearTimeout(timer);
-		timer = setTimeout(() => close(toast), 2600);
+		closeLater();
 	}
 
 	document.querySelectorAll('.bar-links a, .ghost-link').forEach(link => {
