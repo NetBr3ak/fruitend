@@ -973,6 +973,21 @@ footer {
         --bar: 72px;
     }
 
+    /* 22vw and the tighter gaps lift the dial's bottom edge from 852 to 781 px on a 375x812 phone,
+       so the slice the lead asks you to drag is whole on the first screen, and over half of it
+       shows on a 375x667 one. */
+    .hero {
+        padding-top: 28px;
+    }
+
+    .hero-title {
+        font-size: clamp(4rem, min(22vw, 21vh), 11rem);
+    }
+
+    .hero-grid {
+        row-gap: 28px;
+    }
+
     /* Three items in a 390px bar: every one of these is what keeps "Sign up" on one line. */
     .bar-inner {
         gap: 12px;
