@@ -70,7 +70,8 @@ fruitend/
 
 ## Credits
 
-The four fruit photos come from Wikimedia Commons. Each one is cropped to a 360 px square.
+The four fruit photos come from Wikimedia Commons. Each one is cropped to a 360 px square, with a
+200 px copy (`*-200.webp`) for screens that need no more.
 
 | File | Photo | Author | Licence |
 |---|---|---|---|
