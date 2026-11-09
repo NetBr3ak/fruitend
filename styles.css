@@ -338,6 +338,7 @@ footer a:focus-visible,
     margin-top: 28px;
     font-size: clamp(1.125rem, 1.6vw, 1.375rem);
     line-height: 1.45;
+    text-wrap: pretty;
 }
 
 .hero-actions {
@@ -393,7 +394,7 @@ footer a:focus-visible,
     container-type: inline-size;
     /* closest-side, so 100% lands on the circle edge and not on the square's far corner */
     background:
-        radial-gradient(circle closest-side, var(--cream) 0 24%, transparent 24%),
+        radial-gradient(circle closest-side, var(--cream) 0 26%, transparent 26%),
         radial-gradient(circle closest-side, transparent 0 88%, var(--cream) 88% 100%),
         repeating-conic-gradient(from -15deg, var(--mango) 0 30deg, var(--lemon) 0 60deg);
 }
@@ -441,7 +442,7 @@ footer a:focus-visible,
     display: grid;
     place-items: center;
     font-family: var(--micro);
-    font-size: max(.75rem, 5.5cqi);
+    font-size: max(.875rem, 5.5cqi);
     color: var(--cocoa);
 }
 
@@ -571,6 +572,7 @@ footer a:focus-visible,
 
 .blk p {
     font-size: 1rem;
+    text-wrap: pretty;
 }
 
 .blk-tall {
@@ -786,7 +788,9 @@ footer {
     text-underline-offset: 4px;
 }
 
+/* The links carry 12 px of padding; without the same here the copy sat 12 px below their baseline. */
 .foot-copy {
+    padding-block: 12px;
     font-family: var(--micro);
     font-size: .8125rem;
     color: var(--cream);
