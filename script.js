@@ -81,6 +81,10 @@ document.addEventListener('DOMContentLoaded', function () {
 		}
 		pending = { next, show };
 		root.classList.add('scrubbing');
+		// The new scene spreads from the slice, or from the bar's slider while that one shows.
+		const origin = (bar.classList.contains('timed') ? timeBar : clock).getBoundingClientRect();
+		root.style.setProperty('--vt-x', `${origin.left + origin.width / 2}px`);
+		root.style.setProperty('--vt-y', `${origin.top + origin.height / 2}px`);
 		fade = document.startViewTransition(() => {
 			pending.show(pending.next);
 			pending = null;
@@ -238,8 +242,9 @@ document.addEventListener('DOMContentLoaded', function () {
 		const entries = performance.getEntriesByType('resource');
 		const timing = file => file === 'index.html' ? performance.getEntriesByType('navigation')[0]
 			: entries.find(e => new URL(e.name).pathname.endsWith('/' + file));
-		let measured = 0;
-		document.querySelectorAll('.chips li').forEach(li => {
+		const sizes = new Map();
+		const chips = document.querySelector('.chips');
+		chips.querySelectorAll('li').forEach(li => {
 			const entry = timing(li.textContent.trim());
 			if (!entry?.decodedBodySize) return;
 			for (const text of [`${(entry.decodedBodySize / 1000).toFixed(1)} kB`, `${Math.round(entry.responseEnd - entry.startTime)} ms`]) {
@@ -247,9 +252,13 @@ document.addEventListener('DOMContentLoaded', function () {
 				cell.textContent = text;
 				li.append(cell);
 			}
-			measured++;
+			sizes.set(li, entry.decodedBodySize);
 		});
-		document.querySelector('.files-note').hidden = !measured;
+		// Each bar is its file's share of the largest one (styles.css, .chips.measured).
+		const largest = Math.max(...sizes.values());
+		sizes.forEach((size, li) => li.style.setProperty('--share', (size / largest).toFixed(3)));
+		chips.classList.toggle('measured', sizes.size > 0);
+		document.querySelector('.files-note').hidden = !sizes.size;
 	}
 
 	/* ---------- inspector ---------- */
