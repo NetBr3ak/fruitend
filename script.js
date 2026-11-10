@@ -155,10 +155,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
 	timeBar.addEventListener('input', () => choose(Number(timeBar.value)));
 
+	// scroll-padding in styles.css keeps focus and anchors below the bar at its real height.
+	const bar = document.querySelector('.bar');
+	if ('ResizeObserver' in window) {
+		new ResizeObserver(() => root.style.setProperty('--bar-h', `${bar.offsetHeight}px`)).observe(bar);
+	}
+
 	// The bar's slider shows while the dial is off screen (under the bar counts as off), so the
 	// time stays in reach next to the blocks it colours. It stays while it has the focus.
 	if ('IntersectionObserver' in window) {
-		const bar = document.querySelector('.bar');
 		let dialOnScreen = true;
 		const showTimeBar = () => {
 			const show = !dialOnScreen || document.activeElement === timeBar;

@@ -212,11 +212,11 @@ footer a:focus-visible,
     left: 0;
 }
 
-/* Without this the skip link and the nav links land behind the sticky bar. */
-#main,
-#fruits,
-#about {
-    scroll-margin-top: calc(var(--bar) + 6px);
+/* Anchor jumps and focus scrolling stop below the sticky bar. The bar wraps at large text
+   sizes (139 px at 200% on a 320 px screen), so script.js writes its real height into --bar-h;
+   without script the fixed --bar holds (WCAG 2.4.11, focus not obscured). */
+html {
+    scroll-padding-top: calc(var(--bar-h, var(--bar)) + 6px);
 }
 
 /* ---------- bar ---------- */
