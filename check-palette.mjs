@@ -21,7 +21,7 @@ const RAMP = {
 const PAIRS = [
 	['cocoa', 'mango', 4.5, 'bar links, hero title, .press label'],
 	['midnight', 'mango', 4.5, 'nav + ghost hover (M1 fix), 12-13px'],
-	['cream', 'cocoa', 4.5, 'ticker, toast, skip link, inspector'],
+	['cream', 'cocoa', 4.5, 'ticker, skip link, inspector'],
 	['cocoa', 'straw', 4.5, '.pill-ink hover, .fruits-title'],
 	['cream', 'straw', 3.0, '.numeral at 1.5em'],
 	['cream', 'magenta', 4.5, '.blk-tall body copy'],
@@ -31,6 +31,8 @@ const PAIRS = [
 	['cream', 'midnight', 4.5, '.cta title and note'],
 	['kiwi', 'plum', 4.5, 'footer links'],
 	['cream', 'plum', 4.5, 'footer copy'],
+	['mango', 'plum', 4.5, 'footer link hover'],
+	['kiwi', 'cocoa', 4.5, 'inspector target and rules label'],
 ];
 
 const lin = (c) => (c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4);

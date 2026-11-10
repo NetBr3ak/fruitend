@@ -48,7 +48,7 @@ one gap: the browser treats a local file as a separate origin and blocks `cssRul
 node check-palette.mjs
 ```
 
-The script walks `--tod` from 0 to 1 in 21 steps. At each step it checks 12 text and background
+The script walks `--tod` from 0 to 1 in 21 steps. At each step it checks 14 text and background
 pairs against their WCAG contrast floor: 4.5:1, or 3:1 for display-size text. It exits with
 code 1 if any pair falls short. CI runs it on every push to `main` and on every pull request.
 

@@ -49,7 +49,7 @@ więc **Inspect styles** pokazuje pomiary, ale nie reguły źródłowe.
 node check-palette.mjs
 ```
 
-Skrypt przechodzi `--tod` od 0 do 1 w 21 krokach. W każdym kroku sprawdza 12 par tekstu i tła
+Skrypt przechodzi `--tod` od 0 do 1 w 21 krokach. W każdym kroku sprawdza 14 par tekstu i tła
 względem progu kontrastu WCAG: 4,5:1 albo 3:1 dla dużego tekstu. Kończy się kodem 1, jeśli
 któraś para nie spełnia progu. CI uruchamia go przy każdym pushu do `main` i przy każdym pull
 requeście.
