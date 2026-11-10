@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <defs>
+    <filter id="edge" x="-15%" y="-15%" width="130%" height="130%">
+      <feMorphology in="SourceAlpha" operator="dilate" radius="4.5" result="grow" />
+      <feFlood flood-color="#fff8ec" />
+      <feComposite in2="grow" operator="in" />
+      <feMerge><feMergeNode /><feMergeNode in="SourceGraphic" /></feMerge>
+    </filter>
+    <linearGradient id="g-pine" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#ffc93c" />
+      <stop offset="1" stop-color="#e08a00" />
+    </linearGradient>
+    <pattern id="p-pine" height="13" patternTransform="rotate(45)" patternUnits="userSpaceOnUse" width="13">
+      <path d="M0 0H13M0 0V13" stroke="#a85f00" stroke-width="2" />
+      <circle cx="6.5" cy="6.5" fill="#7a4300" r="1.4" />
+    </pattern>
+    <path d="M60 54C56 40 56 24 60 7C64 24 64 40 60 54Z" id="frond" />
+  </defs>
+  <g filter="url(#edge)">
+  <g fill="#2e8a46">
+  <use href="#frond" transform="rotate(-58 60 54)" /><use href="#frond" transform="rotate(58 60 54)" />
+  <use href="#frond" transform="rotate(-34 60 54)" /><use href="#frond" transform="rotate(34 60 54)" />
+  </g>
+  <g fill="#43ad5c">
+  <use href="#frond" transform="rotate(-14 60 54)" /><use href="#frond" transform="rotate(14 60 54)" />
+  <use href="#frond" />
+  </g>
+  <ellipse cx="60" cy="84" fill="url(#g-pine)" rx="26" ry="31" />
+  <ellipse cx="60" cy="84" fill="url(#p-pine)" opacity=".85" rx="26" ry="31" />
+  <ellipse cx="50" cy="72" fill="#fff3c4" opacity=".35" rx="6" ry="12" transform="rotate(20 50 72)" />
+  </g>
+</svg>
