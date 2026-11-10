@@ -1,5 +1,209 @@
-document.addEventListener("DOMContentLoaded",function(){const m=document.documentElement,P=e=>{e.matches(":popover-open")||e.showPopover()},I=e=>{e.matches(":popover-open")&&e.hidePopover()},E=document.querySelector(".bar");"ResizeObserver"in window&&new ResizeObserver(()=>m.style.setProperty("--bar-h",`${E.offsetHeight}px`)).observe(E);const h=document.getElementById("motion-toggle");let d=!1,g=!1;function y(e){d=e,m.classList.toggle("paused",d),h.textContent=d?"Play motion":"Pause motion"}if(h.addEventListener("click",()=>{g=!1,y(!d)}),m.classList.add("is-ready"),h.hidden=!1,"getEntriesByType"in performance){const e=performance.getEntriesByType("resource"),t=s=>s==="index.html"?performance.getEntriesByType("navigation")[0]:e.find(i=>new URL(i.name).pathname.endsWith("/"+s)),n=new Map,o=document.querySelector(".chips");o.querySelectorAll("li").forEach(s=>{const i=t(s.textContent.trim());if(i?.decodedBodySize){for(const W of[`${(i.decodedBodySize/1e3).toFixed(1)} kB`,`${Math.round(i.responseEnd-i.startTime)} ms`]){const z=document.createElement("span");z.textContent=W,s.append(z)}n.set(s,i.decodedBodySize)}});const c=Math.max(...n.values());n.forEach((s,i)=>i.style.setProperty("--share",(s/c).toFixed(3))),o.classList.toggle("measured",n.size>0),document.querySelector(".files-note").hidden=!n.size}if(!("popover"in HTMLElement.prototype))return;const r=document.getElementById("probe"),l=document.getElementById("probe-halo"),u=document.getElementById("probe-toggle"),C=r.querySelector(".probe-target"),S=r.querySelector(".probe-box"),R=r.querySelector(".probe-label"),w=r.querySelector(".probe-rules");r.hidden=!1,u.parentElement.hidden=!1,u.hidden=!1;const f=document.createElement("canvas").getContext("2d",{willReadFrequently:!0});let x=!1,a=null,p=0;const b=e=>e<=.04045?e/12.92:((e+.055)/1.055)**2.4,B=([e,t,n])=>.2126*b(e)+.7152*b(t)+.0722*b(n);function L(e){return f.clearRect(0,0,1,1),f.fillStyle=e,f.fillRect(0,0,1,1),[...f.getImageData(0,0,1,1).data].map(t=>t/255)}function F(e,t){const[n,o]=[B(e),B(t)].sort((c,s)=>s-c);return(n+.05)/(o+.05)}function O(e){for(let t=e;t;t=t.parentElement){const n=getComputedStyle(t);if(n.backgroundImage!=="none")return null;const o=L(n.backgroundColor);if(o[3]===1)return o;if(o[3]>0)return null}return null}function A(e,t){const n=L(t.color),o=O(e);return n[3]<1||!o||t.opacity!=="1"?"text contrast not calculated for this background":`text ${F(n,o).toFixed(2)}:1`}const T=e=>e.constructor.name==="CSSContainerRule",j=e=>e.media?matchMedia(e.conditionText).matches:T(e)||e.conditionText===void 0?!0:CSS.supports(e.conditionText),H=e=>e.parentRule&&T(e.parentRule)?`@container ${e.parentRule.conditionText} {
-${e.cssText}
-}`:e.cssText,$=e=>[...e].flatMap(t=>t.cssRules?j(t)?[t,...$(t.cssRules)]:[]:[t]);function D(e){return[...document.styleSheets].flatMap(t=>{try{return $(t.cssRules)}catch{return[]}}).filter(t=>{if(!t.selectorText)return!1;try{return e.matches(t.selectorText)}catch{return!1}})}function k(e){l.style.translate=`${e.left}px ${e.top}px`,l.style.width=`${e.width}px`,l.style.height=`${e.height}px`,l.hidden=!1}const N=()=>{a&&k(a.getBoundingClientRect())};function U(){!a||p||(p=requestAnimationFrame(()=>{p=0,a&&M(a)}))}function M(e){const t=getComputedStyle(e),n=e.getBoundingClientRect(),o=D(e);a=e,k(n),C.textContent=e.tagName.toLowerCase()+[...e.classList].map(c=>"."+c).join(""),S.textContent=[`${Math.round(n.width)} x ${Math.round(n.height)} px`,`padding ${t.padding}`,`radius ${t.borderRadius}`,t.display.includes("flex")||t.display.includes("grid")?`gap ${t.gap}`:null,A(e,t)].filter(Boolean).join("  |  "),R.hidden=!1,w.textContent=o.length?o.slice(-6).map(c=>H(c).slice(0,320)).join(`
-
-`):"No authored rules readable. Opened from the disk, the browser treats styles.css as another origin and cssRules throws, so only the computed values above survive. Serve the folder over http and this fills in."}function q(e){const t=e.target;!(t instanceof Element)||r.contains(t)||M(t)}function v(e){x=e,u.setAttribute("aria-pressed",String(e));const t=e?"addEventListener":"removeEventListener";if(document[t]("pointerover",q),document[t]("focusin",q),document[t]("scroll",N,{passive:!0}),window[t]("resize",U),!e){cancelAnimationFrame(p),p=0,I(r),l.hidden=!0,a=null,g&&y(!1);return}C.textContent="Point at anything",S.textContent=matchMedia("(hover: hover)").matches?"Hover or tab to an element and its real box lands here.":"Tap an element and its real box lands here.",R.hidden=!0,w.textContent="",P(r),g=!d,y(!0)}u.addEventListener("click",()=>v(!x)),r.querySelector(".probe-close").addEventListener("click",()=>{v(!1),u.focus()}),addEventListener("keydown",e=>{e.key==="Escape"&&x&&v(!1)})});
+document.addEventListener('DOMContentLoaded', function () {
+ const root = document.documentElement;
+ const open = el => {
+  if (!el.matches(':popover-open')) el.showPopover();
+ };
+ const close = el => {
+  if (el.matches(':popover-open')) el.hidePopover();
+ };
+ const bar = document.querySelector('.bar');
+ if ('ResizeObserver' in window) {
+  new ResizeObserver(() => root.style.setProperty('--bar-h', `${bar.offsetHeight}px`)).observe(bar);
+ }
+ const motionBtn = document.getElementById('motion-toggle');
+ let paused = false;
+ let resumeMotion = false;
+ function setPaused(on) {
+  paused = on;
+  root.classList.toggle('paused', paused);
+  motionBtn.textContent = paused ? 'Play motion' : 'Pause motion';
+ }
+ motionBtn.addEventListener('click', () => {
+  resumeMotion = false;
+  setPaused(!paused);
+ });
+ root.classList.add('is-ready');
+ motionBtn.hidden = false;
+ if ('getEntriesByType' in performance) {
+  const entries = performance.getEntriesByType('resource');
+  const timing = file =>
+   file === 'index.html'
+    ? performance.getEntriesByType('navigation')[0]
+    : entries.find(resource => new URL(resource.name).pathname.endsWith('/' + file));
+  const sizes = new Map();
+  const chips = document.querySelector('.chips');
+  chips.querySelectorAll('li').forEach(li => {
+   const entry = timing(li.textContent.trim());
+   if (!entry?.decodedBodySize) return;
+   for (const text of [
+    `${(entry.decodedBodySize / 1000).toFixed(1)} kB`,
+    `${Math.round(entry.responseEnd - entry.startTime)} ms`
+   ]) {
+    const cell = document.createElement('span');
+    cell.textContent = text;
+    li.append(cell);
+   }
+   sizes.set(li, entry.decodedBodySize);
+  });
+  const largest = Math.max(...sizes.values());
+  sizes.forEach((size, li) => li.style.setProperty('--share', (size / largest).toFixed(3)));
+  chips.classList.toggle('measured', sizes.size > 0);
+  document.querySelector('.files-note').hidden = !sizes.size;
+ }
+ if (!('popover' in HTMLElement.prototype)) return;
+ const probe = document.getElementById('probe');
+ const halo = document.getElementById('probe-halo');
+ const probeBtn = document.getElementById('probe-toggle');
+ const probeTarget = probe.querySelector('.probe-target');
+ const probeBox = probe.querySelector('.probe-box');
+ const probeLabel = probe.querySelector('.probe-label');
+ const probeRules = probe.querySelector('.probe-rules');
+ probe.hidden = false;
+ probeBtn.parentElement.hidden = false;
+ probeBtn.hidden = false;
+ const swatch = document.createElement('canvas').getContext('2d', { willReadFrequently: true });
+ let inspecting = false;
+ let inspected = null;
+ let frame = 0;
+ const linear = c => (c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4);
+ const luminance = ([r, g, b]) => 0.2126 * linear(r) + 0.7152 * linear(g) + 0.0722 * linear(b);
+ function paint(color) {
+  swatch.clearRect(0, 0, 1, 1);
+  swatch.fillStyle = color;
+  swatch.fillRect(0, 0, 1, 1);
+  return [...swatch.getImageData(0, 0, 1, 1).data].map(channel => channel / 255);
+ }
+ function contrast(a, b) {
+  const [hi, lo] = [luminance(a), luminance(b)].sort((x, y) => y - x);
+  return (hi + 0.05) / (lo + 0.05);
+ }
+ function groundOf(el) {
+  for (let node = el; node; node = node.parentElement) {
+   const style = getComputedStyle(node);
+   if (style.backgroundImage !== 'none') return null;
+   const color = paint(style.backgroundColor);
+   if (color[3] === 1) return color;
+   if (color[3] > 0) return null;
+  }
+  return null;
+ }
+ function textContrast(el, style) {
+  const ink = paint(style.color);
+  const ground = groundOf(el);
+  if (ink[3] < 1 || !ground || style.opacity !== '1') return 'text contrast not calculated for this background';
+  return `text ${contrast(ink, ground).toFixed(2)}:1`;
+ }
+ const inContainer = rule => rule.constructor.name === 'CSSContainerRule';
+ const live = rule =>
+  rule.media
+   ? matchMedia(rule.conditionText).matches
+   : inContainer(rule) || rule.conditionText === undefined
+     ? true
+     : CSS.supports(rule.conditionText);
+ const ruleText = rule =>
+  rule.parentRule && inContainer(rule.parentRule)
+   ? `@container ${rule.parentRule.conditionText} {\n${rule.cssText}\n}`
+   : rule.cssText;
+ const flatten = rules =>
+  [...rules].flatMap(rule => (rule.cssRules ? (live(rule) ? [rule, ...flatten(rule.cssRules)] : []) : [rule]));
+ function authoredRules(el) {
+  return [...document.styleSheets]
+   .flatMap(sheet => {
+    try {
+     return flatten(sheet.cssRules);
+    } catch {
+     return [];
+    }
+   })
+   .filter(rule => {
+    if (!rule.selectorText) return false;
+    try {
+     return el.matches(rule.selectorText);
+    } catch {
+     return false;
+    }
+   });
+ }
+ function place(rect) {
+  halo.style.translate = `${rect.left}px ${rect.top}px`;
+  halo.style.width = `${rect.width}px`;
+  halo.style.height = `${rect.height}px`;
+  halo.hidden = false;
+ }
+ const track = () => {
+  if (inspected) place(inspected.getBoundingClientRect());
+ };
+ function refresh() {
+  if (!inspected || frame) return;
+  frame = requestAnimationFrame(() => {
+   frame = 0;
+   if (inspected) describe(inspected);
+  });
+ }
+ function describe(el) {
+  const style = getComputedStyle(el);
+  const rect = el.getBoundingClientRect();
+  const matched = authoredRules(el);
+  inspected = el;
+  place(rect);
+  probeTarget.textContent = el.tagName.toLowerCase() + [...el.classList].map(name => '.' + name).join('');
+  probeBox.textContent = [
+   `${Math.round(rect.width)} x ${Math.round(rect.height)} px`,
+   `padding ${style.padding}`,
+   `radius ${style.borderRadius}`,
+   style.display.includes('flex') || style.display.includes('grid') ? `gap ${style.gap}` : null,
+   textContrast(el, style)
+  ]
+   .filter(Boolean)
+   .join('  |  ');
+  probeLabel.hidden = false;
+  probeRules.textContent = matched.length
+   ? matched
+      .slice(-6)
+      .map(rule => ruleText(rule).slice(0, 320))
+      .join('\n\n')
+   : 'No authored rules readable. Opened from the disk, the browser treats styles.css ' +
+     'as another origin and cssRules throws, so only the computed values above survive. ' +
+     'Serve the folder over http and this fills in.';
+ }
+ function look(event) {
+  const el = event.target;
+  if (!(el instanceof Element) || probe.contains(el)) return;
+  describe(el);
+ }
+ function setInspecting(on) {
+  inspecting = on;
+  probeBtn.setAttribute('aria-pressed', String(on));
+  const bind = on ? 'addEventListener' : 'removeEventListener';
+  document[bind]('pointerover', look);
+  document[bind]('focusin', look);
+  document[bind]('scroll', track, { passive: true });
+  window[bind]('resize', refresh);
+  if (!on) {
+   cancelAnimationFrame(frame);
+   frame = 0;
+   close(probe);
+   halo.hidden = true;
+   inspected = null;
+   if (resumeMotion) setPaused(false);
+   return;
+  }
+  probeTarget.textContent = 'Point at anything';
+  probeBox.textContent = matchMedia('(hover: hover)').matches
+   ? 'Hover or tab to an element and its real box lands here.'
+   : 'Tap an element and its real box lands here.';
+  probeLabel.hidden = true;
+  probeRules.textContent = '';
+  open(probe);
+  resumeMotion = !paused;
+  setPaused(true);
+ }
+ probeBtn.addEventListener('click', () => setInspecting(!inspecting));
+ probe.querySelector('.probe-close').addEventListener('click', () => {
+  setInspecting(false);
+  probeBtn.focus();
+ });
+ addEventListener('keydown', event => {
+  if (event.key === 'Escape' && inspecting) setInspecting(false);
+ });
+});
