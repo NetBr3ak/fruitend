@@ -30,11 +30,14 @@ document.addEventListener('DOMContentLoaded', function () {
 	const clock = document.getElementById('clock');
 	const clockTime = clock.querySelector('.clock-time');
 	const STEP = { ArrowUp: 15, ArrowRight: 15, ArrowDown: -15, ArrowLeft: -15, PageUp: 60, PageDown: -60 };
-	let tod = 0; // minutes past noon, 0 to 720
+	let tod = null; // minutes past noon, 0 to 720
+	let drag = null; // pointerId of the one pointer that moves the hand
 	let touchStart = null; // [x, y] of a touch that has not set the time yet
 
 	function setTod(minutes) {
-		tod = Math.min(720, Math.max(0, Math.round(minutes)));
+		const next = Math.min(720, Math.max(0, Math.round(minutes)));
+		if (next === tod) return;
+		tod = next;
 		root.style.setProperty('--tod', (tod / 720).toFixed(4));
 		const wall = (720 + tod) % 1440;
 		const time = `${pad(Math.floor(wall / 60))}:${pad(wall % 60)}`;
@@ -43,22 +46,33 @@ document.addEventListener('DOMContentLoaded', function () {
 		clockTime.textContent = time;
 	}
 
-	// Minutes past noon under the pointer, read clockwise from twelve.
+	// Minutes past noon under the pointer, read clockwise from twelve. Null on the cream disc in
+	// the middle (26% of the padding box's radius, as styles.css paints it): there the angle swings
+	// wildly with every pixel, so a press on the time would throw the hand anywhere.
 	function minutesAt(e) {
 		const r = clock.getBoundingClientRect();
-		const angle = Math.atan2(e.clientX - r.left - r.width / 2, r.top + r.height / 2 - e.clientY);
-		return (angle * 180 / Math.PI + 360) % 360 / 360 * 720;
+		const x = e.clientX - r.left - r.width / 2;
+		const y = r.top + r.height / 2 - e.clientY;
+		if (Math.hypot(x, y) < clock.clientWidth / 2 * .26) return null;
+		return (Math.atan2(x, y) * 180 / Math.PI + 360) % 360 / 360 * 720;
 	}
+
+	const jumpTo = e => { const next = minutesAt(e); if (next !== null) setTod(next); };
 
 	// Past twelve the drag stops at the end it reached: wrapping round would flip the
 	// whole page between midnight and noon in one frame.
 	function follow(e) {
 		let next = minutesAt(e);
+		if (next === null) return;
 		if (Math.abs(next - tod) > 360) next = tod > 360 ? 720 : 0;
 		setTod(next);
 	}
 
+	// Only the main button of the primary pointer turns the hand: a right click opens the menu,
+	// and a second finger must not take over a drag in progress.
 	clock.addEventListener('pointerdown', e => {
+		if (drag !== null || !e.isPrimary || e.button !== 0) return;
+		drag = e.pointerId;
 		clock.setPointerCapture(e.pointerId);
 		root.classList.add('scrubbing');
 		// On the knob the drag rule holds from the first touch, so grabbing it just left of twelve
@@ -67,11 +81,11 @@ document.addEventListener('DOMContentLoaded', function () {
 		const onKnob = e.target.closest('.knob');
 		touchStart = e.pointerType === 'touch' && !onKnob ? [e.clientX, e.clientY] : null;
 		if (onKnob) follow(e);
-		else if (!touchStart) setTod(minutesAt(e));
+		else if (!touchStart) jumpTo(e);
 	});
 
 	clock.addEventListener('pointermove', e => {
-		if (!clock.hasPointerCapture(e.pointerId)) return;
+		if (e.pointerId !== drag) return;
 		if (touchStart) {
 			// touch-action: pan-y turns a mostly vertical swipe into a page scroll, but Chromium
 			// still sends about three pointermoves (20 px) before its pointercancel. Until the
@@ -79,22 +93,26 @@ document.addEventListener('DOMContentLoaded', function () {
 			const [x, y] = touchStart;
 			if (Math.abs(e.clientY - y) >= Math.abs(e.clientX - x)) return;
 			touchStart = null;
-			setTod(minutesAt(e));
+			jumpTo(e);
 			return;
 		}
 		follow(e);
 	});
 
-	// A tap: the finger lifted before it went sideways.
-	clock.addEventListener('pointerup', e => {
-		if (touchStart) setTod(minutesAt(e));
-	});
+	function end(e) {
+		if (e.pointerId !== drag) return;
+		// A tap: the finger lifted before it went sideways.
+		if (e.type === 'pointerup' && touchStart) jumpTo(e);
+		drag = null;
+		touchStart = null;
+		root.classList.remove('scrubbing');
+	}
 
-	['pointerup', 'pointercancel'].forEach(type => {
-		clock.addEventListener(type, () => root.classList.remove('scrubbing'));
-	});
+	['pointerup', 'pointercancel', 'lostpointercapture'].forEach(type => clock.addEventListener(type, end));
 
 	clock.addEventListener('keydown', e => {
+		// Alt+Left is Back, Ctrl and Cmd shortcuts belong to the browser.
+		if (e.altKey || e.ctrlKey || e.metaKey) return;
 		const jump = e.key === 'Home' ? 0 : e.key === 'End' ? 720 : null;
 		if (jump === null && STEP[e.key] === undefined) return;
 		e.preventDefault();
