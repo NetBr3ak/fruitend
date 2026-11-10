@@ -151,7 +151,7 @@ ol {
 .ticker-ctl,
 .disc-note,
 .clock-time,
-.chips li,
+.chips a,
 .press,
 .note,
 .foot-links a,
@@ -692,7 +692,10 @@ footer a:focus-visible,
     text-wrap: balance;
 }
 
-.chips li {
+/* Each chip opens its file on GitHub: pill-shaped like Pause and Inspect, they looked pressable
+   and did nothing. */
+.chips a {
+    display: block;
     width: fit-content;
     padding: 16px 24px;
     border: 2px solid var(--cocoa);
@@ -700,7 +703,16 @@ footer a:focus-visible,
     font-family: var(--micro);
     font-size: .8125rem;
     letter-spacing: .12em;
+    text-decoration: none;
     color: var(--cocoa);
+    transition: background .2s ease, color .2s ease;
+}
+
+@media (hover: hover) {
+    .chips a:hover {
+        color: var(--cream);
+        background: var(--cocoa);
+    }
 }
 
 .chips li + li {
