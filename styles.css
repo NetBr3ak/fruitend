@@ -229,13 +229,16 @@ footer a:focus-visible,
     border-bottom: 6px solid var(--ink);
 }
 
+/* Wrap, never overlap: at 200% text on a 320 px screen the slider's time ran over "Fruits" and
+   the "Source" pill left the page (measured 2026-11-10). At 100% everything fits on one line. */
 .bar-inner {
     width: var(--wrap);
     margin-inline: auto;
     min-height: var(--bar);
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
-    gap: 28px;
+    gap: 0 28px;
 }
 
 .wordmark {
@@ -258,9 +261,12 @@ footer a:focus-visible,
     flex: none;
 }
 
-/* The dial's twin, a native range input; script.js shows it while the dial is off screen. */
+/* The dial's twin, a native range input; script.js shows it while the dial is off screen. The
+   basis is what it needs (the input's 64 px, the gap and the time), so the bar breaks a line only
+   when that does not fit; where there is room it grows to 18rem. */
 .bar-time {
-    flex: 0 1 18rem;
+    flex: 1 1 calc(74px + 3.25rem);
+    max-width: 18rem;
     min-width: 0;
     display: flex;
     align-items: center;
