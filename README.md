@@ -79,7 +79,7 @@ The four fruit photos come from Wikimedia Commons. Each one is cropped to a 360 
 |---|---|---|---|
 | `images/strawberries.webp` | [Strawberries in basket 2018 G1](https://commons.wikimedia.org/wiki/File:Strawberries_in_basket_2018_G1.jpg) | George Chernilevsky | Public domain |
 | `images/kiwi.webp` | [Kiwi-halbiert](https://commons.wikimedia.org/wiki/File:Kiwi-halbiert.jpg) | MartinThoma | CC0 1.0 |
-| `images/pineapple.webp` | [Canned Pineapple Chunks](https://commons.wikimedia.org/wiki/File:Canned_Pineapple_Chunks.jpg) | Alabama Extension | CC0 1.0 |
+| `images/pineapple.webp` | [Ananas bozor rastasida](https://commons.wikimedia.org/wiki/File:Ananas_bozor_rastasida.jpg) | Usmonov Gayrat | CC0 1.0 |
 | `images/blueberries.webp` | [Aberdeenshire blueberries](https://commons.wikimedia.org/wiki/File:Aberdeenshire_blueberries.jpg) | Mx. Granger | CC0 1.0 |
 
 The three fonts are Bricolage Grotesque, Hanken Grotesk and Martian Mono, all under the SIL Open
