@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	const isNight = m => noonDistance(m) >= 360;
 	const calm = matchMedia('(prefers-reduced-motion: reduce)');
 
-	// A jump across 06:00 or 18:00 cross-fades the whole page in one 400 ms view transition,
+	// A jump across 06:00 or 18:00 spreads the new scene in a 600 ms circle (a view transition),
 	// instead of the night switching in one frame halfway through the 600 ms colour fade.
 	// A drag stays direct. The fade sets the time one frame later, so until then `pending` holds
 	// it: keys pressed in that frame count from it, and the fade shows the newest one. A second
@@ -254,7 +254,8 @@ document.addEventListener('DOMContentLoaded', function () {
 			}
 			sizes.set(li, entry.decodedBodySize);
 		});
-		// Each bar is its file's share of the largest one (styles.css, .chips.measured).
+		// --share is each file's size over the largest one, 0 to 1; styles.css (.chips.measured)
+		// clips the bar to it, so the two files change together.
 		const largest = Math.max(...sizes.values());
 		sizes.forEach((size, li) => li.style.setProperty('--share', (size / largest).toFixed(3)));
 		chips.classList.toggle('measured', sizes.size > 0);

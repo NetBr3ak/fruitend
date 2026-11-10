@@ -125,8 +125,8 @@
         --night: round(down, calc(var(--tod) + .5), 1);
         --mango-ground: color-mix(in oklch, var(--mango), oklch(from #ffa732 calc(.41 - var(--tod) * .12) .07 calc(h - var(--tod) * 28)) calc(var(--night) * 100%));
         --lemon-ground: color-mix(in oklch, var(--lemon), oklch(from #ffd166 calc(.51 - var(--tod) * .12) .08 calc(h - var(--tod) * 26)) calc(var(--night) * 100%));
-        --cream-ground: color-mix(in oklch, var(--cream), oklch(from #ffe9cf calc(.35 - var(--tod) * .12) .03 calc(h - var(--tod) * 60)) calc(var(--night) * 100%));
-        --straw-ground: color-mix(in oklch, var(--straw), oklch(from #ef4040 calc(.39 - var(--tod) * .12) .1 calc(h - var(--tod) * 14)) calc(var(--night) * 100%));
+        --cream-ground: color-mix(in oklch, var(--cream), oklch(from #ffe9cf calc(.29 - var(--tod) * .12) .03 calc(h - var(--tod) * 60)) calc(var(--night) * 100%));
+        --straw-ground: color-mix(in oklch, var(--straw), oklch(from #ef4040 calc(.47 - var(--tod) * .12) .1 calc(h - var(--tod) * 14)) calc(var(--night) * 100%));
         --kiwi-ground: color-mix(in oklch, var(--kiwi), oklch(from #5ce1a0 calc(.46 - var(--tod) * .12) .06 calc(h + var(--tod) * 26)) calc(var(--night) * 100%));
         --ink: color-mix(in oklch, var(--cocoa), var(--cream) calc(var(--night) * 100%));
         --on-ink: color-mix(in oklch, var(--cream), var(--cocoa) calc(var(--night) * 100%));
@@ -175,8 +175,9 @@ img {
     max-width: 100%;
 }
 
-/* The tilted ticker and the stickers reach past the page edges; clipped here, they never make
-   the page scroll sideways. */
+/* The tilted ticker reaches past both edges. Without this clip body.scrollWidth measured 1319 at
+   a 1280 px window and 388 at 375 px (2026-11-10, Chromium), so anything that sizes the page from
+   the body draws a strip of empty page beside it. */
 main {
     overflow-x: clip;
 }
@@ -455,7 +456,7 @@ html {
     --r: 8deg;
     --drift: -40px;
     --spin: -10deg;
-    right: -6%;
+    right: 2%;
     bottom: -4%;
     width: 36%;
 }
@@ -465,7 +466,7 @@ html {
     --r: -14deg;
     --drift: -90px;
     --spin: 22deg;
-    top: calc(var(--title) * .82);
+    top: calc(var(--title) * .9);
     left: calc(var(--title) * .9);
     width: calc(var(--title) * 1.16);
 }
@@ -581,7 +582,7 @@ html {
        inside the hero at every hour. */
     .hero {
         background:
-            radial-gradient(42% 58% at calc(50% + sin(var(--hand)) * 36%) calc(46% - cos(var(--hand)) * 34%),
+            radial-gradient(circle clamp(220px, 42vw, 540px) at calc(50% + sin(var(--hand)) * 36%) calc(46% - cos(var(--hand)) * 34%),
                 color-mix(in oklch, oklch(.97 .09 95) calc(var(--glow) * 100%), transparent), transparent 72%),
             var(--mango-ground);
     }
@@ -830,9 +831,11 @@ html {
     min-height: 12rem;
 }
 
-/* The photo fills whatever box the layout gives it; its own square shape never sets a height. */
+/* The photo fills whatever box the layout gives it; its own square shape never sets a height.
+   The clip keeps a photo scaled for its crop out of the text below it. */
 .blk picture {
     position: relative;
+    overflow: clip;
 }
 
 .blk-in img {
@@ -940,8 +943,16 @@ html {
     background: var(--lemon-ground);
 }
 
+/* The pineapple and the strawberry basket fill their tiles: the photos frame them small. */
 .blk-pineapple img {
     object-position: 50% 72%;
+    scale: 1.45;
+    transform-origin: 50% 80%;
+}
+
+.blk-tall .blk-in img {
+    scale: 1.35;
+    transform-origin: 50% 100%;
 }
 
 .blk-wide {
@@ -965,7 +976,7 @@ html {
     inset: -1px 0 auto;
     height: 120px;
     background: var(--straw-ground);
-    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 720 120'%3E%3Cpath d='M0 0H720V20Q630 32 540 20T360 20T180 20T0 20Z'/%3E%3Cpath d='M33 12.4V16.4C45 16.4 45 22.4 45 30.4L47 33.2A7 7 0 1 0 57 33.2L59 28.3C59 20.3 59 14.3 71 14.3V10.3Z'/%3E%3Cpath d='M146 12.3V16.3C158 16.3 158 22.3 158 30.3L161 93.8A9.8 9.8 0 1 0 175 93.8L178 35.3C178 27.3 178 21.3 190 21.3V17.3Z'/%3E%3Cpath d='M251 21.7V25.7C263 25.7 263 31.7 263 39.7L265 57.7A8.4 8.4 0 1 0 277 57.7L279 39.7C279 31.7 279 25.7 291 25.7V21.7Z'/%3E%3Cpath d='M388 12.8V16.8C400 16.8 400 22.8 400 30.8L402.5 71.8A9.1 9.1 0 1 0 415.5 71.8L418 28.3C418 20.3 418 14.3 430 14.3V10.3Z'/%3E%3Cpath d='M511 12.8V16.8C523 16.8 523 22.8 523 30.8L525 42.8A7 7 0 1 0 535 42.8L537 35.1C537 27.1 537 21.1 549 21.1V17.1Z'/%3E%3Cpath d='M618 21.9V25.9C630 25.9 630 31.9 630 39.9L633 69.3A9.8 9.8 0 1 0 647 69.3L650 39.2C650 31.2 650 25.2 662 25.2V21.2Z'/%3E%3C/svg%3E") 0 0 / 720px 120px repeat-x;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 120'%3E%3Cpath d='M0 0H1440V20Q1350 32 1260 20T1080 20T900 20T720 20T540 20T360 20T180 20T0 20Z'/%3E%3Cpath d='M41 11.8V15.8C53 15.8 53 21.8 53 29.8L55 39.3A8.5 8.5 0 1 0 65 39.3L67 28.1C67 20.1 67 14.1 79 14.1V10.1Z'/%3E%3Cpath d='M150 12.7V16.7C162 16.7 162 22.7 162 30.7L165 85.5A11.9 11.9 0 1 0 179 85.5L182 35.7C182 27.7 182 21.7 194 21.7V17.7Z'/%3E%3Cpath d='M266 22V26C278 26 278 32 278 40L280 59.4A10.2 10.2 0 1 0 292 59.4L294 39C294 31 294 25 306 25V21Z'/%3E%3Cpath d='M389 12.8V16.8C401 16.8 401 22.8 401 30.8L403.5 67.2A11 11 0 1 0 416.5 67.2L419 28.3C419 20.3 419 14.3 431 14.3V10.3Z'/%3E%3Cpath d='M503 12.1V16.1C515 16.1 515 22.1 515 30.1L517 46.5A8.5 8.5 0 1 0 527 46.5L529 34.1C529 26.1 529 20.1 541 20.1V16.1Z'/%3E%3Cpath d='M618 21.9V25.9C630 25.9 630 31.9 630 39.9L633 66.4A11.9 11.9 0 1 0 647 66.4L650 39.2C650 31.2 650 25.2 662 25.2V21.2Z'/%3E%3Cpath d='M749 12.8V16.8C761 16.8 761 22.8 761 30.8L763.5 79.2A11 11 0 1 0 776.5 79.2L779 28.3C779 20.3 779 14.3 791 14.3V10.3Z'/%3E%3Cpath d='M865 12.2V16.2C877 16.2 877 22.2 877 30.2L879 42.7A8.5 8.5 0 1 0 889 42.7L891 34.4C891 26.4 891 20.4 903 20.4V16.4Z'/%3E%3Cpath d='M980 21.9V25.9C992 25.9 992 31.9 992 39.9L994 65.5A10.2 10.2 0 1 0 1006 65.5L1008 39.3C1008 31.3 1008 25.3 1020 25.3V21.3Z'/%3E%3Cpath d='M1108 12.8V16.8C1120 16.8 1120 22.8 1120 30.8L1123 83.7A11.9 11.9 0 1 0 1137 83.7L1140 28.2C1140 20.2 1140 14.2 1152 14.2V10.2Z'/%3E%3Cpath d='M1243 13.9V17.9C1255 17.9 1255 23.9 1255 31.9L1257 50.9A8.5 8.5 0 1 0 1267 50.9L1269 36.5C1269 28.5 1269 22.5 1281 22.5V18.5Z'/%3E%3Cpath d='M1349 22V26C1361 26 1361 32 1361 40L1363.5 73.7A11 11 0 1 0 1376.5 73.7L1379 38.8C1379 30.8 1379 24.8 1391 24.8V20.8Z'/%3E%3C/svg%3E") 0 0 / 1440px 120px repeat-x;
     transform-origin: top;
     pointer-events: none;
 }
@@ -1052,7 +1063,7 @@ html {
 /* ---------- cta ---------- */
 
 .cta {
-    --r: clamp(14px, 1.6vw, 22px);
+    --scallop: clamp(14px, 1.6vw, 22px);
     view-timeline: --cta;
     background: var(--midnight);
     padding: clamp(64px, 10vw, 128px) 0;
@@ -1063,9 +1074,9 @@ html {
     content: "";
     position: absolute;
     inset: auto 0 calc(100% - 1px);
-    height: var(--r);
+    height: var(--scallop);
     background: var(--midnight);
-    mask: radial-gradient(var(--r) at 50% 100%, #000 98%, #0000) 50% 100% / calc(2 * var(--r)) var(--r) repeat-x;
+    mask: radial-gradient(var(--scallop) at 50% 100%, #000 98%, #0000) 50% 100% / calc(2 * var(--scallop)) var(--scallop) repeat-x;
 }
 
 .badge {
@@ -1085,8 +1096,9 @@ html {
 
 .badge text {
     font-family: var(--display);
-    /* Engines lay the same words out at 186 to 227 units; textLength in the markup evens them to
-       232, half the ring less a word gap, so the two copies never meet. */
+    /* Engines lay the same words out at 186 to 227 units a copy; textLength in the markup stretches
+       both copies, one string, to 470 of the ring's 477.5, so the end stops one word gap short of
+       the start in every engine. */
     font-size: 18px;
     font-weight: 800;
     font-variation-settings: "wdth" 85;
@@ -1574,8 +1586,8 @@ footer {
         }
     }
 
-    /* Everything has landed by 600 ms, and the dial the lead asks you to drag by 500 ms
-       (NN/g response-time limits: 1 s keeps the flow). */
+    /* The text has landed by 600 ms and the dial the lead asks you to drag by 500 ms (NN/g
+       response-time limits: 1 s keeps the flow); the cut-outs, decoration only, by 1350 ms. */
     .bar,
     .hero-title .line,
     .lead,
@@ -1647,7 +1659,7 @@ footer {
 
         @keyframes settle {
             from {
-                scale: 1.12;
+                transform: scale(1.12);
             }
         }
 
@@ -1659,16 +1671,16 @@ footer {
 
         @keyframes slap {
             from {
-                scale: 1.8;
-                rotate: calc(var(--r) + 24deg);
+                scale: 1.4;
+                rotate: calc(var(--r) + 16deg);
             }
         }
 
-        .tile-sticker,
-        .foot-mark .sticker {
+        .tile-sticker {
+            transform-origin: 20% 20%;
             animation: slap var(--ease) both;
             animation-timeline: --tile;
-            animation-range: entry 50% entry 100%;
+            animation-range: entry 40px entry 260px;
         }
 
         @keyframes rise-letter {
@@ -1684,12 +1696,11 @@ footer {
         }
 
         .foot-mark .sticker {
+            animation: slap var(--ease) both;
             animation-timeline: --mark;
             animation-range: entry 40% entry 95%;
         }
-    }
 
-    @supports (animation-timeline: view()) {
         @keyframes drip {
             from {
                 scale: 1 .3;
