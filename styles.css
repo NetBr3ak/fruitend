@@ -647,10 +647,13 @@ footer a:focus-visible,
     padding: clamp(16px, 6cqi, 28px);
 }
 
+/* At 200% text a long name breaks inside the word rather than run off its block. */
 .blk h3 {
     font-size: 1.5rem;
     font-size: clamp(1.25rem, 7.4cqi, 2rem);
     line-height: 1;
+    overflow-wrap: anywhere;
+    hyphens: auto;
     letter-spacing: -.02em;
     font-variation-settings: "wdth" 85;
 }
