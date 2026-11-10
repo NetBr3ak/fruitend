@@ -171,7 +171,8 @@ ol {
 
 .cta a:focus-visible,
 footer a:focus-visible,
-.ticker button:focus-visible {
+.ticker button:focus-visible,
+.probe button:focus-visible {
     outline-color: var(--cream);
 }
 
@@ -889,6 +890,33 @@ footer {
 
 .probe-box {
     margin-top: 12px;
+}
+
+.probe-close {
+    float: right;
+    width: 32px;
+    height: 32px;
+    margin: -8px -8px 8px 12px;
+    font-size: 1.125rem;
+    line-height: 1;
+    color: var(--cream);
+    background: transparent;
+    border: 2px solid var(--cream);
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background .2s ease, color .2s ease;
+}
+
+@media (hover: hover) {
+    .probe-close:hover {
+        color: var(--cocoa);
+        background: var(--cream);
+    }
+}
+
+.probe-label {
+    margin-top: 12px;
+    color: var(--kiwi);
 }
 
 .probe-rules {

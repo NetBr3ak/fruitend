@@ -44,6 +44,7 @@ document.addEventListener('DOMContentLoaded', function () {
 		clock.setAttribute('aria-valuenow', tod);
 		clock.setAttribute('aria-valuetext', time);
 		clockTime.textContent = time;
+		clock.dispatchEvent(new Event('input'));
 	}
 
 	// Minutes past noon under the pointer, read clockwise from twelve. Null on the cream disc in
@@ -152,10 +153,12 @@ document.addEventListener('DOMContentLoaded', function () {
 	const probeBtn = document.getElementById('probe-toggle');
 	const probeTarget = probe.querySelector('.probe-target');
 	const probeBox = probe.querySelector('.probe-box');
+	const probeLabel = probe.querySelector('.probe-label');
 	const probeRules = probe.querySelector('.probe-rules');
 	const swatch = document.createElement('canvas').getContext('2d', { willReadFrequently: true });
 	let inspecting = false;
 	let inspected = null;
+	let frame = 0;
 
 	const lin = c => c <= .04045 ? c / 12.92 : ((c + .055) / 1.055) ** 2.4;
 	const luminance = ([r, g, b]) => .2126 * lin(r) + .7152 * lin(g) + .0722 * lin(b);
@@ -174,12 +177,25 @@ document.addEventListener('DOMContentLoaded', function () {
 		return (hi + .05) / (lo + .05);
 	}
 
+	// A ratio is only honest against one solid colour. A gradient or an image on the way up (the
+	// cream disc in the clock is a radial-gradient over the mango hero) or any transparency
+	// means the text sits on something this cannot measure, so it returns null.
 	function groundOf(el) {
 		for (let n = el; n; n = n.parentElement) {
-			const c = paint(getComputedStyle(n).backgroundColor);
-			if (c[3] > 0) return c;
+			const s = getComputedStyle(n);
+			if (s.backgroundImage !== 'none') return null;
+			const c = paint(s.backgroundColor);
+			if (c[3] === 1) return c;
+			if (c[3] > 0) return null;
 		}
-		return [0, 0, 0, 1];
+		return null;
+	}
+
+	function textContrast(el, s) {
+		const ink = paint(s.color);
+		const ground = groundOf(el);
+		if (ink[3] < 1 || !ground || s.opacity !== '1') return 'text contrast not calculated for this background';
+		return `text ${contrast(ink, ground).toFixed(2)}:1`;
 	}
 
 	// A rule inside a @media or @supports block is only worth showing when its condition is
@@ -206,8 +222,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 	// The halo is position: fixed, and a scroll by finger fires no pointerover or focusin, so
 	// it is placed again on every scroll or it stays where the element used to be.
-	function place() {
-		const r = inspected.getBoundingClientRect();
+	function place(r) {
 		halo.style.translate = `${r.left}px ${r.top}px`;
 		halo.style.width = `${r.width}px`;
 		halo.style.height = `${r.height}px`;
@@ -215,7 +230,19 @@ document.addEventListener('DOMContentLoaded', function () {
 		halo.hidden = false;
 	}
 
-	const track = () => { if (inspected) place(); };
+	const track = () => { if (inspected) place(inspected.getBoundingClientRect()); };
+
+	// The clock, a resize and the end of the palette's 600 ms fade all change what the panel
+	// shows; one frame folds a burst of them into one read.
+	function refresh() {
+		if (!inspected || frame) return;
+		frame = requestAnimationFrame(() => {
+			frame = 0;
+			if (inspected) describe(inspected);
+		});
+	}
+
+	const settle = e => { if (e.propertyName === '--tod') refresh(); };
 
 	function describe(el) {
 		const s = getComputedStyle(el);
@@ -223,7 +250,7 @@ document.addEventListener('DOMContentLoaded', function () {
 		const matched = authoredRules(el);
 
 		inspected = el;
-		place();
+		place(r);
 
 		probeTarget.textContent = el.tagName.toLowerCase() + [...el.classList].map(c => '.' + c).join('');
 		probeBox.textContent = [
@@ -231,9 +258,10 @@ document.addEventListener('DOMContentLoaded', function () {
 			`padding ${s.padding}`,
 			`radius ${s.borderRadius}`,
 			s.display.includes('flex') || s.display.includes('grid') ? `gap ${s.gap}` : null,
-			`text ${contrast(paint(s.color), groundOf(el)).toFixed(2)}:1`,
+			textContrast(el, s),
 		].filter(Boolean).join('  |  ');
 
+		probeLabel.hidden = false;
 		probeRules.textContent = matched.length
 			? matched.slice(-6).map(rule => rule.cssText.slice(0, 320)).join('\n\n')
 			: 'No authored rules readable. Opened from the disk, the browser treats styles.css '
@@ -255,8 +283,13 @@ document.addEventListener('DOMContentLoaded', function () {
 		document[bind]('pointerover', look);
 		document[bind]('focusin', look);
 		document[bind]('scroll', track, { passive: true });
+		window[bind]('resize', refresh);
+		clock[bind]('input', refresh);
+		root[bind]('transitionend', settle);
 
 		if (!on) {
+			cancelAnimationFrame(frame);
+			frame = 0;
 			close(probe);
 			halo.hidden = true;
 			inspected = null;
@@ -265,6 +298,7 @@ document.addEventListener('DOMContentLoaded', function () {
 		}
 		probeTarget.textContent = 'Point at anything';
 		probeBox.textContent = 'Hover or tab to an element and its real box lands here.';
+		probeLabel.hidden = true;
 		probeRules.textContent = '';
 		open(probe);
 		resumeTicker = !paused;
@@ -272,6 +306,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	}
 
 	probeBtn.addEventListener('click', () => setInspecting(!inspecting));
+	probe.querySelector('.probe-close').addEventListener('click', () => setInspecting(false));
 
 	addEventListener('keydown', e => {
 		if (e.key === 'Escape' && inspecting) setInspecting(false);
