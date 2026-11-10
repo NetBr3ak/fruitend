@@ -12,8 +12,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
 	// Under reduced motion styles.css never hides the blocks, so there is nothing to observe.
 	if ('IntersectionObserver' in window && reveal.length && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
-		// No bottom margin: Chromium resolves a percentage there against the width, so in a
-		// 1600 x 400 window -12% kept a block hidden after 100 px of it had scrolled into view.
+		// No margin: a block shows as soon as its first pixel enters the viewport, so nothing
+		// stays hidden at the lower edge of a low window.
 		const seen = new IntersectionObserver((entries, obs) => {
 			entries.forEach(entry => {
 				if (!entry.isIntersecting) return;
@@ -311,7 +311,11 @@ document.addEventListener('DOMContentLoaded', function () {
 	}
 
 	probeBtn.addEventListener('click', () => setInspecting(!inspecting));
-	probe.querySelector('.probe-close').addEventListener('click', () => setInspecting(false));
+	probe.querySelector('.probe-close').addEventListener('click', () => {
+		setInspecting(false);
+		// The close button disappears with the panel; without this, focus falls back to the top of the page.
+		probeBtn.focus();
+	});
 
 	addEventListener('keydown', e => {
 		if (e.key === 'Escape' && inspecting) setInspecting(false);
