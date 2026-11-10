@@ -209,6 +209,28 @@ document.addEventListener('DOMContentLoaded', function () {
 	tickerBtn.parentElement.hidden = false;
 	tickerBtn.hidden = false;
 
+	/* ---------- the three files, measured on this visit ---------- */
+
+	// Resource Timing gives each file this page fetched its decoded size and load time; the page
+	// itself is the navigation entry. Opened from the disk the sizes are 0, so nothing shows.
+	if ('getEntriesByType' in performance) {
+		const entries = performance.getEntriesByType('resource');
+		const timing = file => file === 'index.html' ? performance.getEntriesByType('navigation')[0]
+			: entries.find(e => new URL(e.name).pathname.endsWith('/' + file));
+		let measured = 0;
+		document.querySelectorAll('.chips li').forEach(li => {
+			const entry = timing(li.textContent.trim());
+			if (!entry?.decodedBodySize) return;
+			for (const text of [`${(entry.decodedBodySize / 1000).toFixed(1)} kB`, `${Math.round(entry.responseEnd - entry.startTime)} ms`]) {
+				const cell = document.createElement('span');
+				cell.textContent = text;
+				li.append(cell);
+			}
+			measured++;
+		});
+		document.querySelector('.files-note').hidden = !measured;
+	}
+
 	/* ---------- inspector ---------- */
 
 	// The panel is a popover. Without the API, matches(':popover-open') throws, so the button

@@ -725,16 +725,15 @@ footer a:focus-visible,
 
 /* ---------- files ---------- */
 
+/* A spec sheet under its heading, not the heading-left, button-right shape of the CTA below. */
 .files {
     background: var(--cream-ground);
-    padding: clamp(64px, 10vw, 128px) 0;
+    padding: clamp(56px, 8vw, 96px) 0 clamp(64px, 9vw, 112px);
 }
 
 .files-grid {
     display: grid;
-    grid-template-columns: 1.25fr 1fr;
-    gap: clamp(40px, 6vw, 88px);
-    align-items: center;
+    gap: clamp(28px, 4vw, 48px);
 }
 
 .files-title {
@@ -745,15 +744,29 @@ footer a:focus-visible,
     text-wrap: balance;
 }
 
-/* Each chip opens its file on GitHub: pill-shaped like Pause, it has to do something. */
+/* One row per file; script.js adds its size and load time beside the chip. Rows wrap rather than
+   scroll at 320 px with 200% text. */
+.chips li {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 28px;
+    font-family: var(--micro);
+    font-size: .8125rem;
+}
+
+.chips li + li {
+    margin-top: 12px;
+}
+
+/* Each chip opens its file on GitHub: pill-shaped like Pause, it has to do something. The names
+   are 9 and 10 characters, so one width in ch lines the numbers up. */
 .chips a {
     display: block;
-    width: fit-content;
+    min-width: calc(10ch + 52px);
     padding: 16px 24px;
     border: 2px solid var(--ink);
     border-radius: 999px;
-    font-family: var(--micro);
-    font-size: .8125rem;
     text-decoration: none;
     color: var(--ink);
     transition: background .2s ease, color .2s ease;
@@ -766,16 +779,12 @@ footer a:focus-visible,
     }
 }
 
-.chips li + li {
-    margin-top: 12px;
+.chips span {
+    min-width: 8ch;
 }
 
-.chips li:nth-child(2) {
-    margin-left: 24px;
-}
-
-.chips li:nth-child(3) {
-    margin-left: 48px;
+.files-note {
+    max-width: 34rem;
 }
 
 /* ---------- cta ---------- */
@@ -999,7 +1008,6 @@ footer {
         margin-right: 0;
     }
 
-    .files-grid,
     .cta-grid {
         grid-template-columns: 1fr;
     }
@@ -1105,14 +1113,6 @@ footer {
         inset: auto 8px 8px;
         width: auto;
         max-height: 40vh;
-    }
-
-    .chips li:nth-child(2) {
-        margin-left: 16px;
-    }
-
-    .chips li:nth-child(3) {
-        margin-left: 32px;
     }
 }
 
