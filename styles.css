@@ -1138,6 +1138,45 @@ footer {
     }
 }
 
+/* Coarse pointers get the 44 px target the rest of the page already gives (WCAG 2.5.5). */
+@media (pointer: coarse) {
+    .ticker-ctl {
+        min-height: 44px;
+    }
+
+    .probe-close {
+        width: 44px;
+        height: 44px;
+    }
+}
+
+/* Forced colours drop the gradients that draw the hand, the knob and the progress track, which
+   left an empty ring with a time in it. They come back here in system colours. */
+@media (forced-colors: active) {
+    .citrus::before,
+    .citrus::after,
+    .knob {
+        forced-color-adjust: none;
+    }
+
+    /* GrayText under Highlight, so the elapsed part of the track stands apart from the rest. */
+    .citrus {
+        border-color: GrayText;
+    }
+
+    .citrus::before {
+        background-image: linear-gradient(CanvasText 0 0);
+    }
+
+    .knob {
+        background: radial-gradient(circle, CanvasText 9px, transparent 10px);
+    }
+
+    .citrus::after {
+        background: conic-gradient(Highlight calc(var(--tod) * 360deg), transparent 0);
+    }
+}
+
 /* ---------- motion ---------- */
 
 @media (prefers-reduced-motion: no-preference) {
@@ -1269,6 +1308,30 @@ footer {
 
     /* The ticker does not move here, so Pause would do nothing. */
     #ticker-toggle {
+        display: none;
+    }
+}
+
+/* Paper gets every block, still and in the flow: no reveal, no sticky bar, no inspector. */
+@media print {
+    *,
+    *::before,
+    *::after {
+        animation: none !important;
+        transition: none !important;
+    }
+
+    .bar {
+        position: static;
+    }
+
+    .js [data-reveal] {
+        opacity: 1;
+        transform: none;
+    }
+
+    .probe:popover-open,
+    .probe-halo {
         display: none;
     }
 }
