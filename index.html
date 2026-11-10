@@ -3,25 +3,24 @@
 <head>
 <meta charset="UTF-8">
 <meta content="width=device-width, initial-scale=1.0" name="viewport">
-<meta content="Fruitend is a static, fruit-themed demo landing page. Its colors follow a 24-hour citrus clock and turn dark at night. No framework, no build step."
+<meta content="Fruitend is a static, fruit-themed demo landing page. A citrus slice drawn in CSS turns slowly in the hero. No framework, no build step."
 name="description">
 <title>Fruitend - a fruit-themed demo landing page</title>
 <link href="https://netbr3ak.github.io/fruitend/" rel="canonical">
 <meta content="website" property="og:type">
 <meta content="https://netbr3ak.github.io/fruitend/" property="og:url">
 <meta content="Fruitend - a fruit-themed demo landing page" property="og:title">
-<meta content="Fruitend is a static, fruit-themed demo landing page. Its colors follow a 24-hour citrus clock and turn dark at night. No framework, no build step."
+<meta content="Fruitend is a static, fruit-themed demo landing page. A citrus slice drawn in CSS turns slowly in the hero. No framework, no build step."
 property="og:description">
 <meta content="https://netbr3ak.github.io/fruitend/images/preview.png" property="og:image">
 <meta content="1200" property="og:image:width">
 <meta content="630" property="og:image:height">
-<meta content="The Fruitend page at 17:00 on a laptop and on a phone" property="og:image:alt">
+<meta content="The Fruitend page on a laptop and on a phone" property="og:image:alt">
 <meta content="summary_large_image" name="twitter:card">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Fruitend","url":"https://netbr3ak.github.io/fruitend/","description":"Fruitend is a static, fruit-themed demo landing page. Its colors follow a 24-hour citrus clock and turn dark at night. No framework, no build step.","inLanguage":"en"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Fruitend","url":"https://netbr3ak.github.io/fruitend/","description":"Fruitend is a static, fruit-themed demo landing page. A citrus slice drawn in CSS turns slowly in the hero. No framework, no build step.","inLanguage":"en"}</script>
 <link href="favicon.svg" rel="icon" type="image/svg+xml">
 <link as="font" crossorigin href="fonts/bricolage-grotesque.woff2" rel="preload" type="font/woff2">
 <link href="styles.css" rel="stylesheet">
-<script>{const t=new URLSearchParams(location.search).get("t"),n=t===null?NaN:Number(t),o=new Date,s=Number.isFinite(n)?n*60:o.getHours()*60+o.getMinutes(),e=((Math.round(s)%1440+1440)%1440+720)%1440;document.documentElement.style.setProperty("--tod",(Math.min(e,1440-e)/720).toFixed(4))}</script>
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -40,10 +39,6 @@ property="og:description">
 </svg>
 <span class="wordmark-text">Fruitend</span>
 </a>
-<div class="bar-time" hidden>
-<input aria-label="Time of day" id="time-bar" max="1439" min="0" step="15" type="range" value="720">
-<span aria-hidden="true" class="bar-clock">12:00</span>
-</div>
 <ul class="bar-links" role="list">
 <li><a href="#fruits">Fruits</a></li>
 <li><a href="#about">Files</a></li>
@@ -65,8 +60,8 @@ srcset="images/cut-strawberry-240.webp 240w, images/cut-strawberry-480.webp 480w
 <span class="line">is</span>
 <span class="line">Juicy</span>
 </h1>
-<p class="lead">A demo landing page with four fruits. Its colors follow the hour on the citrus
-clock.</p>
+<p class="lead">A demo landing page with four fruits. The citrus slice is drawn in CSS, with no
+image.</p>
 <div class="hero-actions">
 <a class="pill-ink big" href="#fruits">See the fruits</a>
 <a class="ghost-link" href="https://github.com/NetBr3ak/fruitend">View source</a>
@@ -74,10 +69,7 @@ clock.</p>
 </div>
 <div class="hero-disc">
 <div class="dial">
-<div class="citrus" id="clock">
-<span aria-hidden="true" class="clock-time">12:00</span>
-<span aria-hidden="true" class="knob"></span>
-</div>
+<div aria-hidden="true" class="citrus"></div>
 <picture class="sticker cut cut-pineapple" style="--i: 0">
 <source sizes="(max-width: 1000px) min(11vw, 80px), min(7vw, 99px)" srcset="images/cut-pineapple-240.avif 104w, images/cut-pineapple-480.avif 209w" type="image/avif">
 <img alt="" decoding="async" fetchpriority="low" height="480" sizes="(max-width: 1000px) min(11vw, 80px), min(7vw, 99px)" src="images/cut-pineapple-480.webp"
@@ -94,10 +86,6 @@ srcset="images/cut-kiwi-240.webp 240w, images/cut-kiwi-480.webp 480w" width="480
 srcset="images/cut-pint-240.webp 240w, images/cut-pint-480.webp 480w" width="480">
 </picture>
 </div>
-<p class="disc-note" hidden id="clock-note">It keeps your time until you drag the hand or tap the
-slice. <span class="disc-keys">On a keyboard, Tab to the slice: the arrow keys move 15 minutes,
-Page Up and Page Down an hour.</span></p>
-<button class="pill-ink now" hidden id="clock-now" type="button">Back to now</button>
 </div>
 </div>
 </section>
@@ -111,7 +99,7 @@ Page Up and Page Down an hour.</span></p>
 </div>
 </div>
 <div class="ticker-ctls" hidden>
-<button class="ticker-ctl" hidden id="ticker-toggle" type="button">Pause</button>
+<button class="ticker-ctl" hidden id="motion-toggle" type="button">Pause motion</button>
 <button aria-controls="probe" aria-pressed="false" class="ticker-ctl" hidden id="probe-toggle"
 type="button">Inspect styles</button>
 </div>
