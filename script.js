@@ -312,9 +312,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
 	// A rule inside a @media or @supports block is only worth showing when its condition is
 	// live right now, otherwise the panel lists CSS the element is not actually getting.
+	// A @container condition depends on the box around the element, which no API evaluates,
+	// so those rules stay and the panel writes their condition in front of them.
+	const inContainer = rule => rule.constructor.name === 'CSSContainerRule';
 	const live = rule => rule.media ? matchMedia(rule.conditionText).matches
-		: rule.conditionText === undefined ? true
+		: inContainer(rule) || rule.conditionText === undefined ? true
 			: CSS.supports(rule.conditionText);
+	const ruleText = rule => rule.parentRule && inContainer(rule.parentRule)
+		? `@container ${rule.parentRule.conditionText} {\n${rule.cssText}\n}` : rule.cssText;
 
 	const flatten = rules => [...rules].flatMap(r =>
 		r.cssRules ? (live(r) ? [r, ...flatten(r.cssRules)] : []) : [r]);
@@ -375,7 +380,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 		probeLabel.hidden = false;
 		probeRules.textContent = matched.length
-			? matched.slice(-6).map(rule => rule.cssText.slice(0, 320)).join('\n\n')
+			? matched.slice(-6).map(rule => ruleText(rule).slice(0, 320)).join('\n\n')
 			: 'No authored rules readable. Opened from the disk, the browser treats styles.css '
 			+ 'as another origin and cssRules throws, so only the computed values above survive. '
 			+ 'Serve the folder over http and this fills in.';
