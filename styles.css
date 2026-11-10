@@ -156,7 +156,6 @@ ol {
 .note,
 .foot-links a,
 .foot-copy,
-.toast,
 .probe {
     font-variation-settings: "wdth" 87.5;
 }
@@ -172,8 +171,7 @@ ol {
 
 .cta a:focus-visible,
 footer a:focus-visible,
-.ticker button:focus-visible,
-.toast button:focus-visible {
+.ticker button:focus-visible {
     outline-color: var(--cream);
 }
 
@@ -196,8 +194,10 @@ footer a:focus-visible,
     left: 0;
 }
 
-/* Without this the skip link lands behind the sticky bar it was meant to skip. */
-#main {
+/* Without this the skip link and the nav links land behind the sticky bar. */
+#main,
+#fruits,
+#about {
     scroll-margin-top: calc(var(--bar) + 6px);
 }
 
@@ -858,75 +858,6 @@ footer {
     color: var(--mango);
 }
 
-/* ---------- toast ---------- */
-
-/* A popover paints in the top layer, so no overflow:clip and no future stacking context can
-   shave it the way the hero animation was shaving its own focus ring. display and overlay
-   need allow-discrete to survive the close; overlay is not Baseline yet, so the exit may snap. */
-.toast {
-    position: fixed;
-    inset: auto auto 24px 50%;
-    translate: -50% 0;
-    z-index: 30;
-    /* Shrink-to-fit would measure from left: 50% to the right edge, 187 px on a 375 px phone,
-       and break the message into five lines. */
-    width: max-content;
-    max-width: min(92vw, 30rem);
-    padding: 14px 14px 14px 20px;
-    align-items: center;
-    gap: 16px;
-    border: 2px solid var(--kiwi);
-    border-radius: 28px;
-    background: var(--cocoa);
-    color: var(--cream);
-    font-family: var(--micro);
-    font-size: .8125rem;
-    line-height: 1.5;
-    opacity: 0;
-    transition:
-        opacity .2s var(--ease),
-        translate .2s var(--ease),
-        overlay .2s allow-discrete,
-        display .2s allow-discrete;
-}
-
-.toast:popover-open {
-    display: flex;
-    opacity: 1;
-}
-
-@starting-style {
-    .toast:popover-open {
-        opacity: 0;
-        translate: -50% 12px;
-    }
-}
-
-.toast-msg {
-    flex: 1;
-}
-
-.toast-close {
-    flex: none;
-    width: 32px;
-    height: 32px;
-    font-size: 1.125rem;
-    line-height: 1;
-    color: var(--cream);
-    background: transparent;
-    border: 2px solid var(--cream);
-    border-radius: 999px;
-    cursor: pointer;
-    transition: background .2s ease, color .2s ease;
-}
-
-@media (hover: hover) {
-    .toast-close:hover {
-        color: var(--cocoa);
-        background: var(--cream);
-    }
-}
-
 /* ---------- inspector ---------- */
 
 .probe {
@@ -970,7 +901,7 @@ footer {
 }
 
 /* Not a popover: in the top layer it painted over the panel whenever it opened after it. Below
-   the top layer it sits under the panel and the toast, and z-index 15 keeps it over the bar. */
+   the top layer it sits under the panel, and z-index 15 keeps it over the bar. */
 .probe-halo {
     position: fixed;
     inset: 0 auto auto 0;

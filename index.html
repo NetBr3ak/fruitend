@@ -58,11 +58,11 @@
             </a>
 
             <ul class="bar-links" role="list">
-                <li><a href="#">Fruits</a></li>
-                <li><a href="#">About</a></li>
+                <li><a href="#fruits">Fruits</a></li>
+                <li><a href="#about">About</a></li>
             </ul>
 
-            <a class="pill-ink" href="#">Sign up</a>
+            <a class="pill-ink" href="https://github.com/NetBr3ak/fruitend">Source</a>
         </nav>
     </header>
 
@@ -80,8 +80,8 @@
                         colors run from noon to midnight.</p>
 
                     <div class="hero-actions">
-                        <a class="pill-ink big" href="#">Sign up</a>
-                        <a class="ghost-link" href="#">See the fruits</a>
+                        <a class="pill-ink big" href="#fruits">Explore the fruits</a>
+                        <a class="ghost-link" href="https://github.com/NetBr3ak/fruitend">View source</a>
                     </div>
                 </div>
 
@@ -103,13 +103,13 @@
             <div class="ticker-marquee">
                 <div class="ticker-track">
                     <p class="ticker-run">Kiwi &middot; Pineapple &middot; Strawberries &middot; Blueberries &middot;
-                        Sign up is a demo &middot;</p>
+                        Noon to midnight &middot;</p>
                     <p aria-hidden="true" class="ticker-run">Kiwi &middot; Pineapple &middot; Strawberries &middot;
-                        Blueberries &middot; Sign up is a demo &middot;</p>
+                        Blueberries &middot; Noon to midnight &middot;</p>
                     <p aria-hidden="true" class="ticker-run">Kiwi &middot; Pineapple &middot; Strawberries &middot;
-                        Blueberries &middot; Sign up is a demo &middot;</p>
+                        Blueberries &middot; Noon to midnight &middot;</p>
                     <p aria-hidden="true" class="ticker-run">Kiwi &middot; Pineapple &middot; Strawberries &middot;
-                        Blueberries &middot; Sign up is a demo &middot;</p>
+                        Blueberries &middot; Noon to midnight &middot;</p>
                 </div>
             </div>
 
@@ -120,7 +120,7 @@
             </div>
         </div>
 
-        <section class="fruits">
+        <section class="fruits" id="fruits">
             <div class="wrap">
                 <h2 class="fruits-title" data-reveal>The <span class="numeral">4</span> fruits</h2>
 
@@ -162,7 +162,7 @@
             </div>
         </section>
 
-        <section class="files">
+        <section class="files" id="about">
             <div class="wrap files-grid">
                 <h2 class="files-title" data-reveal><span class="line">Three files.</span>
                     No&nbsp;framework, no build&nbsp;step, nothing to&nbsp;install.</h2>
@@ -177,11 +177,11 @@
 
         <section class="cta">
             <div class="wrap cta-grid">
-                <h2 class="cta-title" data-reveal>Sign up for the fruit list</h2>
+                <h2 class="cta-title" data-reveal>Fork it and swap the fruit</h2>
 
                 <div class="cta-side" data-reveal>
-                    <a aria-describedby="cta-note" class="press" href="#">Sign up</a>
-                    <p class="note" id="cta-note">The button is a demo, nothing is sent.</p>
+                    <a aria-describedby="cta-note" class="press" href="https://github.com/NetBr3ak/fruitend">Make it your own</a>
+                    <p class="note" id="cta-note">Opens the repository on GitHub. MIT license.</p>
                 </div>
             </div>
         </section>
@@ -202,12 +202,6 @@
             <span aria-hidden="true">Fruitend</span>
         </div>
     </footer>
-
-    <div class="toast" id="toast" popover="manual">
-        <p class="toast-msg" role="status"></p>
-        <button aria-label="Dismiss message" class="toast-close" popovertarget="toast" popovertargetaction="hide"
-            type="button">&times;</button>
-    </div>
 
     <div aria-hidden="true" class="probe-halo" hidden id="probe-halo"></div>
 

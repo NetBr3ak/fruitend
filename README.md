@@ -24,8 +24,8 @@ Live page: https://netbr3ak.github.io/fruitend/
   you hover or focus.
 - The ticker has a Pause button. If your system asks for reduced motion, nothing on the page
   moves and the Pause button is hidden.
-- The nav links, "See the fruits" and "Sign up" are demos. They lead nowhere: a click shows a
-  short message and sends nothing.
+- Every link works without JavaScript. "Fruits", "About" and "Explore the fruits" jump to their
+  section; "Source", "View source" and "Make it your own" open this repository.
 
 There is no framework, no build step and no request to another server. The fonts ship with
 the page.
@@ -61,7 +61,7 @@ fruitend/
 ├── images/             # The four fruit photos and the preview image above
 ├── index.html          # The page
 ├── styles.css          # All styles, including the palette
-├── script.js           # Toast, clock, ticker, inspector
+├── script.js           # Clock, ticker, inspector
 ├── check-palette.mjs   # Contrast check for the whole palette ramp
 ├── favicon.svg
 ├── sitemap.xml

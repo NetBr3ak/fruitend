@@ -1,4 +1,3 @@
-// Demo page: the nav links, "See the fruits" and sign-up lead nowhere, so a click reports that in a toast.
 document.addEventListener('DOMContentLoaded', function () {
 	const root = document.documentElement;
 	const pad = n => String(n).padStart(2, '0');
@@ -6,41 +5,6 @@ document.addEventListener('DOMContentLoaded', function () {
 	// hidePopover() on a closed popover and showPopover() on an open one both throw.
 	const open = el => { if (!el.matches(':popover-open')) el.showPopover(); };
 	const close = el => { if (el.matches(':popover-open')) el.hidePopover(); };
-
-	/* ---------- toast ---------- */
-
-	const toast = document.getElementById('toast');
-	const toastMsg = toast.querySelector('.toast-msg');
-	let timer;
-
-	// 5 s (2.6 s was short for two lines), and held while the pointer or focus is on it.
-	function closeLater() {
-		clearTimeout(timer);
-		timer = setTimeout(() => toast.matches(':hover, :focus-within') ? closeLater() : close(toast), 5000);
-	}
-
-	function say(message) {
-		// Writing the same string twice is not a DOM mutation, so the live region would
-		// stay silent on a repeat click. Clearing first forces the announcement.
-		toastMsg.textContent = '';
-		requestAnimationFrame(() => { toastMsg.textContent = message; });
-		open(toast);
-		closeLater();
-	}
-
-	document.querySelectorAll('.bar-links a, .ghost-link').forEach(link => {
-		link.addEventListener('click', function (e) {
-			e.preventDefault();
-			say(`"${this.textContent.trim()}" is a demo link, it goes nowhere.`);
-		});
-	});
-
-	document.querySelectorAll('.pill-ink, .press').forEach(button => {
-		button.addEventListener('click', function (e) {
-			e.preventDefault();
-			say('Sign up is a demo, nothing was sent.');
-		});
-	});
 
 	/* ---------- reveal ---------- */
 
@@ -261,7 +225,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 	function look(e) {
 		const el = e.target;
-		if (!(el instanceof Element) || probe.contains(el) || toast.contains(el)) return;
+		if (!(el instanceof Element) || probe.contains(el)) return;
 		describe(el);
 	}
 
@@ -292,9 +256,6 @@ document.addEventListener('DOMContentLoaded', function () {
 	probeBtn.addEventListener('click', () => setInspecting(!inspecting));
 
 	addEventListener('keydown', e => {
-		if (e.key !== 'Escape') return;
-		clearTimeout(timer);
-		close(toast);
-		if (inspecting) setInspecting(false);
+		if (e.key === 'Escape' && inspecting) setInspecting(false);
 	});
 });

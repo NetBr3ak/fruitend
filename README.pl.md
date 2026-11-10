@@ -26,8 +26,8 @@ Strona na żywo: https://netbr3ak.github.io/fruitend/
   kursorem albo z fokusem.
 - Pasek z tekstem ma przycisk Pause. Jeśli system prosi o ograniczenie ruchu, nic na stronie
   się nie rusza, a przycisk Pause jest ukryty.
-- Linki w menu, "See the fruits" i "Sign up" to atrapy. Nigdzie nie prowadzą: kliknięcie
-  pokazuje krótki komunikat i niczego nie wysyła.
+- Każdy link działa bez JavaScriptu. "Fruits", "About" i "Explore the fruits" przewijają do
+  swojej sekcji; "Source", "View source" i "Make it your own" otwierają to repozytorium.
 
 Nie ma frameworka, budowania ani zapytań do innego serwera. Fonty leżą obok strony.
 
@@ -63,7 +63,7 @@ fruitend/
 ├── images/             # Cztery zdjęcia owoców i obraz podglądu powyżej
 ├── index.html          # Strona
 ├── styles.css          # Wszystkie style, razem z paletą
-├── script.js           # Komunikat, zegar, pasek, inspektor
+├── script.js           # Zegar, pasek, inspektor
 ├── check-palette.mjs   # Sprawdzenie kontrastu całej skali palety
 ├── favicon.svg
 ├── sitemap.xml
