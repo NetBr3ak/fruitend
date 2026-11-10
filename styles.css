@@ -1166,6 +1166,19 @@ footer {
     }
 }
 
+/* Below 375 px the word pushes "Sign up" past the page margin (at 320 px about 50 px past the
+   edge); the mark stays, and the word stays the link's accessible name. */
+@media (max-width: 374px) {
+    .wordmark-text {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip-path: inset(50%);
+        white-space: nowrap;
+    }
+}
+
 /* ---------- motion ---------- */
 
 @media (prefers-reduced-motion: no-preference) {
