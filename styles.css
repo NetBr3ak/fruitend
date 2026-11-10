@@ -272,8 +272,12 @@ footer a:focus-visible,
 
 .pill-ink.big {
     min-height: 52px;
-    padding: 0 34px;
+    max-width: 100%;
+    padding: 8px 34px;
     font-size: .8125rem;
+    /* At 320 px with 200% text "See the fruits" is wider than the page: wrap, never clip. */
+    white-space: normal;
+    text-align: center;
 }
 
 /* ---------- hero ---------- */
