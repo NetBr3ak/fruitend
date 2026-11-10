@@ -99,8 +99,6 @@
 html {
     scroll-behavior: smooth;
     background: var(--plum);
-    /* clip, not hidden: the hero disc bleeds past the right edge without killing position:sticky */
-    overflow-x: clip;
 }
 
 body {
@@ -110,7 +108,6 @@ body {
     line-height: 1.6;
     color: var(--cocoa);
     background: var(--plum);
-    overflow-x: clip;
 }
 
 img {
@@ -279,6 +276,9 @@ footer a:focus-visible,
 /* ---------- hero ---------- */
 
 .hero {
+    /* The dial bleeds past the right edge. Clip, not hidden, and only here: nothing else
+       overflows, and a clip on html or body would also cut any future wide element. */
+    overflow-x: clip;
     background: var(--mango);
     padding: clamp(40px, 5vw, 64px) 0 clamp(56px, 10vw, 120px);
 }
