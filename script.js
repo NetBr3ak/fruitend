@@ -414,7 +414,10 @@ document.addEventListener('DOMContentLoaded', function () {
 			return;
 		}
 		probeTarget.textContent = 'Point at anything';
-		probeBox.textContent = 'Hover or tab to an element and its real box lands here.';
+		// A phone has no hover; a tap fires the same pointerover.
+		probeBox.textContent = matchMedia('(hover: hover)').matches
+			? 'Hover or tab to an element and its real box lands here.'
+			: 'Tap an element and its real box lands here.';
 		probeLabel.hidden = true;
 		probeRules.textContent = '';
 		open(probe);
