@@ -167,10 +167,6 @@ footer a:focus-visible,
     top: 0;
     z-index: 20;
     padding: 14px 20px;
-    font-family: var(--micro);
-    font-size: .8125rem;
-    text-transform: uppercase;
-    letter-spacing: .12em;
     color: var(--cream);
     background: var(--cocoa);
     text-decoration: none;
@@ -233,11 +229,7 @@ footer a:focus-visible,
 
 .bar-links a {
     display: inline-block;
-    padding: 15px 0;
-    font-family: var(--micro);
-    font-size: .75rem;
-    text-transform: uppercase;
-    letter-spacing: .12em;
+    padding: 12px 0;
     text-decoration: none;
     color: var(--cocoa);
     transition: color .2s ease;
@@ -255,11 +247,7 @@ footer a:focus-visible,
     align-items: center;
     justify-content: center;
     min-height: 44px;
-    padding: 0 24px;
-    font-family: var(--micro);
-    font-size: .75rem;
-    text-transform: uppercase;
-    letter-spacing: .12em;
+    padding: 0 22px;
     text-decoration: none;
     white-space: nowrap;
     color: var(--cream);
@@ -278,8 +266,8 @@ footer a:focus-visible,
 .pill-ink.big {
     min-height: 52px;
     max-width: 100%;
-    padding: 8px 34px;
-    font-size: .8125rem;
+    padding: 8px 32px;
+    font-size: 1.125rem;
     /* At 320 px with 200% text "See the fruits" is wider than the page: wrap, never clip. */
     white-space: normal;
     text-align: center;
@@ -319,10 +307,6 @@ footer a:focus-visible,
     display: block;
 }
 
-.juicy {
-    color: var(--midnight);
-}
-
 .lead {
     max-width: 34rem;
     margin-top: 28px;
@@ -343,10 +327,7 @@ footer a:focus-visible,
     display: inline-flex;
     align-items: center;
     min-height: 44px;
-    font-family: var(--micro);
-    font-size: .8125rem;
-    text-transform: uppercase;
-    letter-spacing: .12em;
+    font-size: 1.125rem;
     text-decoration: underline;
     text-decoration-thickness: 2px;
     text-underline-offset: 4px;
@@ -456,9 +437,7 @@ footer a:focus-visible,
 .disc-note {
     max-width: 26rem;
     margin-top: 24px;
-    font-family: var(--micro);
-    font-size: .8125rem;
-    line-height: 1.7;
+    line-height: 1.5;
     color: var(--cocoa);
 }
 
@@ -501,10 +480,10 @@ footer a:focus-visible,
     min-width: 34vw;
     padding-right: 2ch;
     white-space: nowrap;
-    font-family: var(--micro);
-    font-size: .8125rem;
-    text-transform: uppercase;
-    letter-spacing: .12em;
+    font-family: var(--display);
+    font-size: 1.375rem;
+    font-weight: 800;
+    font-variation-settings: "wdth" 85;
     color: var(--cream);
 }
 
@@ -518,10 +497,7 @@ footer a:focus-visible,
 .ticker-ctl {
     min-height: 36px;
     padding: 0 16px;
-    font-family: var(--micro);
-    font-size: .75rem;
-    text-transform: uppercase;
-    letter-spacing: .12em;
+    font: inherit;
     color: var(--cream);
     background: transparent;
     border: 2px solid var(--cream);
@@ -557,13 +533,6 @@ footer a:focus-visible,
     font-variation-settings: "wdth" 85;
     text-wrap: balance;
     color: var(--cocoa);
-}
-
-/* Cream on strawberry is 3.25:1, so it is only legal at this display size. Never on small text. */
-.numeral {
-    color: var(--cream);
-    font-size: 1.5em;
-    line-height: 0;
 }
 
 .bento {
@@ -695,7 +664,6 @@ footer a:focus-visible,
     border-radius: 999px;
     font-family: var(--micro);
     font-size: .8125rem;
-    letter-spacing: .12em;
     text-decoration: none;
     color: var(--cocoa);
     transition: background .2s ease, color .2s ease;
@@ -752,11 +720,8 @@ footer a:focus-visible,
     align-items: center;
     justify-content: center;
     min-height: 64px;
-    padding: 0 44px;
-    font-family: var(--micro);
-    font-size: .875rem;
-    text-transform: uppercase;
-    letter-spacing: .12em;
+    padding: 0 40px;
+    font-size: 1.25rem;
     text-decoration: none;
     color: var(--cocoa);
     background: var(--mango);
@@ -780,8 +745,6 @@ footer a:focus-visible,
 
 .note {
     margin-top: 20px;
-    font-family: var(--micro);
-    font-size: .8125rem;
     line-height: 1.6;
     color: var(--cream);
 }
@@ -805,8 +768,6 @@ footer {
 .foot-links a {
     display: inline-block;
     padding: 12px 0;
-    font-family: var(--micro);
-    font-size: .8125rem;
     text-decoration: none;
     color: var(--kiwi);
     transition: color .2s ease;
@@ -823,8 +784,6 @@ footer {
 /* The links carry 12 px of padding; without the same here the copy sat 12 px below their baseline. */
 .foot-copy {
     padding-block: 12px;
-    font-family: var(--micro);
-    font-size: .8125rem;
     color: var(--cream);
 }
 
@@ -874,8 +833,6 @@ footer {
 
 .probe-target {
     color: var(--kiwi);
-    text-transform: uppercase;
-    letter-spacing: .12em;
 }
 
 .probe-box {
