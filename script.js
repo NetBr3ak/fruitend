@@ -27,6 +27,8 @@ document.addEventListener('DOMContentLoaded', function () {
 	let touchStart = null; // [x, y] of a touch that has not set the time yet
 
 	const wallMinutes = () => { const d = new Date(); return d.getHours() * 60 + d.getMinutes(); };
+	// Minutes from m to the nearest noon: 0 at 12:00, 360 at 06:00 and 18:00, 720 at 00:00.
+	const noonDistance = m => { const d = (m + 720) % 1440; return Math.min(d, 1440 - d); };
 
 	function setTod(next) {
 		next = (Math.round(next) % 1440 + 1440) % 1440;
@@ -34,8 +36,8 @@ document.addEventListener('DOMContentLoaded', function () {
 		minutes = next;
 		// Noon sits at the top and midnight at the bottom. --tod is the distance from noon:
 		// 0 at 12:00, .5 at 06:00 and 18:00, 1 at 00:00, so a turn never jumps.
+		root.style.setProperty('--tod', (noonDistance(minutes) / 720).toFixed(4));
 		const fromNoon = (minutes + 720) % 1440;
-		root.style.setProperty('--tod', (Math.min(fromNoon, 1440 - fromNoon) / 720).toFixed(4));
 		hand += ((fromNoon / 4 - hand) % 360 + 540) % 360 - 180;
 		root.style.setProperty('--hand', `${hand.toFixed(2)}deg`);
 		const time = `${pad(Math.floor(minutes / 60))}:${pad(minutes % 60)}`;
@@ -54,6 +56,22 @@ document.addEventListener('DOMContentLoaded', function () {
 		following = false;
 		nowBtn.hidden = pinned;
 		setTod(next);
+	}
+
+	// Night is 18:00 to 06:00, where --tod is .5 or more (styles.css, the round() block).
+	const isNight = m => noonDistance(m) >= 360;
+	const calm = matchMedia('(prefers-reduced-motion: reduce)');
+
+	// A jump across 06:00 or 18:00 cross-fades the whole page in one 400 ms view transition,
+	// instead of the night switching in one frame halfway through the 600 ms colour fade.
+	// A drag stays direct.
+	function across(next, update) {
+		if (typeof document.startViewTransition !== 'function' || calm.matches || isNight(next) === isNight(minutes)) {
+			update();
+			return;
+		}
+		root.classList.add('scrubbing');
+		document.startViewTransition(update).finished.finally(() => root.classList.remove('scrubbing'));
 	}
 
 	// Minutes since midnight under the pointer, read clockwise from noon at the top. Null on the
@@ -98,10 +116,11 @@ document.addEventListener('DOMContentLoaded', function () {
 	function end(e) {
 		if (e.pointerId !== drag) return;
 		// A tap: the finger lifted before it went sideways.
-		if (e.type === 'pointerup' && touchStart) jumpTo(e);
+		const tap = e.type === 'pointerup' && touchStart ? minutesAt(e) : null;
 		drag = null;
 		touchStart = null;
 		root.classList.remove('scrubbing');
+		if (tap !== null) across(tap, () => choose(tap));
 	}
 
 	['pointerup', 'pointercancel', 'lostpointercapture'].forEach(type => clock.addEventListener(type, end));
@@ -113,7 +132,8 @@ document.addEventListener('DOMContentLoaded', function () {
 		const jump = e.key === 'Home' ? 0 : e.key === 'End' ? 1439 : null;
 		if (jump === null && STEP[e.key] === undefined) return;
 		e.preventDefault();
-		choose(jump ?? Math.min(1439, Math.max(0, minutes + STEP[e.key])));
+		const next = jump ?? Math.min(1439, Math.max(0, minutes + STEP[e.key]));
+		across(next, () => choose(next));
 	});
 
 	timeBar.addEventListener('input', () => choose(Number(timeBar.value)));
@@ -136,9 +156,12 @@ document.addEventListener('DOMContentLoaded', function () {
 	}
 
 	nowBtn.addEventListener('click', () => {
-		following = true;
-		nowBtn.hidden = true;
-		setTod(wallMinutes());
+		const wall = wallMinutes();
+		across(wall, () => {
+			following = true;
+			nowBtn.hidden = true;
+			setTod(wall);
+		});
 		// The button hides under the focus; the dial is where the visitor was working.
 		clock.focus();
 	});

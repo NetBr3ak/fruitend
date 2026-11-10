@@ -1278,6 +1278,12 @@ footer {
     .ticker.paused .ticker-track {
         animation-play-state: paused;
     }
+
+    /* script.js starts a view transition only for a jump between day and night. */
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+        animation-duration: .4s;
+    }
 }
 
 @media (prefers-reduced-motion: reduce) {
