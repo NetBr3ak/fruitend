@@ -120,38 +120,62 @@
             <div class="wrap">
                 <h2 class="fruits-title">Four fruits</h2>
 
-                <div class="bento">
+                <!-- Each sizes value is the photo's width in the layout styles.css gives that block at
+                     that viewport width: a column of one block below 641 px, two to 1000 px, three above. -->
+                <div class="field">
                     <article class="blk blk-tall">
-                        <img alt="Strawberries in a wicker basket" class="sticker rot-a" decoding="async" height="360" loading="lazy"
-                            sizes="(max-width: 640px) 150px, 180px" src="images/strawberries.webp"
-                            srcset="images/strawberries-200.webp 200w, images/strawberries-300.webp 300w, images/strawberries.webp 360w" width="360">
-                        <h3>Strawberries</h3>
-                        <p>Each seed on the skin is a fruit of its own.</p>
+                        <div class="blk-in">
+                            <picture>
+                                <source sizes="(max-width: 625px) 92vw, (max-width: 1000px) 46vw, min(38vw, 511px)" srcset="images/strawberries-400.avif 400w, images/strawberries-800.avif 800w, images/strawberries-1000.avif 1000w" type="image/avif">
+                                <img alt="Strawberries in a wicker basket" decoding="async" height="400" loading="lazy" sizes="(max-width: 625px) 92vw, (max-width: 1000px) 46vw, min(38vw, 511px)"
+                                    src="images/strawberries-400.webp" srcset="images/strawberries-400.webp 400w, images/strawberries-800.webp 800w, images/strawberries-1000.webp 1000w" width="400">
+                            </picture>
+                            <div class="blk-text">
+                                <h3>Strawberries</h3>
+                                <p>Each seed on the skin is a fruit of its own.</p>
+                            </div>
+                        </div>
                     </article>
 
                     <article class="blk blk-kiwi">
-                        <img alt="A kiwi cut in half" class="sticker rot-b" decoding="async" height="360" loading="lazy"
-                            sizes="(max-width: 640px) clamp(88px, 30vw, 112px), 160px" src="images/kiwi.webp"
-                            srcset="images/kiwi-200.webp 200w, images/kiwi-300.webp 300w, images/kiwi.webp 360w" width="360">
-                        <h3>Kiwi</h3>
-                        <p>Weight for weight, more vitamin C than an orange.</p>
+                        <div class="blk-in">
+                            <picture>
+                                <source sizes="(max-width: 625px) 42vw, (max-width: 640px) 46vw, (max-width: 1000px) 21vw, min(12.2vw, 164px)" srcset="images/kiwi-400.avif 400w, images/kiwi-800.avif 800w" type="image/avif">
+                                <img alt="A kiwi cut in half" decoding="async" height="400" loading="lazy" sizes="(max-width: 625px) 42vw, (max-width: 640px) 46vw, (max-width: 1000px) 21vw, min(12.2vw, 164px)"
+                                    src="images/kiwi-400.webp" srcset="images/kiwi-400.webp 400w, images/kiwi-800.webp 800w" width="400">
+                            </picture>
+                            <div class="blk-text">
+                                <h3>Kiwi</h3>
+                                <p>Weight for weight, more vitamin C than an orange.</p>
+                            </div>
+                        </div>
                     </article>
 
                     <article class="blk blk-lemon">
-                        <img alt="A whole pineapple with its green crown" class="sticker rot-c" decoding="async" height="360" loading="lazy"
-                            sizes="(max-width: 640px) clamp(88px, 30vw, 112px), 160px" src="images/pineapple.webp"
-                            srcset="images/pineapple-200.webp 200w, images/pineapple-300.webp 300w, images/pineapple.webp 360w" width="360">
-                        <h3>Pineapple</h3>
-                        <p>A plant grows one fruit at a time, and each one takes over a year.</p>
+                        <div class="blk-in">
+                            <picture>
+                                <source sizes="(max-width: 625px) 42vw, (max-width: 640px) 46vw, (max-width: 1000px) 21vw, min(12.2vw, 164px)" srcset="images/pineapple-400.avif 400w, images/pineapple-800.avif 800w" type="image/avif">
+                                <img alt="A whole pineapple with its green crown" decoding="async" height="400" loading="lazy" sizes="(max-width: 625px) 42vw, (max-width: 640px) 46vw, (max-width: 1000px) 21vw, min(12.2vw, 164px)"
+                                    src="images/pineapple-400.webp" srcset="images/pineapple-400.webp 400w, images/pineapple-800.webp 800w" width="400">
+                            </picture>
+                            <div class="blk-text">
+                                <h3>Pineapple</h3>
+                                <p>A plant grows one fruit at a time, and each one takes over a year.</p>
+                            </div>
+                        </div>
                     </article>
 
                     <article class="blk blk-wide">
-                        <img alt="Blueberries in a white bowl" class="sticker rot-d" decoding="async" height="360" loading="lazy"
-                            sizes="(max-width: 640px) clamp(88px, 30vw, 112px), 160px" src="images/blueberries.webp"
-                            srcset="images/blueberries-200.webp 200w, images/blueberries-300.webp 300w, images/blueberries.webp 360w" width="360">
-                        <div>
-                            <h3>Blueberries</h3>
-                            <p>The pale blue is a coat of wax. Rub it off and the berry is almost black.</p>
+                        <div class="blk-in">
+                            <picture>
+                                <source sizes="(max-width: 625px) 42vw, (max-width: 1000px) 46vw, min(27vw, 365px)" srcset="images/blueberries-400.avif 400w, images/blueberries-800.avif 800w" type="image/avif">
+                                <img alt="Blueberries in a white bowl" decoding="async" height="400" loading="lazy" sizes="(max-width: 625px) 42vw, (max-width: 1000px) 46vw, min(27vw, 365px)"
+                                    src="images/blueberries-400.webp" srcset="images/blueberries-400.webp 400w, images/blueberries-800.webp 800w" width="400">
+                            </picture>
+                            <div class="blk-text">
+                                <h3>Blueberries</h3>
+                                <p>The pale blue is a coat of wax. Rub it off and the berry is almost black.</p>
+                            </div>
                         </div>
                     </article>
                 </div>

@@ -580,25 +580,55 @@ footer a:focus-visible,
     color: var(--ink);
 }
 
-.bento {
+/* One flush field of colour: no gaps, no corners, so the four blocks read as one surface and
+   the photos carry it, not a kit of cards. */
+.field {
     display: grid;
     grid-template-columns: 1.4fr 1fr 1fr;
-    gap: 20px;
     margin-top: clamp(36px, 5vw, 64px);
 }
 
+/* Each block lays itself out by its own width (the @container rules below), so the same block
+   is designed at every size instead of stretched. */
 .blk {
-    padding: 32px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    border-radius: 28px;
+    display: grid;
+    container-type: inline-size;
+}
+
+/* A narrow block, and the layout wherever container queries are missing: the photo bleeds off
+   the left edge at full height and the text sits beside it. */
+.blk-in {
+    display: grid;
+    grid-template-columns: 45% 1fr;
+    min-height: 12rem;
+}
+
+/* The photo fills whatever box the layout gives it; its own square shape never sets a height. */
+.blk picture {
+    position: relative;
+}
+
+.blk img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.blk-text {
+    display: grid;
+    align-content: center;
+    gap: 10px;
+    padding: clamp(16px, 6cqi, 28px);
 }
 
 .blk h3 {
-    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    font-size: 1.5rem;
+    font-size: clamp(1.25rem, 7.4cqi, 2rem);
     line-height: 1;
     letter-spacing: -.02em;
+    font-variation-settings: "wdth" 85;
 }
 
 .blk p {
@@ -606,10 +636,50 @@ footer a:focus-visible,
     text-wrap: pretty;
 }
 
+/* Strawberries in a narrow block stand on their photo: at least 5:3 of the width, and in the
+   two-row desktop span it takes the height the text leaves. */
+@container (width < 36rem) {
+    .blk-tall .blk-in {
+        grid-template-columns: none;
+        grid-template-rows: 1fr auto;
+    }
+
+    .blk-tall picture {
+        min-height: 60cqi;
+    }
+
+    .blk-tall .blk-text {
+        padding: clamp(20px, 6cqi, 32px);
+    }
+
+    .blk-tall h3 {
+        font-size: clamp(2rem, 10cqi, 4rem);
+    }
+}
+
+/* A wide block: the text on the left and the photo off the right edge, at least 4:3. */
+@container (width >= 36rem) {
+    .blk-in {
+        grid-template-columns: 1fr 50%;
+    }
+
+    .blk-in picture {
+        order: 1;
+        min-height: 37.5cqi;
+    }
+
+    .blk-text {
+        padding: 32px;
+    }
+
+    .blk h3 {
+        font-size: clamp(2rem, 6cqi, 3.5rem);
+    }
+}
+
 .blk-tall {
     grid-column: 1;
     grid-row: 1 / span 2;
-    justify-content: flex-end;
     background: var(--magenta);
     color: var(--cream);
 }
@@ -626,56 +696,7 @@ footer a:focus-visible,
 
 .blk-wide {
     grid-column: 2 / span 2;
-    flex-direction: row;
-    align-items: center;
-    gap: 28px;
     background: var(--mango-ground);
-}
-
-/* The heading and copy sit in their own box here, so they need the gap the other cards get from .blk. */
-.blk-wide > div {
-    display: grid;
-    gap: 20px;
-}
-
-.sticker {
-    width: 160px;
-    height: 160px;
-    flex: none;
-    display: block;
-    object-fit: cover;
-    border-radius: 50%;
-    border: 4px solid var(--cocoa);
-    box-shadow: 8px 8px 0 var(--cocoa);
-    transition: transform .25s var(--ease);
-}
-
-.blk-tall .sticker {
-    width: 180px;
-    height: 180px;
-    margin-bottom: auto;
-}
-
-.rot-a {
-    transform: rotate(-6deg);
-}
-
-.rot-b {
-    transform: rotate(4deg);
-}
-
-.rot-c {
-    transform: rotate(-3deg);
-}
-
-.rot-d {
-    transform: rotate(7deg);
-}
-
-@media (hover: hover) {
-    .blk:hover .sticker {
-        transform: rotate(0) scale(1.04);
-    }
 }
 
 /* ---------- files ---------- */
@@ -959,20 +980,13 @@ footer {
         grid-template-columns: 1fr;
     }
 
-    .bento {
+    .field {
         grid-template-columns: 1fr 1fr;
     }
 
     .blk-tall {
         grid-column: 1 / -1;
         grid-row: auto;
-        flex-direction: row;
-        align-items: center;
-        gap: 28px;
-    }
-
-    .blk-tall .sticker {
-        margin-bottom: 0;
     }
 
     .blk-kiwi {
@@ -1051,11 +1065,7 @@ footer {
         padding-inline: 4vw;
     }
 
-    .blk {
-        padding: 24px;
-    }
-
-    .bento {
+    .field {
         grid-template-columns: 1fr;
     }
 
@@ -1064,46 +1074,6 @@ footer {
     .blk-wide,
     .blk-tall {
         grid-column: 1;
-    }
-
-    .blk-tall {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .blk-tall .sticker {
-        width: 150px;
-        height: 150px;
-    }
-
-    /* Strawberries stay the one large card; the other three turn into compact rows, photo on the
-       left. Four cards of one shape took 1484 px and read as a template. At 1.5rem "Blueberries"
-       is 130 px wide, which still fits beside a 96 px photo on a 320 px screen. */
-    .blk:not(.blk-tall) {
-        display: grid;
-        grid-template-columns: clamp(88px, 30vw, 112px) minmax(0, 1fr);
-        gap: 8px 16px;
-    }
-
-    .blk-wide > div {
-        display: contents;
-    }
-
-    .blk:not(.blk-tall) .sticker {
-        grid-row: span 2;
-        align-self: center;
-        width: 100%;
-        height: auto;
-        aspect-ratio: 1;
-    }
-
-    .blk:not(.blk-tall) h3 {
-        align-self: end;
-        font-size: 1.5rem;
-    }
-
-    .blk:not(.blk-tall) p {
-        align-self: start;
     }
 
     /* Bottom sheet: at 60% of a 812 px screen the panel hid most of what it was describing. */
