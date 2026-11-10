@@ -75,7 +75,7 @@ short. CI runs it on every push to `main` and on every pull request.
 fruitend/
 ├── .github/workflows/  # CI: runs check-palette.mjs
 ├── fonts/              # The three fonts, cut to the characters and the one weight the page uses, and OFL.txt
-├── images/             # Four fruit photos, four cut-out fruits and the preview image above
+├── images/             # Four fruit photos, four cut-out fruits, four sticker drawings (SVG) and the preview image above
 ├── index.html          # The page
 ├── styles.css          # All styles, including the palette
 ├── script.js           # Clock, bar slider, ticker, file sizes, inspector

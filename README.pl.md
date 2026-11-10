@@ -75,7 +75,7 @@ go przy każdym pushu do `main` i przy każdym pull requeście.
 fruitend/
 ├── .github/workflows/  # CI: uruchamia check-palette.mjs
 ├── fonts/              # Trzy fonty, okrojone do znaków i jednej grubości ze strony, i OFL.txt
-├── images/             # Cztery zdjęcia owoców, cztery wycięte owoce i obraz podglądu powyżej
+├── images/             # Cztery zdjęcia owoców, cztery wycięte owoce, cztery rysunki naklejek (SVG) i obraz podglądu powyżej
 ├── index.html          # Strona
 ├── styles.css          # Wszystkie style, razem z paletą
 ├── script.js           # Zegar, suwak w górnym pasku, pasek z tekstem, rozmiary plików, inspektor
