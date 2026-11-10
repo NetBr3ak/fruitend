@@ -1250,35 +1250,6 @@ footer {
     .ticker.paused .ticker-track {
         animation-play-state: paused;
     }
-
-    .js [data-reveal] {
-        opacity: 0;
-        transform: translateY(28px);
-    }
-
-    /* A focused link shows even before its block has scrolled in. */
-    .js [data-reveal].in,
-    .js [data-reveal]:focus-within {
-        opacity: 1;
-        transform: none;
-        transition: opacity .6s var(--ease), transform .6s var(--ease);
-    }
-
-    /* Staggering only pays off while the cards share a row. In one column each card is
-       already on screen when it fires, so the delay is dead waiting time. */
-    @media (min-width: 1001px) {
-        .js .bento .blk:nth-child(2).in {
-            transition-delay: 80ms;
-        }
-
-        .js .bento .blk:nth-child(3).in {
-            transition-delay: 160ms;
-        }
-
-        .js .bento .blk:nth-child(4).in {
-            transition-delay: 240ms;
-        }
-    }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1298,7 +1269,7 @@ footer {
     }
 }
 
-/* Paper gets every block, still and in the flow: no reveal, no sticky bar, no inspector. */
+/* Paper gets every block, still and in the flow: no sticky bar, no inspector. */
 @media print {
     *,
     *::before,
@@ -1309,11 +1280,6 @@ footer {
 
     .bar {
         position: static;
-    }
-
-    .js [data-reveal] {
-        opacity: 1;
-        transform: none;
     }
 
     .probe:popover-open,

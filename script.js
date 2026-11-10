@@ -6,28 +6,6 @@ document.addEventListener('DOMContentLoaded', function () {
 	const open = el => { if (!el.matches(':popover-open')) el.showPopover(); };
 	const close = el => { if (el.matches(':popover-open')) el.hidePopover(); };
 
-	/* ---------- reveal ---------- */
-
-	const reveal = document.querySelectorAll('[data-reveal]');
-
-	// Under reduced motion styles.css never hides the blocks, so there is nothing to observe.
-	if ('IntersectionObserver' in window && reveal.length && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
-		// No margin: a block shows as soon as its first pixel enters the viewport, so nothing
-		// stays hidden at the lower edge of a low window.
-		const seen = new IntersectionObserver((entries, obs) => {
-			entries.forEach(entry => {
-				if (!entry.isIntersecting) return;
-				entry.target.classList.add('in');
-				obs.unobserve(entry.target);
-			});
-		}, { rootMargin: '0px' });
-
-		// The hiding class goes on only once the observer exists, so a script failure
-		// anywhere above this line leaves the content visible instead of blank.
-		root.classList.add('js');
-		reveal.forEach(el => seen.observe(el));
-	}
-
 	/* ---------- the citrus slice is the clock ---------- */
 
 	const clock = document.getElementById('clock');
