@@ -1107,8 +1107,8 @@ footer {
     }
 }
 
-/* Below 375 px the word pushes the pill past the page margin (at 320 px about 50 px past the
-   edge, measured with "Sign up"); the mark stays, and the word stays the link's accessible name. */
+/* Below 375 px the word pushes the pill past the page edge (at 320 px the "Source" pill would end
+   at 352 px, measured 2026-11-10); the mark stays, and the word stays the link's accessible name. */
 @media (max-width: 374px) {
     .wordmark-text {
         position: absolute;
