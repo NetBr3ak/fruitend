@@ -76,8 +76,8 @@
                         <span class="line juicy">Juicy</span>
                     </h1>
 
-                    <p class="lead">A demo landing page with four fruits. Drag or tap the citrus slice and the page's
-                        colors run from noon to midnight.</p>
+                    <p class="lead">A demo landing page with four fruits. Its colors follow the hour on the citrus
+                        clock.</p>
 
                     <div class="hero-actions">
                         <a class="pill-ink big" href="#fruits">See the fruits</a>
@@ -86,14 +86,12 @@
                 </div>
 
                 <div class="hero-disc">
-                    <div aria-describedby="clock-note" aria-label="Time of day" aria-valuemax="720" aria-valuemin="0"
-                        aria-valuenow="0" aria-valuetext="12:00" class="citrus" id="clock" role="slider"
-                        tabindex="0">
+                    <div class="citrus" id="clock">
                         <span aria-hidden="true" class="clock-time">12:00</span>
                         <span aria-hidden="true" class="knob"></span>
                     </div>
 
-                    <p class="disc-note" id="clock-note">Drag to change the colors, noon to midnight.
+                    <p class="disc-note" hidden id="clock-note">Drag to change the colors, noon to midnight.
                         <span class="disc-keys">On a keyboard, Tab to the slice: the arrow keys move 15 minutes,
                             Page Up and Page Down an hour.</span></p>
                 </div>
@@ -114,9 +112,9 @@
                 </div>
             </div>
 
-            <div class="ticker-ctls">
-                <button class="ticker-ctl" id="ticker-toggle" type="button">Pause</button>
-                <button aria-controls="probe" aria-pressed="false" class="ticker-ctl" id="probe-toggle"
+            <div class="ticker-ctls" hidden>
+                <button class="ticker-ctl" hidden id="ticker-toggle" type="button">Pause</button>
+                <button aria-controls="probe" aria-pressed="false" class="ticker-ctl" hidden id="probe-toggle"
                     type="button">Inspect styles</button>
             </div>
         </div>
@@ -206,7 +204,7 @@
 
     <div aria-hidden="true" class="probe-halo" hidden id="probe-halo"></div>
 
-    <aside aria-label="Element inspector" class="probe" id="probe" popover="manual">
+    <aside aria-label="Element inspector" class="probe" hidden id="probe" popover="manual">
         <button aria-label="Close inspector" class="probe-close" type="button">&times;</button>
         <p class="probe-target"></p>
         <p class="probe-box"></p>

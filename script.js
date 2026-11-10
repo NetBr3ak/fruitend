@@ -10,6 +10,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
 	const clock = document.getElementById('clock');
 	const clockTime = clock.querySelector('.clock-time');
+	// Without script the dial is a picture of noon, so the slider semantics and the drag note
+	// arrive only here, with the code that makes them true.
+	const slider = { role: 'slider', tabindex: '0', 'aria-label': 'Time of day', 'aria-valuemin': '0',
+		'aria-valuemax': '720', 'aria-describedby': 'clock-note' };
+	Object.entries(slider).forEach(([name, value]) => clock.setAttribute(name, value));
+	document.getElementById('clock-note').hidden = false;
 	const STEP = { ArrowUp: 15, ArrowRight: 15, ArrowDown: -15, ArrowLeft: -15, PageUp: 60, PageDown: -60 };
 	let tod = null; // minutes past noon, 0 to 720
 	let drag = null; // pointerId of the one pointer that moves the hand
@@ -128,8 +134,14 @@ document.addEventListener('DOMContentLoaded', function () {
 	});
 	// The ticker moves only once Pause works (WCAG 2.2.2), so without JavaScript it stands still.
 	ticker.classList.add('is-ready');
+	tickerBtn.parentElement.hidden = false;
+	tickerBtn.hidden = false;
 
 	/* ---------- inspector ---------- */
+
+	// The panel is a popover. Without the API, matches(':popover-open') throws, so the button
+	// stays hidden and nothing below runs.
+	if (!('popover' in HTMLElement.prototype)) return;
 
 	const probe = document.getElementById('probe');
 	const halo = document.getElementById('probe-halo');
@@ -138,6 +150,8 @@ document.addEventListener('DOMContentLoaded', function () {
 	const probeBox = probe.querySelector('.probe-box');
 	const probeLabel = probe.querySelector('.probe-label');
 	const probeRules = probe.querySelector('.probe-rules');
+	probe.hidden = false;
+	probeBtn.hidden = false;
 	const swatch = document.createElement('canvas').getContext('2d', { willReadFrequently: true });
 	let inspecting = false;
 	let inspected = null;

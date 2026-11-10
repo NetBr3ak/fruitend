@@ -96,6 +96,11 @@
     box-sizing: border-box;
 }
 
+/* Controls that need script carry hidden in the markup; a display rule below must not show them. */
+[hidden] {
+    display: none !important;
+}
+
 html {
     scroll-behavior: smooth;
     background: var(--plum);
@@ -370,7 +375,6 @@ footer a:focus-visible,
     margin-right: -4vw;
     border: 12px solid var(--straw);
     border-radius: 50%;
-    cursor: grab;
     /* At 375 px the dial is 64% of the width, so a thumb scrolling the page often starts on it.
        pan-y keeps that scroll; a sideways drag and a tap still reach script.js. */
     touch-action: pan-y pinch-zoom;
@@ -383,7 +387,12 @@ footer a:focus-visible,
         repeating-conic-gradient(from -15deg, var(--mango) 0 30deg, var(--lemon) 0 60deg);
 }
 
-.citrus:active {
+/* The role comes from script.js: without it the dial is a picture and nothing grabs. */
+.citrus[role="slider"] {
+    cursor: grab;
+}
+
+.citrus[role="slider"]:active {
     cursor: grabbing;
 }
 
