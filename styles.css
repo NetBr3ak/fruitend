@@ -493,6 +493,8 @@ footer a:focus-visible,
     flex: 1;
     min-width: 0;
     overflow: hidden;
+    /* The text faded out before the buttons instead of being sliced off mid-letter. */
+    mask-image: linear-gradient(to left, transparent, #000 32px);
 }
 
 .ticker-track {
