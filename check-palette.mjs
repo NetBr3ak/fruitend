@@ -1,6 +1,7 @@
 // Guards mechanism A: the whole palette is derived from --tod (0 = noon, 1 = midnight)
 // with oklch() relative colours, so one number moves every block. This asserts that no
-// value on that ramp leaves sRGB or drops a text pair under its WCAG floor.
+// value on that ramp leaves sRGB or drops a text pair under its WCAG floor, and the same for
+// the night scene the grounds switch to from --tod .5 (18:00 and 06:00).
 // Run: node check-palette.mjs
 
 // --tod 0 -> 1. Deltas are added to the seed's oklch L, C and H.
@@ -101,5 +102,64 @@ for (const [fg, bg, min, where] of PAIRS) {
 	if (worst < min) fail(line); else console.log('ok   ' + line);
 }
 
-console.log(failures ? `\n${failures} failing` : '\nall pairs hold across the whole noon to midnight ramp');
+// Night, --tod .5 to 1 (18:00 to 06:00): the light grounds turn dark and --ink, the text on
+// them, turns from cocoa to cream (styles.css, the round() block). Seed, oklch L at --tod 0,
+// L drop per unit of --tod, chroma, hue delta per unit of --tod.
+const NIGHT = {
+	mango: ['#ffa732', 0.41, 0.12, 0.07, -28],
+	lemon: ['#ffd166', 0.51, 0.12, 0.08, -26],
+	cream: ['#ffe9cf', 0.35, 0.12, 0.03, -60],
+	straw: ['#ef4040', 0.39, 0.12, 0.10, -14],
+	kiwi: ['#5ce1a0', 0.46, 0.12, 0.06, 26],
+};
+const SCENE = { day: { ink: 'cocoa', 'on-ink': 'cream' }, night: { ink: 'cream', 'on-ink': 'cocoa' } };
+
+const nightGround = (name, t) => {
+	const [seed, l0, dl, c, dh] = NIGHT[name];
+	return oklchToRgb([l0 - dl * t, c, rgbToOklch(hexToRgb(seed))[2] + dh * t]);
+};
+// The colour a role shows in one scene: ink and on-ink swap, a ground is its fruit by day.
+const role = (name, t, scene) => {
+	if (SCENE[scene][name]) return at(SCENE[scene][name], t);
+	const fruit = name.replace(/-ground$/, '');
+	return scene === 'night' ? nightGround(fruit, t) : at(fruit, t);
+};
+
+// fg, bg, minimum ratio, where. Checked by day over --tod 0 to .5 and by night over .5 to 1.
+const SCENE_PAIRS = [
+	['ink', 'mango-ground', 4.5, 'bar, hero title, lead, dial note, bar slider'],
+	['ink', 'lemon-ground', 4.5, 'pineapple block'],
+	['ink', 'kiwi-ground', 4.5, 'kiwi block'],
+	['ink', 'cream-ground', 4.5, 'files section and its numbers'],
+	['ink', 'straw-ground', 4.5, 'fruits title'],
+	['on-ink', 'ink', 4.5, 'pills, Back to now, file link hover'],
+];
+const scenes = {
+	day: Array.from({ length: 21 }, (_, i) => i / 40),
+	night: Array.from({ length: 21 }, (_, i) => 0.5 + i / 40),
+};
+
+for (const name of Object.keys(NIGHT)) {
+	for (const t of scenes.night) {
+		const rgb = nightGround(name, t);
+		if (rgb.some((c) => c < -0.002 || c > 1.002)) {
+			fail(`night --${name}-ground leaves sRGB at --tod ${t.toFixed(3)}: ${rgb.map((c) => c.toFixed(3))}`);
+			break;
+		}
+	}
+}
+
+for (const [fg, bg, min, where] of SCENE_PAIRS) {
+	for (const [scene, ts] of Object.entries(scenes)) {
+		let worst = Infinity, worstT = 0;
+		for (const t of ts) {
+			const r = contrast(role(fg, t, scene), role(bg, t, scene));
+			if (r < worst) { worst = r; worstT = t; }
+		}
+		const line = `${scene.padEnd(5)} ${fg} on ${bg} >= ${min.toFixed(1)}  worst ${worst.toFixed(2)} at --tod ${worstT.toFixed(3)}  (${where})`;
+		if (worst < min) fail(line); else console.log('ok   ' + line);
+	}
+}
+
+console.log(failures ? `\n${failures} failing` : '\nall pairs hold across the whole ramp, by day and by night');
 process.exit(failures ? 1 : 0);
