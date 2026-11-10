@@ -30,10 +30,10 @@ Strona na żywo: https://netbr3ak.github.io/fruitend/
   Dopisz `?t=21` do adresu, aby przypiąć stronę do 21:00.
 - Gdy plaster zniknie z ekranu, w górnym pasku pojawia się suwak z godziną. Przesuwa ten sam
   zegar.
-- Skok przez 06:00 albo 18:00 (klawiszem, stuknięciem albo **Back to now**) przechodzi
-  łagodnie w przeglądarkach z View Transitions. Przeciąganie zmienia kolory od razu.
+- Skok przez 06:00 albo 18:00 (klawiszem, stuknięciem albo **Back to now**) rozlewa nowe
+  kolory kołem od plastra w przeglądarkach z View Transitions. Przeciąganie zmienia kolory od razu.
 - "Three files" pokazuje rozmiar i czas pobrania każdego pliku, zmierzone przez twoją
-  przeglądarkę przy tej wizycie.
+  przeglądarkę przy tej wizycie, z paskiem rozmiaru każdego pliku względem największego.
 - **Inspect styles** pokazuje rozmiar, padding, kontrast tekstu i pasujące reguły CSS elementu pod
   kursorem albo z fokusem. Potrzebuje Popover API; bez niego przycisk zostaje ukryty.
 - Pasek z tekstem ma przycisk Pause. Jeśli system prosi o ograniczenie ruchu, nic na stronie
@@ -75,7 +75,7 @@ go przy każdym pushu do `main` i przy każdym pull requeście.
 fruitend/
 ├── .github/workflows/  # CI: uruchamia check-palette.mjs
 ├── fonts/              # Trzy fonty, okrojone do znaków i jednej grubości ze strony, i OFL.txt
-├── images/             # Cztery zdjęcia owoców i obraz podglądu powyżej
+├── images/             # Cztery zdjęcia owoców, cztery wycięte owoce i obraz podglądu powyżej
 ├── index.html          # Strona
 ├── styles.css          # Wszystkie style, razem z paletą
 ├── script.js           # Zegar, suwak w górnym pasku, pasek z tekstem, rozmiary plików, inspektor
@@ -100,6 +100,17 @@ mniejszy plik tam, gdzie wystarczy.
 | `images/kiwi-*` | [Kiwi-halbiert](https://commons.wikimedia.org/wiki/File:Kiwi-halbiert.jpg) | MartinThoma | CC0 1.0 |
 | `images/pineapple-*` | [Ananas bozor rastasida](https://commons.wikimedia.org/wiki/File:Ananas_bozor_rastasida.jpg) | Usmonov Gayrat | CC0 1.0 |
 | `images/blueberries-*` | [Aberdeenshire blueberries](https://commons.wikimedia.org/wiki/File:Aberdeenshire_blueberries.jpg) | Mx. Granger | CC0 1.0 |
+
+Cztery wycięte owoce wokół plastra (`images/cut-*`) też pochodzą z Wikimedia Commons. Framework
+Vision od Apple (`VNGenerateForegroundInstanceMaskRequest`) oddzielił każdy owoc od tła, a potem
+dodano wokół niego kremową obwódkę. Każdy plik ma najwyżej 480 px na dłuższym boku, w AVIF i WebP.
+
+| Plik | Zdjęcie | Autor | Licencja |
+|---|---|---|---|
+| `images/cut-strawberry-*` | [Strawberry on white background](https://commons.wikimedia.org/wiki/File:Strawberry_on_white_background.jpg) | Joselodos | CC0 1.0 |
+| `images/cut-kiwi-*` | [Kiwi](https://commons.wikimedia.org/wiki/File:Kiwi.jpg) | Renee Comet, National Cancer Institute | domena publiczna |
+| `images/cut-pineapple-*` | [Pineapple on white table](https://commons.wikimedia.org/wiki/File:Pineapple_on_white_table.jpg) | Julien Pianetti | CC0 1.0 |
+| `images/cut-pint-*` | [Blueberries-In-Pack](https://commons.wikimedia.org/wiki/File:Blueberries-In-Pack.jpg) | Evan-Amos | CC0 1.0 |
 
 Trzy fonty to Bricolage Grotesque, Hanken Grotesk i Martian Mono, wszystkie na licencji SIL Open
 Font License. Zobacz [fonts/OFL.txt](fonts/OFL.txt).

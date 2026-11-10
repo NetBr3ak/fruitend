@@ -29,10 +29,10 @@ Live page: https://netbr3ak.github.io/fruitend/
   to pin the page at 21:00.
 - When the slice scrolls out of view, a slider with the time shows in the top bar. It moves the
   same clock.
-- A jump across 06:00 or 18:00 (a key, a tap or **Back to now**) cross-fades the page in
-  browsers with View Transitions. A drag changes the colors directly.
+- A jump across 06:00 or 18:00 (a key, a tap or **Back to now**) spreads the new colors in a
+  circle from the slice in browsers with View Transitions. A drag changes the colors directly.
 - "Three files" shows the size and load time of each file, as your browser measured them on
-  this visit.
+  this visit, with a bar for each file's size against the largest one.
 - **Inspect styles** shows the size, padding, text contrast and matching CSS rules of the element
   you hover or focus. It needs the Popover API; without it the button stays hidden.
 - The ticker has a Pause button. If your system asks for reduced motion, nothing on the page
@@ -75,7 +75,7 @@ short. CI runs it on every push to `main` and on every pull request.
 fruitend/
 ├── .github/workflows/  # CI: runs check-palette.mjs
 ├── fonts/              # The three fonts, cut to the characters and the one weight the page uses, and OFL.txt
-├── images/             # The four fruit photos and the preview image above
+├── images/             # Four fruit photos, four cut-out fruits and the preview image above
 ├── index.html          # The page
 ├── styles.css          # All styles, including the palette
 ├── script.js           # Clock, bar slider, ticker, file sizes, inspector
@@ -100,6 +100,18 @@ take the smaller file where that is enough.
 | `images/kiwi-*` | [Kiwi-halbiert](https://commons.wikimedia.org/wiki/File:Kiwi-halbiert.jpg) | MartinThoma | CC0 1.0 |
 | `images/pineapple-*` | [Ananas bozor rastasida](https://commons.wikimedia.org/wiki/File:Ananas_bozor_rastasida.jpg) | Usmonov Gayrat | CC0 1.0 |
 | `images/blueberries-*` | [Aberdeenshire blueberries](https://commons.wikimedia.org/wiki/File:Aberdeenshire_blueberries.jpg) | Mx. Granger | CC0 1.0 |
+
+The four cut-out fruits around the slice (`images/cut-*`) also come from Wikimedia Commons.
+Apple's Vision framework (`VNGenerateForegroundInstanceMaskRequest`) lifted each fruit off its
+background, then a cream edge was drawn around it. Each file is at most 480 px on its long side,
+in AVIF and WebP.
+
+| File | Photo | Author | Licence |
+|---|---|---|---|
+| `images/cut-strawberry-*` | [Strawberry on white background](https://commons.wikimedia.org/wiki/File:Strawberry_on_white_background.jpg) | Joselodos | CC0 1.0 |
+| `images/cut-kiwi-*` | [Kiwi](https://commons.wikimedia.org/wiki/File:Kiwi.jpg) | Renee Comet, National Cancer Institute | Public domain |
+| `images/cut-pineapple-*` | [Pineapple on white table](https://commons.wikimedia.org/wiki/File:Pineapple_on_white_table.jpg) | Julien Pianetti | CC0 1.0 |
+| `images/cut-pint-*` | [Blueberries-In-Pack](https://commons.wikimedia.org/wiki/File:Blueberries-In-Pack.jpg) | Evan-Amos | CC0 1.0 |
 
 The three fonts are Bricolage Grotesque, Hanken Grotesk and Martian Mono, all under the SIL Open
 Font License. See [fonts/OFL.txt](fonts/OFL.txt).
