@@ -36,6 +36,20 @@
     <link href="favicon.svg" rel="icon" type="image/svg+xml">
     <link as="font" crossorigin href="fonts/bricolage-grotesque.woff2" rel="preload" type="font/woff2">
     <link href="styles.css" rel="stylesheet">
+    <script>
+        // The hour's colours before the first paint: script.js may arrive seconds after the CSS,
+        // and a night visitor would see noon first. Same reading of ?t and the same --tod as
+        // setTod() in script.js, which takes over from here.
+        {
+            const raw = new URLSearchParams(location.search).get('t');
+            const hours = raw === null ? NaN : Number(raw);
+            const now = new Date();
+            const minutes = Number.isFinite(hours) ? hours * 60 : now.getHours() * 60 + now.getMinutes();
+            const fromMidnight = (Math.round(minutes) % 1440 + 1440) % 1440;
+            const fromNoon = (fromMidnight + 720) % 1440;
+            document.documentElement.style.setProperty('--tod', (Math.min(fromNoon, 1440 - fromNoon) / 720).toFixed(4));
+        }
+    </script>
 </head>
 
 <body>
