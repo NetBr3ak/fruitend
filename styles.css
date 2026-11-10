@@ -461,14 +461,18 @@ html {
     width: 36%;
 }
 
-/* Beside the short second line, "is", and above "juicy": sized and placed in the title's em. */
+/* Beside "is" and above "juicy", sized in the title's em. It shares the title's grid cell and
+   is placed from its bottom: "is" and "juicy" are always the last two lines, however "This site"
+   wraps (at 200% text it takes two). */
 .cut-strawberry {
     --r: -14deg;
     --drift: -90px;
     --spin: 22deg;
-    top: calc(var(--title) * .9);
-    left: calc(var(--title) * .9);
-    width: calc(var(--title) * 1.16);
+    position: relative;
+    align-self: end;
+    justify-self: start;
+    width: calc(var(--title) * 1.05);
+    margin: 0 0 calc(var(--title) * .85) calc(var(--title) * .95);
 }
 
 /* ---------- hero ---------- */
@@ -487,8 +491,13 @@ html {
 
 .hero-copy {
     --title: clamp(4rem, min(26vw, 21vh), 11rem);
-    position: relative;
+    display: grid;
     grid-column: 1 / 8;
+}
+
+.hero-title,
+.cut-strawberry {
+    grid-area: 1 / 1;
 }
 
 /* 21vh keeps the two hero buttons above the fold on a 1280x800 or 1366x768 laptop. */
@@ -545,9 +554,9 @@ html {
     justify-self: end;
 }
 
-/* The bleed rides the dial, not .hero-disc, so .disc-note keeps the first letter of every line.
-   Small enough a bleed that the whole dial stays inside the viewport and grabbable. */
-/* The dial's box, so the stickers can sit on its rim at any size. */
+/* The bleed rides the dial, not .hero-disc, so .disc-note keeps the first letter of every line;
+   small enough that the whole dial stays inside the viewport and grabbable. Positioned, so the
+   stickers sit on its rim at any size. */
 .dial {
     position: relative;
     width: clamp(260px, 34vw, 520px);
@@ -690,7 +699,7 @@ html {
 /* ---------- ticker ---------- */
 
 /* A tilted band laid across the seam, like tape on a crate. It is wider than the page so its
-   ends never show; html clips the overflow. */
+   ends never show; main clips the overflow. */
 .ticker {
     position: relative;
     z-index: 2;
@@ -808,12 +817,6 @@ html {
     box-shadow: calc(var(--sx) * 10) calc(var(--sy) * 12) 0 rgb(26 12 5 / .22);
 }
 
-/* The photo zooms inside its frame, so the frame clips; the sticker lives outside it. */
-.blk-in {
-    border-radius: inherit;
-    overflow: clip;
-}
-
 /* One sticker, on the lead tile's top corner. */
 .tile-sticker {
     --r: 9deg;
@@ -824,8 +827,11 @@ html {
 }
 
 /* A narrow block, and the layout wherever container queries are missing: the photo bleeds off
-   the left edge at full height and the text sits beside it. */
+   the left edge at full height and the text sits beside it. The frame clips the settling photo;
+   the tile sticker sits outside it, on .blk. */
 .blk-in {
+    border-radius: inherit;
+    overflow: clip;
     display: grid;
     grid-template-columns: 45% 1fr;
     min-height: 12rem;
@@ -946,8 +952,8 @@ html {
 /* The pineapple and the strawberry basket fill their tiles: the photos frame them small. */
 .blk-pineapple img {
     object-position: 50% 72%;
-    scale: 1.45;
-    transform-origin: 50% 80%;
+    scale: 1.55;
+    transform-origin: 60% 90%;
 }
 
 .blk-tall .blk-in img {
@@ -1204,8 +1210,8 @@ footer {
     color: var(--cream);
 }
 
-/* Clip lives on this wrapper alone, so no focusable element can be swallowed by it. */
-/* --head is room above the letters for the stickers, inside the clip. */
+/* The clip lives on this wrapper alone, so it can swallow no focusable element. --head is room
+   above the letters for the stickers, inside the clip. */
 .foot-mark {
     --mark: clamp(5rem, 30vw, 26rem);
     --head: clamp(28px, 5vw, 72px);
@@ -1522,7 +1528,8 @@ footer {
         border-color: GrayText;
     }
 
-    .citrus::before {
+    .citrus::before,
+    .chips.measured li::after {
         background-image: linear-gradient(CanvasText 0 0);
     }
 
