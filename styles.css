@@ -185,7 +185,7 @@ ol {
 /* Ring color flips with the ground: cocoa on the light blocks, cream on the dark ones.
    No border-radius here: this rule outranks .pill-ink and .ticker-ctl and would square off
    every pill on focus. The outline follows each element's own radius. */
-:is(a, button):focus-visible {
+:is(a, button, input):focus-visible {
     outline: 3px solid var(--ink);
     outline-offset: 4px;
 }
@@ -256,6 +256,28 @@ footer a:focus-visible,
     width: 28px;
     height: 28px;
     flex: none;
+}
+
+/* The dial's twin, a native range input; script.js shows it while the dial is off screen. */
+.bar-time {
+    flex: 0 1 18rem;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.bar-time input {
+    flex: 1;
+    min-width: 64px;
+    margin: 0;
+    accent-color: var(--ink);
+    cursor: pointer;
+}
+
+.bar-clock {
+    font-family: var(--micro);
+    font-size: .875rem;
 }
 
 .bar-links {
@@ -1094,6 +1116,24 @@ footer {
     }
 }
 
+/* Under 800 px the bar has no room for the time slider beside everything else: while it shows,
+   the "Source" pill goes (the hero and the footer link the same page) and the wordmark keeps
+   only its mark, with the word left as the link's accessible name. */
+@media (max-width: 799px) {
+    .bar.timed .pill-ink {
+        display: none;
+    }
+
+    .bar.timed .wordmark-text {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip-path: inset(50%);
+        white-space: nowrap;
+    }
+}
+
 /* Below 375 px the word pushes the pill past the page edge (at 320 px the "Source" pill would end
    at 352 px, measured 2026-11-10); the mark stays, and the word stays the link's accessible name. */
 @media (max-width: 374px) {
@@ -1109,7 +1149,8 @@ footer {
 
 /* Coarse pointers get the 44 px target the rest of the page already gives (WCAG 2.5.5). */
 @media (pointer: coarse) {
-    .ticker-ctl {
+    .ticker-ctl,
+    .bar-time input {
         min-height: 44px;
     }
 

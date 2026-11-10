@@ -18,6 +18,8 @@ document.addEventListener('DOMContentLoaded', function () {
 	document.getElementById('clock-note').hidden = false;
 	const STEP = { ArrowUp: 15, ArrowRight: 15, ArrowDown: -15, ArrowLeft: -15, PageUp: 60, PageDown: -60 };
 	const nowBtn = document.getElementById('clock-now');
+	const timeBar = document.getElementById('time-bar');
+	const barClock = document.querySelector('.bar-clock');
 	let minutes = null; // the dial's time in minutes since midnight, 0 to 1439
 	let hand = 0; // degrees, never wrapped, so every move turns the hand the short way round
 	let following = false; // the dial keeps up with the wall clock until someone sets it
@@ -40,6 +42,10 @@ document.addEventListener('DOMContentLoaded', function () {
 		clock.setAttribute('aria-valuenow', minutes);
 		clock.setAttribute('aria-valuetext', time);
 		clockTime.textContent = time;
+		// The range steps by 15 minutes, so it may round; the time beside it stays exact.
+		timeBar.value = minutes;
+		timeBar.setAttribute('aria-valuetext', time);
+		barClock.textContent = time;
 		clock.dispatchEvent(new Event('input'));
 	}
 
@@ -109,6 +115,25 @@ document.addEventListener('DOMContentLoaded', function () {
 		e.preventDefault();
 		choose(jump ?? Math.min(1439, Math.max(0, minutes + STEP[e.key])));
 	});
+
+	timeBar.addEventListener('input', () => choose(Number(timeBar.value)));
+
+	// The bar's slider shows while the dial is off screen (under the bar counts as off), so the
+	// time stays in reach next to the blocks it colours. It stays while it has the focus.
+	if ('IntersectionObserver' in window) {
+		const bar = document.querySelector('.bar');
+		let dialOnScreen = true;
+		const showTimeBar = () => {
+			const show = !dialOnScreen || document.activeElement === timeBar;
+			timeBar.parentElement.hidden = !show;
+			bar.classList.toggle('timed', show);
+		};
+		new IntersectionObserver(([entry]) => {
+			dialOnScreen = entry.isIntersecting;
+			showTimeBar();
+		}, { rootMargin: `-${bar.offsetHeight}px 0px 0px 0px` }).observe(clock);
+		timeBar.addEventListener('blur', showTimeBar);
+	}
 
 	nowBtn.addEventListener('click', () => {
 		following = true;
