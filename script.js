@@ -64,14 +64,31 @@ document.addEventListener('DOMContentLoaded', function () {
 
 	// A jump across 06:00 or 18:00 cross-fades the whole page in one 400 ms view transition,
 	// instead of the night switching in one frame halfway through the 600 ms colour fade.
-	// A drag stays direct.
-	function across(next, update) {
-		if (typeof document.startViewTransition !== 'function' || calm.matches || isNight(next) === isNight(minutes)) {
-			update();
+	// A drag stays direct. The fade sets the time one frame later, so until then `pending` holds
+	// it: keys pressed in that frame count from it, and the fade shows the newest one. A second
+	// fade never starts over a running one, which would skip it and reject its promises.
+	let fade = null;
+	let pending = null; // { next, show } until the running fade has set the time
+
+	function across(next, show = choose) {
+		if (pending) {
+			pending = { next, show };
 			return;
 		}
+		if (fade || typeof document.startViewTransition !== 'function' || calm.matches || isNight(next) === isNight(minutes)) {
+			show(next);
+			return;
+		}
+		pending = { next, show };
 		root.classList.add('scrubbing');
-		document.startViewTransition(update).finished.finally(() => root.classList.remove('scrubbing'));
+		fade = document.startViewTransition(() => {
+			pending.show(pending.next);
+			pending = null;
+		});
+		fade.finished.finally(() => {
+			fade = null;
+			root.classList.remove('scrubbing');
+		});
 	}
 
 	// Minutes since midnight under the pointer, read clockwise from noon at the top. Null on the
@@ -120,7 +137,7 @@ document.addEventListener('DOMContentLoaded', function () {
 		drag = null;
 		touchStart = null;
 		root.classList.remove('scrubbing');
-		if (tap !== null) across(tap, () => choose(tap));
+		if (tap !== null) across(tap);
 	}
 
 	['pointerup', 'pointercancel', 'lostpointercapture'].forEach(type => clock.addEventListener(type, end));
@@ -132,8 +149,8 @@ document.addEventListener('DOMContentLoaded', function () {
 		const jump = e.key === 'Home' ? 0 : e.key === 'End' ? 1439 : null;
 		if (jump === null && STEP[e.key] === undefined) return;
 		e.preventDefault();
-		const next = jump ?? Math.min(1439, Math.max(0, minutes + STEP[e.key]));
-		across(next, () => choose(next));
+		const next = jump ?? Math.min(1439, Math.max(0, (pending?.next ?? minutes) + STEP[e.key]));
+		across(next);
 	});
 
 	timeBar.addEventListener('input', () => choose(Number(timeBar.value)));
@@ -156,8 +173,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	}
 
 	nowBtn.addEventListener('click', () => {
-		const wall = wallMinutes();
-		across(wall, () => {
+		across(wallMinutes(), wall => {
 			following = true;
 			nowBtn.hidden = true;
 			setTod(wall);
