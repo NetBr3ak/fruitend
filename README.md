@@ -37,7 +37,7 @@ Live page: https://netbr3ak.github.io/fruitend/
   you hover or focus. It needs the Popover API; without it the button stays hidden.
 - The ticker has a Pause button. If your system asks for reduced motion, nothing on the page
   moves and the Pause button is hidden.
-- Every link works without JavaScript. "Fruits", "About" and "See the fruits" jump to their
+- Every link works without JavaScript. "Fruits", "Files" and "See the fruits" jump to their
   section; "Source", "View source" and "Make it your own" open this repository. Without
   JavaScript the clock is a still picture at 12:00, and the controls that need a script stay
   hidden.

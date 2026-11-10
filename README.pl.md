@@ -38,7 +38,7 @@ Strona na żywo: https://netbr3ak.github.io/fruitend/
   kursorem albo z fokusem. Potrzebuje Popover API; bez niego przycisk zostaje ukryty.
 - Pasek z tekstem ma przycisk Pause. Jeśli system prosi o ograniczenie ruchu, nic na stronie
   się nie rusza, a przycisk Pause jest ukryty.
-- Każdy link działa bez JavaScriptu. "Fruits", "About" i "See the fruits" przewijają do
+- Każdy link działa bez JavaScriptu. "Fruits", "Files" i "See the fruits" przewijają do
   swojej sekcji; "Source", "View source" i "Make it your own" otwierają to repozytorium. Bez
   JavaScriptu zegar jest nieruchomym obrazkiem na 12:00, a przyciski, które potrzebują
   skryptu, zostają ukryte.

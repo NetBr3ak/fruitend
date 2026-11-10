@@ -723,7 +723,7 @@ html {
     background: var(--kiwi-ground);
 }
 
-.blk-lemon {
+.blk-pineapple {
     grid-column: 3;
     background: var(--lemon-ground);
 }
@@ -1035,7 +1035,7 @@ footer {
         grid-column: 1;
     }
 
-    .blk-lemon {
+    .blk-pineapple {
         grid-column: 2;
     }
 
@@ -1112,7 +1112,7 @@ footer {
     }
 
     .blk-kiwi,
-    .blk-lemon,
+    .blk-pineapple,
     .blk-wide,
     .blk-tall {
         grid-column: 1;

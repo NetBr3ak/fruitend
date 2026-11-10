@@ -27,7 +27,7 @@ const PAIRS = [
 	['cream', 'straw', 3.0, '.numeral at 1.5em'],
 	['cream', 'magenta', 4.5, '.blk-tall body copy'],
 	['cocoa', 'kiwi', 4.5, '.blk-kiwi body copy'],
-	['cocoa', 'lemon', 4.5, '.blk-lemon body copy'],
+	['cocoa', 'lemon', 4.5, '.blk-pineapple body copy'],
 	['cocoa', 'cream', 4.5, '.files section'],
 	['cream', 'midnight', 4.5, '.cta title and note'],
 	['kiwi', 'plum', 4.5, 'footer links'],
