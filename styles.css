@@ -2,7 +2,7 @@
    Subset to the characters this page uses; anything outside the range falls back to the
    stacks declared on --display / --text / --micro. Each family is also cut (fontTools
    instancer) to the one weight the page sets: 138.5 kB became 65.6 kB. Bricolage keeps its
-   width and optical-size axes; Martian Mono is fixed at the 87.5 width every mono rule asks for. */
+   width and optical-size axes; Martian Mono is cut at width 87.5 and has no axis left. */
 @font-face {
     font-family: "Bricolage Grotesque";
     src: url("fonts/bricolage-grotesque.woff2") format("woff2");
@@ -141,29 +141,9 @@ ol {
     margin-inline: auto;
 }
 
-/* Martian Mono always runs one step narrow. Bricolage narrows as it grows instead:
-   100 by default, 85 on the section titles, 75 on the two oversized words. */
-.skip-link,
-.bar-links a,
-.pill-ink,
-.ghost-link,
-.ticker-run,
-.ticker-ctl,
-.disc-note,
-.clock-time,
-.chips a,
-.press,
-.note,
-.foot-links a,
-.foot-copy,
-.probe {
-    font-variation-settings: "wdth" 87.5;
-}
-
 /* Ring color flips with the ground: cocoa on the light blocks, cream on the dark ones.
-   No border-radius here: this rule outranks .pill-ink and .ticker-ctl, so setting one
-   squared off every pill the moment it took focus. The outline follows each element's
-   own radius on its own. */
+   No border-radius here: this rule outranks .pill-ink and .ticker-ctl and would square off
+   every pill on focus. The outline follows each element's own radius. */
 :is(a, button):focus-visible {
     outline: 3px solid var(--cocoa);
     outline-offset: 4px;
@@ -376,9 +356,8 @@ footer a:focus-visible,
     justify-self: end;
 }
 
-/* The bleed rides the dial, not the wrapper: on .hero-disc it dragged .disc-note off the
-   page edge with it and clipped the first letter of every line. Small enough a bleed that
-   the whole dial stays inside the viewport and grabbable. */
+/* The bleed rides the dial, not .hero-disc, so .disc-note keeps the first letter of every line.
+   Small enough a bleed that the whole dial stays inside the viewport and grabbable. */
 .citrus {
     position: relative;
     display: block;
@@ -694,8 +673,7 @@ footer a:focus-visible,
     text-wrap: balance;
 }
 
-/* Each chip opens its file on GitHub: pill-shaped like Pause and Inspect, they looked pressable
-   and did nothing. */
+/* Each chip opens its file on GitHub: pill-shaped like Pause, it has to do something. */
 .chips a {
     display: block;
     width: fit-content;
@@ -1020,7 +998,7 @@ footer {
         column-gap: 20px;
     }
 
-    /* Three items in a 390px bar: every one of these is what keeps "Sign up" on one line. */
+    /* Three items in a 390px bar: every one of these is what keeps the pill on one line. */
     .bar-inner {
         gap: 12px;
     }
@@ -1129,8 +1107,8 @@ footer {
     }
 }
 
-/* Below 375 px the word pushes "Sign up" past the page margin (at 320 px about 50 px past the
-   edge); the mark stays, and the word stays the link's accessible name. */
+/* Below 375 px the word pushes the pill past the page margin (at 320 px about 50 px past the
+   edge, measured with "Sign up"); the mark stays, and the word stays the link's accessible name. */
 @media (max-width: 374px) {
     .wordmark-text {
         position: absolute;
@@ -1228,8 +1206,8 @@ footer {
         }
     }
 
-    /* Everything has landed by 600 ms, and the dial the lead asks you to drag by 500 ms; it used
-       to come last, at 1100 ms (NN/g response-time limits: 1 s keeps the flow). */
+    /* Everything has landed by 600 ms, and the dial the lead asks you to drag by 500 ms
+       (NN/g response-time limits: 1 s keeps the flow). */
     .bar,
     .hero-title .line,
     .lead,
