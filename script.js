@@ -13,48 +13,55 @@ document.addEventListener('DOMContentLoaded', function () {
 	// Without script the dial is a picture of noon, so the slider semantics and the drag note
 	// arrive only here, with the code that makes them true.
 	const slider = { role: 'slider', tabindex: '0', 'aria-label': 'Time of day', 'aria-valuemin': '0',
-		'aria-valuemax': '720', 'aria-describedby': 'clock-note' };
+		'aria-valuemax': '1439', 'aria-describedby': 'clock-note' };
 	Object.entries(slider).forEach(([name, value]) => clock.setAttribute(name, value));
 	document.getElementById('clock-note').hidden = false;
 	const STEP = { ArrowUp: 15, ArrowRight: 15, ArrowDown: -15, ArrowLeft: -15, PageUp: 60, PageDown: -60 };
-	let tod = null; // minutes past noon, 0 to 720
+	const nowBtn = document.getElementById('clock-now');
+	let minutes = null; // the dial's time in minutes since midnight, 0 to 1439
+	let hand = 0; // degrees, never wrapped, so every move turns the hand the short way round
+	let following = false; // the dial keeps up with the wall clock until someone sets it
 	let drag = null; // pointerId of the one pointer that moves the hand
 	let touchStart = null; // [x, y] of a touch that has not set the time yet
 
-	function setTod(minutes) {
-		const next = Math.min(720, Math.max(0, Math.round(minutes)));
-		if (next === tod) return;
-		tod = next;
-		root.style.setProperty('--tod', (tod / 720).toFixed(4));
-		const wall = (720 + tod) % 1440;
-		const time = `${pad(Math.floor(wall / 60))}:${pad(wall % 60)}`;
-		clock.setAttribute('aria-valuenow', tod);
+	const wallMinutes = () => { const d = new Date(); return d.getHours() * 60 + d.getMinutes(); };
+
+	function setTod(next) {
+		next = (Math.round(next) % 1440 + 1440) % 1440;
+		if (next === minutes) return;
+		minutes = next;
+		// Noon sits at the top and midnight at the bottom. --tod is the distance from noon:
+		// 0 at 12:00, .5 at 06:00 and 18:00, 1 at 00:00, so a turn never jumps.
+		const fromNoon = (minutes + 720) % 1440;
+		root.style.setProperty('--tod', (Math.min(fromNoon, 1440 - fromNoon) / 720).toFixed(4));
+		hand += ((fromNoon / 4 - hand) % 360 + 540) % 360 - 180;
+		root.style.setProperty('--hand', `${hand.toFixed(2)}deg`);
+		const time = `${pad(Math.floor(minutes / 60))}:${pad(minutes % 60)}`;
+		clock.setAttribute('aria-valuenow', minutes);
 		clock.setAttribute('aria-valuetext', time);
 		clockTime.textContent = time;
 		clock.dispatchEvent(new Event('input'));
 	}
 
-	// Minutes past noon under the pointer, read clockwise from twelve. Null on the cream disc in
-	// the middle (26% of the padding box's radius, as styles.css paints it): there the angle swings
-	// wildly with every pixel, so a press on the time would throw the hand anywhere.
+	// Any hand on the dial stops it following the wall clock; "Back to now" starts it again.
+	function choose(next) {
+		following = false;
+		nowBtn.hidden = pinned;
+		setTod(next);
+	}
+
+	// Minutes since midnight under the pointer, read clockwise from noon at the top. Null on the
+	// cream disc in the middle (26% of the padding box's radius, as styles.css paints it): there
+	// the angle swings wildly with every pixel, so a press on the time would throw the hand anywhere.
 	function minutesAt(e) {
 		const r = clock.getBoundingClientRect();
 		const x = e.clientX - r.left - r.width / 2;
 		const y = r.top + r.height / 2 - e.clientY;
 		if (Math.hypot(x, y) < clock.clientWidth / 2 * .26) return null;
-		return (Math.atan2(x, y) * 180 / Math.PI + 360) % 360 / 360 * 720;
+		return 720 + (Math.atan2(x, y) * 180 / Math.PI + 360) % 360 * 4;
 	}
 
-	const jumpTo = e => { const next = minutesAt(e); if (next !== null) setTod(next); };
-
-	// Past twelve the drag stops at the end it reached: wrapping round would flip the
-	// whole page between midnight and noon in one frame.
-	function follow(e) {
-		let next = minutesAt(e);
-		if (next === null) return;
-		if (Math.abs(next - tod) > 360) next = tod > 360 ? 720 : 0;
-		setTod(next);
-	}
+	const jumpTo = e => { const next = minutesAt(e); if (next !== null) choose(next); };
 
 	// Only the main button of the primary pointer turns the hand: a right click opens the menu,
 	// and a second finger must not take over a drag in progress.
@@ -63,13 +70,10 @@ document.addEventListener('DOMContentLoaded', function () {
 		drag = e.pointerId;
 		clock.setPointerCapture(e.pointerId);
 		root.classList.add('scrubbing');
-		// On the knob the drag rule holds from the first touch, so grabbing it just left of twelve
-		// at noon does not jump to midnight. A press anywhere else jumps to that time; a touch off
-		// the knob may still turn into a page scroll.
-		const onKnob = e.target.closest('.knob');
-		touchStart = e.pointerType === 'touch' && !onKnob ? [e.clientX, e.clientY] : null;
-		if (onKnob) follow(e);
-		else if (!touchStart) jumpTo(e);
+		// A press sets the time at once. A touch off the knob waits: it may still turn into a
+		// page scroll. The knob has touch-action: none, so a finger there always drags.
+		touchStart = e.pointerType === 'touch' && !e.target.closest('.knob') ? [e.clientX, e.clientY] : null;
+		if (!touchStart) jumpTo(e);
 	});
 
 	clock.addEventListener('pointermove', e => {
@@ -81,10 +85,8 @@ document.addEventListener('DOMContentLoaded', function () {
 			const [x, y] = touchStart;
 			if (Math.abs(e.clientY - y) >= Math.abs(e.clientX - x)) return;
 			touchStart = null;
-			jumpTo(e);
-			return;
 		}
-		follow(e);
+		jumpTo(e);
 	});
 
 	function end(e) {
@@ -98,20 +100,42 @@ document.addEventListener('DOMContentLoaded', function () {
 
 	['pointerup', 'pointercancel', 'lostpointercapture'].forEach(type => clock.addEventListener(type, end));
 
+	// WAI-ARIA slider keys. The pointer may wrap past midnight; the keys stop at 00:00 and 23:59.
 	clock.addEventListener('keydown', e => {
 		// Alt+Left is Back, Ctrl and Cmd shortcuts belong to the browser.
 		if (e.altKey || e.ctrlKey || e.metaKey) return;
-		const jump = e.key === 'Home' ? 0 : e.key === 'End' ? 720 : null;
+		const jump = e.key === 'Home' ? 0 : e.key === 'End' ? 1439 : null;
 		if (jump === null && STEP[e.key] === undefined) return;
 		e.preventDefault();
-		setTod(jump === null ? tod + STEP[e.key] : jump);
+		choose(jump ?? Math.min(1439, Math.max(0, minutes + STEP[e.key])));
 	});
 
-	// ?t=23 pins the dial for a screenshot. The ramp starts at noon, so earlier hours clamp there.
+	nowBtn.addEventListener('click', () => {
+		following = true;
+		nowBtn.hidden = true;
+		setTod(wallMinutes());
+		// The button hides under the focus; the dial is where the visitor was working.
+		clock.focus();
+	});
+
+	// One tick at the turn of each minute, so a page left open keeps the real time.
+	function tick() {
+		if (following) setTod(wallMinutes());
+		setTimeout(tick, 60000 - Date.now() % 60000);
+	}
+
+	// ?t=23 or ?t=9.5 pins the dial for a screenshot and stops it following the clock.
 	const raw = new URLSearchParams(location.search).get('t');
-	const pinned = raw === null ? NaN : Number(raw) * 60 - 720;
-	const now = new Date();
-	setTod(Number.isFinite(pinned) ? pinned : now.getHours() * 60 + now.getMinutes() - 720);
+	const hours = raw === null ? NaN : Number(raw);
+	const pinned = Number.isFinite(hours);
+	following = !pinned;
+	// The first time lands without the 600 ms fade, or a page opened at night would show noon
+	// first. Reading the computed style applies it while the fade is off.
+	root.classList.add('scrubbing');
+	setTod(pinned ? hours * 60 : wallMinutes());
+	getComputedStyle(root).getPropertyValue('--tod');
+	requestAnimationFrame(() => root.classList.remove('scrubbing'));
+	if (following) tick();
 
 	/* ---------- ticker ---------- */
 

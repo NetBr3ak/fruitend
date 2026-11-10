@@ -47,6 +47,13 @@
     initial-value: 0;
 }
 
+/* The hand's angle. script.js never wraps it, so the fade turns the hand the short way round. */
+@property --hand {
+    syntax: "<angle>";
+    inherits: true;
+    initial-value: 0deg;
+}
+
 :root {
     /* Noon values, and the fallback wherever relative colour is missing. */
     --mango: #ffa732;
@@ -81,7 +88,7 @@
         --magenta: oklch(from #b0107f calc(l - var(--tod) * .035) calc(c - var(--tod) * .02) calc(h - var(--tod) * 12));
         --kiwi: oklch(from #5ce1a0 calc(l - var(--tod) * .06) calc(c - var(--tod) * .02) calc(h + var(--tod) * 26));
 
-        transition: --tod .6s var(--ease);
+        transition: --tod .6s var(--ease), --hand .6s var(--ease);
     }
 
     /* A live drag must not trail 600ms behind the pointer. */
@@ -382,8 +389,8 @@ footer a:focus-visible,
     outline-offset: 8px;
 }
 
-/* Twelve wedges: it was already a clock face. The hand sweeps one turn from noon to midnight.
-   The stem stops at the pith, where the time is written; .knob sits on its tip. */
+/* Twelve wedges of two hours each: one turn of the hand is a day, noon at the top and midnight
+   at the bottom. The stem stops at the pith, where the time is written; .knob sits on its tip. */
 .citrus::before {
     content: "";
     position: absolute;
@@ -394,7 +401,7 @@ footer a:focus-visible,
     /* Starts under the dot's centre: from the very tip its square end poked out of the dot. */
     background: linear-gradient(var(--cocoa) 0 0) 50% 10px / 4px calc(62% - 10px) no-repeat;
     transform-origin: 50% 100%;
-    transform: rotate(calc(var(--tod) * 360deg));
+    transform: rotate(var(--hand));
     pointer-events: none;
 }
 
@@ -408,18 +415,19 @@ footer a:focus-visible,
     width: 44px;
     height: 44px;
     /* The hand's tip: 34% of the dial out from the centre, less the dot's 10 px radius. */
-    transform: rotate(calc(var(--tod) * 360deg)) translateY(calc(10px - 34cqi));
+    transform: rotate(var(--hand)) translateY(calc(10px - 34cqi));
     background: radial-gradient(circle, var(--cocoa) 9px, transparent 10px);
     touch-action: none;
 }
 
-/* The straw border doubles as the progress track. */
+/* The rim is the day: straw over the top, 06:00 to 18:00, and midnight blue under the bottom
+   half, so the night shows on the dial before the hand reaches it. */
 .citrus::after {
     content: "";
     position: absolute;
     inset: -12px;
     border-radius: 50%;
-    background: conic-gradient(var(--cocoa) calc(var(--tod) * 360deg), transparent 0);
+    background: conic-gradient(from 90deg, var(--midnight) 0 180deg, transparent 0);
     mask: radial-gradient(circle closest-side, transparent 0 calc(100% - 12px), #000 calc(100% - 12px));
     pointer-events: none;
 }
@@ -439,6 +447,13 @@ footer a:focus-visible,
     margin-top: 24px;
     line-height: 1.5;
     color: var(--cocoa);
+}
+
+.now {
+    margin-top: 16px;
+    border: 0;
+    font: inherit;
+    cursor: pointer;
 }
 
 /* The key help means nothing on a phone, and its lines fell across the bottom edge of the first
@@ -1102,8 +1117,8 @@ footer {
     }
 }
 
-/* Forced colours drop the gradients that draw the hand, the knob and the progress track, which
-   left an empty ring with a time in it. They come back here in system colours. */
+/* Forced colours drop the gradients that draw the hand, the knob and the night half of the rim,
+   which left an empty ring with a time in it. They come back here in system colours. */
 @media (forced-colors: active) {
     .citrus::before,
     .citrus::after,
@@ -1111,7 +1126,7 @@ footer {
         forced-color-adjust: none;
     }
 
-    /* GrayText under Highlight, so the elapsed part of the track stands apart from the rest. */
+    /* GrayText for the day and Highlight for the night half of the rim. */
     .citrus {
         border-color: GrayText;
     }
@@ -1125,7 +1140,7 @@ footer {
     }
 
     .citrus::after {
-        background: conic-gradient(Highlight calc(var(--tod) * 360deg), transparent 0);
+        background: conic-gradient(from 90deg, Highlight 0 180deg, transparent 0);
     }
 }
 
