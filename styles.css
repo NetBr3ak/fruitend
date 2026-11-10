@@ -470,11 +470,10 @@ footer a:focus-visible,
     color: var(--cocoa);
 }
 
-/* The note is about keys, and on a phone its three lines fell across the bottom edge of the first
-   screen. The slider's aria-describedby still reads it: accname 1.2 counts a hidden node that a
-   relation points to directly. */
+/* The key help means nothing on a phone, and its lines fell across the bottom edge of the first
+   screen; the drag hint before it stays. */
 @media (hover: none) and (pointer: coarse) {
-    .disc-note {
+    .disc-keys {
         display: none;
     }
 }
@@ -1014,6 +1013,11 @@ footer {
 
     .hero-grid {
         row-gap: 28px;
+    }
+
+    /* At 20 px "See the fruits" and "View source" share one row on a 375 px phone (338 of 345 px). */
+    .hero-actions {
+        column-gap: 20px;
     }
 
     /* Three items in a 390px bar: every one of these is what keeps "Sign up" on one line. */

@@ -20,11 +20,11 @@ Live page: https://netbr3ak.github.io/fruitend/
   across it sideways; a vertical swipe that starts off the knob scrolls the page.
 - On load the clock shows your local time. The ramp starts at noon, so an hour before noon
   shows noon. Add `?t=21` to the address to pin the page at 21:00.
-- **Inspect** shows the size, padding, text contrast and matching CSS rules of the element
+- **Inspect styles** shows the size, padding, text contrast and matching CSS rules of the element
   you hover or focus.
 - The ticker has a Pause button. If your system asks for reduced motion, nothing on the page
   moves and the Pause button is hidden.
-- Every link works without JavaScript. "Fruits", "About" and "Explore the fruits" jump to their
+- Every link works without JavaScript. "Fruits", "About" and "See the fruits" jump to their
   section; "Source", "View source" and "Make it your own" open this repository.
 
 There is no framework, no build step and no request to another server. The fonts ship with
@@ -40,7 +40,7 @@ python3 -m http.server 8000
 
 Then open http://localhost:8000/. Opening `index.html` straight from the disk also works, with
 one gap: the browser treats a local file as a separate origin and blocks `cssRules`, so
-**Inspect** shows the measurements but not the source rules.
+**Inspect styles** shows the measurements but not the source rules.
 
 ## Check the palette
 

@@ -22,11 +22,11 @@ Strona na żywo: https://netbr3ak.github.io/fruitend/
   przewija stronę.
 - Po wczytaniu zegar pokazuje twój czas lokalny. Skala zaczyna się w południe, więc godzina
   przed południem pokazuje południe. Dopisz `?t=21` do adresu, aby przypiąć stronę do 21:00.
-- **Inspect** pokazuje rozmiar, padding, kontrast tekstu i pasujące reguły CSS elementu pod
+- **Inspect styles** pokazuje rozmiar, padding, kontrast tekstu i pasujące reguły CSS elementu pod
   kursorem albo z fokusem.
 - Pasek z tekstem ma przycisk Pause. Jeśli system prosi o ograniczenie ruchu, nic na stronie
   się nie rusza, a przycisk Pause jest ukryty.
-- Każdy link działa bez JavaScriptu. "Fruits", "About" i "Explore the fruits" przewijają do
+- Każdy link działa bez JavaScriptu. "Fruits", "About" i "See the fruits" przewijają do
   swojej sekcji; "Source", "View source" i "Make it your own" otwierają to repozytorium.
 
 Nie ma frameworka, budowania ani zapytań do innego serwera. Fonty leżą obok strony.
@@ -41,7 +41,7 @@ python3 -m http.server 8000
 
 Potem otwórz http://localhost:8000/. Plik `index.html` otwarty prosto z dysku też działa,
 z jedną luką: przeglądarka traktuje plik lokalny jak inne pochodzenie i blokuje `cssRules`,
-więc **Inspect** pokazuje pomiary, ale nie reguły źródłowe.
+więc **Inspect styles** pokazuje pomiary, ale nie reguły źródłowe.
 
 ## Sprawdzenie palety
 
