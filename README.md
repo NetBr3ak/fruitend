@@ -2,8 +2,8 @@
 
 Read this in: **English** | [Polski](README.pl.md)
 
-A static demo landing page on a fruit theme. The citrus slice in the hero is drawn in CSS and
-turns slowly, like a juicer. The cut-out fruits around it float in place.
+A static demo landing page in fruit colors. The citrus slice in the hero is drawn with CSS
+gradients and turns slowly, like a juicer. The cut-out fruits around it float in place.
 
 Live page: https://netbr3ak.github.io/fruitend/
 
@@ -22,12 +22,13 @@ Live page: https://netbr3ak.github.io/fruitend/
   this visit, with a bar for each file's size against the largest one.
 - **Inspect styles** shows the size, padding, text contrast and matching CSS rules of the element
   you hover or focus. It needs the Popover API; without it the button stays hidden.
-- The ticker has a **Pause motion** button. It stops everything that moves: the ticker, the
-  slice and the fruits. **Inspect styles** also stops them while it is on. If your system asks
-  for reduced motion, nothing on the page moves and the button is hidden.
+- A **Pause motion** button sits under the slice. It stops the three loops: the ticker, the
+  slice and the fruits. **Inspect styles**, in the ticker, also stops them while it is on. If
+  your system asks for reduced motion, nothing on the page moves and the button is hidden.
 - Every link works without JavaScript. "Fruits", "Files" and "See the fruits" jump to their
   section; "Source", "View source" and "Make it your own" open this repository. Without
-  JavaScript nothing moves, and the controls that need a script stay hidden.
+  JavaScript the entrance animation and the scroll effects still run, but nothing loops: the
+  ticker, the slice and the fruits stand still, and the controls that need a script stay hidden.
 
 There is no framework, no build step and no request to another server. The fonts ship with
 the page.

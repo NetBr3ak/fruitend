@@ -2,8 +2,9 @@
 
 Czytaj w: [English](README.md) | **Polski**
 
-Statyczna strona demo w owocowym motywie. Plaster cytrusa na górze strony jest narysowany w CSS
-i powoli się obraca, jak wyciskarka do cytrusów. Wycięte owoce wokół niego unoszą się w miejscu.
+Statyczna strona demo w owocowych kolorach. Plaster cytrusa na górze strony jest narysowany
+gradientami CSS i powoli się obraca, jak wyciskarka do cytrusów. Wycięte owoce wokół niego
+unoszą się w miejscu.
 
 Strona na żywo: https://netbr3ak.github.io/fruitend/
 
@@ -22,12 +23,14 @@ Strona na żywo: https://netbr3ak.github.io/fruitend/
   przeglądarkę przy tej wizycie, z paskiem rozmiaru każdego pliku względem największego.
 - **Inspect styles** pokazuje rozmiar, padding, kontrast tekstu i pasujące reguły CSS elementu pod
   kursorem albo z fokusem. Potrzebuje Popover API; bez niego przycisk zostaje ukryty.
-- Pasek z tekstem ma przycisk **Pause motion**. Zatrzymuje wszystko, co się rusza: pasek,
-  plaster i owoce. **Inspect styles** też je zatrzymuje, dopóki jest włączony. Jeśli system
-  prosi o ograniczenie ruchu, nic na stronie się nie rusza, a przycisk jest ukryty.
+- Pod plastrem jest przycisk **Pause motion**. Zatrzymuje trzy zapętlone ruchy: pasek z
+  tekstem, plaster i owoce. **Inspect styles** na pasku też je zatrzymuje, dopóki jest
+  włączony. Jeśli system prosi o ograniczenie ruchu, nic na stronie się nie rusza, a przycisk
+  jest ukryty.
 - Każdy link działa bez JavaScriptu. "Fruits", "Files" i "See the fruits" przewijają do
   swojej sekcji; "Source", "View source" i "Make it your own" otwierają to repozytorium. Bez
-  JavaScriptu nic się nie rusza, a przyciski, które potrzebują skryptu, zostają ukryte.
+  JavaScriptu animacja wejścia i efekty przewijania nadal działają, ale nic się nie zapętla:
+  pasek, plaster i owoce stoją, a przyciski, które potrzebują skryptu, zostają ukryte.
 
 Nie ma frameworka, budowania ani zapytań do innego serwera. Fonty leżą obok strony.
 
