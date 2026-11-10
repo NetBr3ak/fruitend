@@ -53,7 +53,7 @@
     --lemon: #ffd166;
     --cream: #ffe9cf;
     --straw: #ef4040;
-    --magenta: #c21292;
+    --magenta: #b0107f;
     --midnight: #001a66;
     --plum: #0b0510;
     --cocoa: #1a0c05;
@@ -74,11 +74,11 @@
    meet them. Every text pair on this ramp is checked by check-palette.mjs. */
 @supports (color: oklch(from red l c h)) {
     :root {
-        --mango: oklch(from #ffa732 calc(l - var(--tod) * .13) calc(c - var(--tod) * .035) calc(h - var(--tod) * 18));
-        --lemon: oklch(from #ffd166 calc(l - var(--tod) * .12) calc(c - var(--tod) * .03) calc(h - var(--tod) * 14));
+        --mango: oklch(from #ffa732 calc(l - var(--tod) * .1) c calc(h - var(--tod) * 28));
+        --lemon: oklch(from #ffd166 calc(l - var(--tod) * .08) calc(c - var(--tod) * .025) calc(h - var(--tod) * 26));
         --cream: oklch(from #ffe9cf calc(l - var(--tod) * .02) calc(c - var(--tod) * .02) calc(h - var(--tod) * 60));
         --straw: oklch(from #ef4040 calc(l - var(--tod) * .01) calc(c - var(--tod) * .01) calc(h - var(--tod) * 14));
-        --magenta: oklch(from #c21292 calc(l - var(--tod) * .035) calc(c - var(--tod) * .02) calc(h - var(--tod) * 12));
+        --magenta: oklch(from #b0107f calc(l - var(--tod) * .035) calc(c - var(--tod) * .02) calc(h - var(--tod) * 12));
         --kiwi: oklch(from #5ce1a0 calc(l - var(--tod) * .06) calc(c - var(--tod) * .02) calc(h + var(--tod) * 26));
 
         transition: --tod .6s var(--ease);

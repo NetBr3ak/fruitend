@@ -5,11 +5,11 @@
 
 // --tod 0 -> 1. Deltas are added to the seed's oklch L, C and H.
 const RAMP = {
-	mango: ['#ffa732', -0.13, -0.035, -18],
-	lemon: ['#ffd166', -0.12, -0.030, -14],
+	mango: ['#ffa732', -0.10, 0, -28],
+	lemon: ['#ffd166', -0.08, -0.025, -26],
 	cream: ['#ffe9cf', -0.020, -0.020, -60],
 	straw: ['#ef4040', -0.010, -0.010, -14],
-	magenta: ['#c21292', -0.035, -0.020, -12],
+	magenta: ['#b0107f', -0.035, -0.020, -12],
 	kiwi: ['#5ce1a0', -0.060, -0.020, 26],
 	// The dark end is already midnight, so it stays put and the warm end travels to meet it.
 	midnight: ['#001a66', 0, 0, 0],
