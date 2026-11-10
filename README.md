@@ -2,45 +2,32 @@
 
 Read this in: **English** | [Polski](README.pl.md)
 
-A static demo landing page on a fruit theme. The citrus slice in the hero is drawn in CSS and is
-also a 24-hour clock: it shows your local time, and the colors of the page follow the hour on it.
-From 18:00 to 06:00 the page turns dark.
+A static demo landing page on a fruit theme. The citrus slice in the hero is drawn in CSS and
+turns slowly, like a juicer. The cut-out fruits around it float in place.
 
 Live page: https://netbr3ak.github.io/fruitend/
 
-![The Fruitend page at 17:00 on a 1280 px laptop screen and a 375 px phone screen](images/preview.png)
+![The Fruitend page on a 1280 px laptop screen and a 375 px phone screen](images/preview.png)
 
 ## What the page does
 
-- One number, `--tod`, drives the palette. 0 is noon, 0.5 is 06:00 or 18:00, and 1 is
-  midnight. CSS derives the colors from it with `oklch()` relative colors. JavaScript sets only
-  that number.
-- From 18:00 to 06:00 the light grounds turn dark and their text turns from cocoa to cream. The
-  switch is a step made in CSS with `round()`, not a blend, so no text sits on a ground it
-  fails against. The four photos dim with the hour through a CSS `filter`.
-- The citrus slice is a slider (`role="slider"`): noon at the top, midnight at the bottom, and
-  the dark half of the ring is the night. Drag it, or focus it with Tab and use the keys: each
-  arrow moves 15 minutes, Page Up and Page Down move an hour, Home jumps to 00:00 and End to
-  23:59. A drag may pass noon and midnight. On a touch screen, drag the knob at the tip of the
-  hand, tap the slice or drag across it sideways; a vertical swipe that starts off the knob
-  scrolls the page.
-- On load the clock shows your local time and moves with it every minute. Once you move it, it
-  stays where you put it, and **Back to now** returns it to the clock. Add `?t=21` to the address
-  to pin the page at 21:00.
-- When the slice scrolls out of view, a slider with the time shows in the top bar. It moves the
-  same clock.
-- A jump across 06:00 or 18:00 (a key, a tap or **Back to now**) spreads the new colors in a
-  circle from the slice in browsers with View Transitions. A drag changes the colors directly.
+- The citrus slice turns once every 48 seconds. Its segments turn, but its highlight stays at
+  the upper left, so the light seems to stand still. The four cut-out fruits rise by 6 px and
+  tilt by 2 degrees, then go back. Each fruit has its own pace (one move takes 7, 9, 11 or 13
+  seconds), so after a few seconds they no longer move together. The motion changes only `rotate`
+  and `translate`.
+- The light comes from the upper left: the glow in the hero, the highlight on the slice, and the
+  shadows of the stickers and the fruit blocks.
 - "Three files" shows the size and load time of each file, as your browser measured them on
   this visit, with a bar for each file's size against the largest one.
 - **Inspect styles** shows the size, padding, text contrast and matching CSS rules of the element
   you hover or focus. It needs the Popover API; without it the button stays hidden.
-- The ticker has a Pause button. If your system asks for reduced motion, nothing on the page
-  moves and the Pause button is hidden.
+- The ticker has a **Pause motion** button. It stops everything that moves: the ticker, the
+  slice and the fruits. **Inspect styles** also stops them while it is on. If your system asks
+  for reduced motion, nothing on the page moves and the button is hidden.
 - Every link works without JavaScript. "Fruits", "Files" and "See the fruits" jump to their
   section; "Source", "View source" and "Make it your own" open this repository. Without
-  JavaScript the clock is a still picture at 12:00, and the controls that need a script stay
-  hidden.
+  JavaScript nothing moves, and the controls that need a script stay hidden.
 
 There is no framework, no build step and no request to another server. The fonts ship with
 the page.
@@ -63,11 +50,9 @@ one gap: the browser treats a local file as a separate origin and blocks `cssRul
 node check-palette.mjs
 ```
 
-The script walks `--tod` from 0 to 1 in 21 steps. At each step it checks 14 text and background
-pairs against their WCAG contrast floor: 4.5:1, or 3:1 for display-size text. Then it checks 6
-more pairs, the text on the grounds that turn dark at night: the day scene over `--tod` 0 to 0.5
-and the night scene over 0.5 to 1, 21 steps each. It exits with code 1 if any pair falls
-short. CI runs it on every push to `main` and on every pull request.
+The script checks 14 text and background pairs of the palette against their WCAG contrast floor:
+4.5:1, or 3:1 for display-size text. It exits with code 1 if any pair falls short. CI runs it on
+every push to `main` and on every pull request.
 
 ## Files
 
@@ -78,8 +63,8 @@ fruitend/
 ├── images/             # Four fruit photos, four cut-out fruits, four sticker drawings (SVG) and the preview image above
 ├── index.html          # The page
 ├── styles.css          # All styles, including the palette
-├── script.js           # Clock, bar slider, ticker, file sizes, inspector
-├── check-palette.mjs   # Contrast check for the whole palette ramp
+├── script.js           # Pause motion button, file sizes, inspector
+├── check-palette.mjs   # Contrast check for the palette
 ├── favicon.svg
 ├── sitemap.xml
 ├── LICENSE
