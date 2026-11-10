@@ -50,7 +50,7 @@ ul,ol{margin:0;padding:0;list-style:none}
 .dial{width:clamp(260px,34vw,520px);margin-right:-4vw;position:relative}
 .citrus{aspect-ratio:1;border:12px solid var(--straw);background:var(--cream);width:100%;box-shadow:calc(var(--sx) * 10) calc(var(--sy) * 14) 0 -4px #1a0c0538;border-radius:50%;display:block;position:relative}
 .citrus:before,.citrus:after{content:"";border-radius:50%;position:absolute;inset:0}
-.citrus:before{background:radial-gradient(circle closest-side, var(--cream) 0 26%, transparent 26%), radial-gradient(circle closest-side, transparent 0 88%, var(--cream) 88% 100%), repeating-conic-gradient(from -15deg, transparent 0 29deg, var(--cream) 29deg 30deg), repeating-conic-gradient(from -15deg, var(--mango) 0 30deg, var(--lemon) 0 60deg)}
+.citrus:before{background:radial-gradient(circle closest-side, var(--cream) 0 12%, transparent 12%), radial-gradient(circle closest-side, transparent 0 88%, var(--cream) 88% 100%), repeating-conic-gradient(from -15deg, var(--cream) 0 .5deg, transparent .8deg 29.2deg, var(--cream) 29.5deg 30deg), repeating-conic-gradient(from -15deg, var(--mango) 0 30deg, var(--lemon) 0 60deg)}
 .citrus:after{background:radial-gradient(circle at 30% 30%,oklch(100% 0 0/.32),#0000 42%)}
 .ticker{z-index:2;background:var(--cocoa);align-items:center;gap:20px;height:68px;margin:-18px -3vw;padding-left:3vw;display:flex;position:relative;overflow:hidden;rotate:-1.5deg;box-shadow:0 10px 0 -2px #1a0c052e}
 .ticker-marquee{flex:1;min-width:0;overflow:hidden;mask-image:linear-gradient(90deg,#0000,#000 32px calc(100% - 32px),#0000)}
