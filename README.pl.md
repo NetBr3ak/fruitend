@@ -17,8 +17,9 @@ Strona na żywo: https://netbr3ak.github.io/fruitend/
 - Plaster cytrusa to suwak (`role="slider"`), a w jego środku widać godzinę. Przeciągnij go
   albo przejdź do niego klawiszem Tab i użyj klawiszy: każda strzałka to 15 minut, Page Up
   i Page Down to godzina, Home i End skaczą do południa i do północy. Przeciąganie za 12
-  zatrzymuje się w południe albo o północy. Na ekranie dotykowym stuknij plaster albo
-  przeciągnij go w bok; ruch w pionie przewija stronę.
+  zatrzymuje się w południe albo o północy. Na ekranie dotykowym przeciągnij gałkę na końcu
+  wskazówki, stuknij plaster albo przeciągnij po nim w bok; ruch w pionie zaczęty poza gałką
+  przewija stronę.
 - Po wczytaniu zegar pokazuje twój czas lokalny. Skala zaczyna się w południe, więc godzina
   przed południem pokazuje południe. Dopisz `?t=21` do adresu, aby przypiąć stronę do 21:00.
 - **Inspect** pokazuje rozmiar, padding, kontrast tekstu i pasujące reguły CSS elementu pod

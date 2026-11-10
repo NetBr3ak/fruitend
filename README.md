@@ -16,7 +16,8 @@ Live page: https://netbr3ak.github.io/fruitend/
 - The citrus slice is a slider (`role="slider"`) and shows the time in its middle. Drag it, or
   focus it with Tab and use the keys: each arrow moves 15 minutes, Page Up and Page Down move
   an hour, Home and End jump to noon and midnight. A drag past twelve stops at noon or
-  midnight. On a touch screen, tap the slice or drag sideways; a vertical swipe scrolls the page.
+  midnight. On a touch screen, drag the knob at the tip of the hand, tap the slice or drag
+  across it sideways; a vertical swipe that starts off the knob scrolls the page.
 - On load the clock shows your local time. The ramp starts at noon, so an hour before noon
   shows noon. Add `?t=21` to the address to pin the page at 21:00.
 - **Inspect** shows the size, padding, text contrast and matching CSS rules of the element
