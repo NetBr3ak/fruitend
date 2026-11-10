@@ -10,14 +10,17 @@ document.addEventListener('DOMContentLoaded', function () {
 
 	const reveal = document.querySelectorAll('[data-reveal]');
 
-	if ('IntersectionObserver' in window && reveal.length) {
+	// Under reduced motion styles.css never hides the blocks, so there is nothing to observe.
+	if ('IntersectionObserver' in window && reveal.length && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+		// No bottom margin: Chromium resolves a percentage there against the width, so in a
+		// 1600 x 400 window -12% kept a block hidden after 100 px of it had scrolled into view.
 		const seen = new IntersectionObserver((entries, obs) => {
 			entries.forEach(entry => {
 				if (!entry.isIntersecting) return;
 				entry.target.classList.add('in');
 				obs.unobserve(entry.target);
 			});
-		}, { rootMargin: '0px 0px -12% 0px' });
+		}, { rootMargin: '0px' });
 
 		// The hiding class goes on only once the observer exists, so a script failure
 		// anywhere above this line leaves the content visible instead of blank.
@@ -145,6 +148,8 @@ document.addEventListener('DOMContentLoaded', function () {
 		resumeTicker = false;
 		setPaused(!paused);
 	});
+	// The ticker moves only once Pause works (WCAG 2.2.2), so without JavaScript it stands still.
+	ticker.classList.add('is-ready');
 
 	/* ---------- inspector ---------- */
 

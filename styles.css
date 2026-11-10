@@ -1218,7 +1218,7 @@ footer {
         animation: disc-in .5s var(--ease) both;
     }
 
-    .ticker-track {
+    .ticker.is-ready .ticker-track {
         animation: slide 26s linear infinite;
     }
 
@@ -1231,7 +1231,9 @@ footer {
         transform: translateY(28px);
     }
 
-    .js [data-reveal].in {
+    /* A focused link shows even before its block has scrolled in. */
+    .js [data-reveal].in,
+    .js [data-reveal]:focus-within {
         opacity: 1;
         transform: none;
         transition: opacity .6s var(--ease), transform .6s var(--ease);
