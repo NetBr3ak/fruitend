@@ -394,8 +394,10 @@
       repeating-conic-gradient(in srgb from -15deg, var(--mango) 0 30deg, var(--lemon) 0 60deg);
   }
 
-  /* The highlight depicts the light, so it stays put while the segments turn. */
+  /* The highlight depicts the light, so it stays put while the segments turn.
+     Positioned, so it paints above the segments, which rotate turns into a stacking context. */
   .slice::after {
+    position: relative;
     grid-area: 1 / 1;
     border-radius: 50%;
     background: radial-gradient(circle at 30% 30%, oklch(100% 0 0 / 0.32), transparent 42%);
