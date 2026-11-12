@@ -1,6 +1,6 @@
 'use strict';
 
-// The slice switch: Space is native to a checkbox; the ARIA switch pattern adds Enter.
+// Enter supplements the checkbox's native Space key.
 const sliceSwitch = document.querySelector('.slice-switch');
 sliceSwitch.addEventListener('keydown', event => {
   if (event.key !== 'Enter') return;
@@ -8,7 +8,7 @@ sliceSwitch.addEventListener('keydown', event => {
   sliceSwitch.click();
 });
 
-// The visit measurement, from Resource Timing.
+// Resource Timing counts received bytes, not decoded sizes.
 const entriesByUrl = new Map();
 const kilobytes = new Intl.NumberFormat(undefined, {
   minimumFractionDigits: 1,
@@ -28,7 +28,7 @@ function kindOf(entry) {
   return 'images';
 }
 
-function childOf(row, className) {
+function ensureChild(row, className) {
   const element = row.querySelector(`.${className}`);
   return element ?? row.appendChild(Object.assign(document.createElement('span'), { className }));
 }
@@ -42,8 +42,8 @@ function showFileSizes(entries) {
   if (sizes.size === 0) return;
   const largest = Math.max(...sizes.values());
   for (const [row, size] of sizes) {
-    childOf(row, 'file-size').textContent = formatKilobytes(size);
-    childOf(row, 'file-bar').style.setProperty('--share', (size / largest).toFixed(3));
+    ensureChild(row, 'file-size').textContent = formatKilobytes(size);
+    ensureChild(row, 'file-bar').style.setProperty('--share', (size / largest).toFixed(3));
   }
   document.querySelector('.files-note').hidden = false;
 }
@@ -56,13 +56,14 @@ function showVisitTotal(entries) {
     .map(kind => `${kind} ${formatKilobytes(sum(groups[kind]))}`);
   const line = document.querySelector('.visit-total');
   line.textContent =
-    `So far this visit has loaded ${entries.length} files, ` +
+    `Measured this visit: ${entries.length} files, ` +
     `${formatKilobytes(sum(entries))} in all: ${parts.join(', ')}.`;
   line.hidden = false;
 }
 
-// Opened from the disk, every size reads 0, so nothing shows.
+// Disk visits have no HTTP transfer size.
 const observer = new PerformanceObserver(list => {
+  if (location.protocol === 'file:') return;
   for (const entry of list.getEntries()) entriesByUrl.set(entry.name, entry);
   const measured = [...entriesByUrl.values()].filter(entry => entry.encodedBodySize > 0);
   if (measured.length === 0) return;
@@ -72,15 +73,16 @@ const observer = new PerformanceObserver(list => {
 observer.observe({ type: 'navigation', buffered: true });
 observer.observe({ type: 'resource', buffered: true });
 
-// The inspector: a manual popover that describes the pointed or focused element.
+// Popovers keep the page usable.
 const inspector = document.getElementById('inspector');
 const inspectButton = document.querySelector('.inspect-button');
 const halo = document.querySelector('.inspector-halo');
 const targetLine = inspector.querySelector('.inspector-target');
 const boxLine = inspector.querySelector('.inspector-box');
 const rulesBlock = inspector.querySelector('.inspector-rules');
-// From the markup; the third is the note for a page opened from the disk.
-const startTexts = [targetLine.textContent, boxLine.textContent, rulesBlock.textContent];
+const startTarget = targetLine.textContent;
+const startBox = boxLine.textContent;
+const diskNote = rulesBlock.textContent;
 const anchorsWork = CSS.supports('anchor-name: --inspected');
 const swatch = document.createElement('canvas').getContext('2d', { willReadFrequently: true });
 let inspected = null;
@@ -103,7 +105,6 @@ function contrastRatio(a, b) {
   return (high + 0.05) / (low + 0.05);
 }
 
-// The nearest solid background; over an image or a translucent layer, no ratio.
 function groundOf(element) {
   for (let node = element; node; node = node.parentElement) {
     const style = getComputedStyle(node);
@@ -122,7 +123,6 @@ function describeContrast(element, style) {
   return `text ${contrastRatio(text, ground).toFixed(2)}:1`;
 }
 
-// & is the parent; a nested selector without & sits inside it.
 function resolveSelector(selector, parent) {
   if (!parent) return selector;
   if (selector.includes('&')) return selector.replaceAll('&', `:is(${parent})`);
@@ -130,15 +130,15 @@ function resolveSelector(selector, parent) {
 }
 
 function matchesSafely(element, selector) {
-  // matches() throws on a selector this browser cannot parse; such a rule cannot apply.
+  // Unparseable selectors cannot apply.
   try {
     return element.matches(selector);
-  } catch {
+  } catch (error) {
+    if (error.name !== 'SyntaxError') throw error;
     return false;
   }
 }
 
-// Group rules whose condition fails drop out; the rest add a step to the chain.
 function collectRules(rules, element, context, found) {
   const descend = (rule, step) =>
     collectRules(rule.cssRules, element, { ...context, chain: [...context.chain, step] }, found);
@@ -162,10 +162,11 @@ function collectRules(rules, element, context, found) {
 function matchingRules(element) {
   const found = [];
   for (const sheet of document.styleSheets) {
-    // cssRules throws a SecurityError on a page opened from the disk.
+    // Local-file security can block CSS rules.
     try {
       collectRules(sheet.cssRules, element, { chain: [], parent: null }, found);
-    } catch {
+    } catch (error) {
+      if (error.name !== 'SecurityError') throw error;
       return null;
     }
   }
@@ -178,7 +179,7 @@ function formatRule({ chain, selector, rule }) {
 }
 
 function describeBox(element, style) {
-  // offsetWidth ignores transforms, so a turning slice reads steady. SVG has none.
+  // Layout sizes stay steady while the slice turns; SVG has no offsetWidth.
   const { width, height } = element instanceof HTMLElement
     ? { width: element.offsetWidth, height: element.offsetHeight }
     : element.getBoundingClientRect();
@@ -203,6 +204,8 @@ function moveHalo(element) {
 }
 
 function describeElement(element) {
+  // The static label avoids transformed-anchor drift.
+  if (element.matches('.slice-segments, .slice-switch')) element = element.closest('.slice');
   const style = getComputedStyle(element);
   const rules = matchingRules(element);
   moveHalo(element);
@@ -212,7 +215,9 @@ function describeElement(element) {
   boxLine.textContent = describeBox(element, style);
   rulesBlock.textContent = rules
     ? rules.slice(-6).map(formatRule).join('\n\n')
-    : startTexts[2];
+    : diskNote;
+  const box = element.getBoundingClientRect();
+  inspector.classList.toggle('inspector-left', box.left + box.width / 2 > innerWidth / 2);
 }
 
 function inspectTarget(event) {
@@ -222,8 +227,8 @@ function inspectTarget(event) {
 }
 
 function startInspecting() {
-  targetLine.textContent = matchMedia('(hover: none)').matches ? 'Tap any element.' : startTexts[0];
-  boxLine.textContent = startTexts[1];
+  targetLine.textContent = matchMedia('(hover: none)').matches ? targetLine.dataset.touch : startTarget;
+  boxLine.textContent = startBox;
   rulesBlock.textContent = '';
   listeners = new AbortController();
   const { signal } = listeners;
@@ -247,6 +252,7 @@ function stopInspecting() {
 if ('popover' in HTMLElement.prototype) {
   inspector.hidden = false;
   inspectButton.hidden = false;
+  // beforetoggle catches the next Tab; toggle can arrive too late.
   inspector.addEventListener('beforetoggle', event => {
     if (event.newState === 'open') startInspecting();
     else stopInspecting();

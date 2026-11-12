@@ -1,10 +1,10 @@
-/* The width axis (wdth 75 to 100) stays in the file, so font-stretch drives it. */
+/* The width axis drives the squeeze; optional prevents late font metrics from shifting titles. */
 @font-face {
   font-family: 'Bricolage Grotesque';
   src: url('fonts/bricolage-grotesque.woff2') format('woff2');
   font-weight: 800;
   font-stretch: 75% 100%;
-  font-display: swap;
+  font-display: optional;
   unicode-range: U+20-7E, U+A0, U+A9, U+B0, U+B7, U+D7, U+2018-201D, U+2026;
 }
 
@@ -15,14 +15,6 @@
   font-weight: 400;
   font-display: optional;
   unicode-range: U+20-7E, U+A0, U+A9, U+B0, U+B7, U+D7, U+2018-201D, U+2026;
-}
-
-/* Arial Black at 55% matches the display face's width, so the swap barely moves a line. */
-@font-face {
-  font-family: 'Bricolage fallback';
-  src: local('Arial Black'), local('Arial-Black');
-  font-weight: 800;
-  size-adjust: 55%;
 }
 
 /* Registered, so the mix can animate; an unregistered property would jump at 50%. */
@@ -78,7 +70,7 @@
 }
 
 @layer tokens {
-  /* Four decimals keep each colour inside sRGB; check-palette.mjs reads these lines. */
+  /* Four decimals keep the palette inside sRGB. */
   :root {
     --mango: oklch(79.7793% 0.1595 68.2298);
     --straw: oklch(63.2685% 0.2116 25.6559);
@@ -95,7 +87,7 @@
     --ground: var(--cream);
     --ink: var(--cocoa);
     --name: var(--cocoa);
-    --display-font: 'Bricolage Grotesque', 'Bricolage fallback', 'Arial Black', sans-serif;
+    --display-font: 'Bricolage Grotesque', 'Arial Black', sans-serif;
     --text-font: 'Hanken Grotesk', system-ui, sans-serif;
     --code-font: ui-monospace, monospace;
     --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
@@ -142,8 +134,11 @@
     color: var(--name);
   }
 
-  p {
-    text-wrap: pretty;
+  /* Short paragraphs wrap more evenly where pretty is supported; normal wrapping remains. */
+  @supports (text-wrap: pretty) {
+    p {
+      text-wrap: pretty;
+    }
   }
 
   a {
@@ -193,7 +188,7 @@
     clip-path: inset(50%);
   }
 
-  /* A minimum size has no effect on an inline box, so links and buttons become inline-flex. */
+  /* Inline boxes ignore minimum target sizes. */
   @media (pointer: coarse) {
     a,
     button {
@@ -241,7 +236,7 @@
     --previous: var(--bloom);
   }
 
-  /* One ground for every coloured part; --flood 100% holds the colour where nothing animates it. */
+  /* 100% keeps static bands in their own colour. */
   .site-header,
   .hero,
   .band,
@@ -256,21 +251,30 @@
 
     /* A fixed dark lightness keeps cream text above 11.9:1 on every fruit's hue. */
     @supports (color: light-dark(red, red)) and (color: oklch(from red l c h)) {
-      --ground: light-dark(
-        var(--tint),
-        oklch(from var(--tint) var(--dark-lightness) calc(c * var(--dark-chroma)) h)
-      );
-      --ink: light-dark(var(--cocoa), var(--cream));
-      --name: light-dark(var(--cocoa), var(--tint));
+      & {
+        --ground: light-dark(
+          var(--tint),
+          oklch(from var(--tint) var(--dark-lightness) calc(c * var(--dark-chroma)) h)
+        );
+        --ink: light-dark(var(--cocoa), var(--cream));
+        --name: light-dark(var(--cocoa), var(--tint));
+      }
     }
+  }
+
+  .header-inner,
+  .hero-inner,
+  .band-inner,
+  .files-inner,
+  .footer-inner {
+    inline-size: var(--content);
+    margin-inline: auto;
   }
 
   .header-inner {
     display: flex;
     align-items: center;
     gap: 0.5rem 1.5rem;
-    inline-size: var(--content);
-    margin-inline: auto;
     padding-block: 1rem;
     font-size: 1rem;
   }
@@ -322,8 +326,6 @@
     display: grid;
     align-items: center;
     gap: 3rem;
-    inline-size: var(--content);
-    margin-inline: auto;
   }
 
   .hero-copy {
@@ -335,10 +337,9 @@
     font-size: min(100cqi / 4.3, 10rem);
   }
 
-  /* nowrap, start-aligned lines: the squeeze never re-wraps or moves a line start. */
+  /* The bundled face fits each line; a missing local face can wrap instead of overflowing. */
   .hero-title span {
     display: block;
-    white-space: nowrap;
   }
 
   .lead {
@@ -373,12 +374,13 @@
     cursor: pointer;
   }
 
-  /* Hub, pith and rind, the segment lines, then the mango and lemon segments.
-     The conic layers interpolate in srgb: Firefox draws a repeating conic gradient wrongly
-     in the default oklab space that oklch colours select. */
   .slice-segments {
     grid-area: 1 / 1;
     border-radius: 50%;
+    --segments: repeating-conic-gradient(from -15deg, #ffa732 0 30deg, #ffd166 0 60deg);
+    --lines: repeating-conic-gradient(
+      from -15deg, #ffe9cf 0 0.5deg, transparent 0.8deg 29.2deg, #ffe9cf 29.5deg 30deg
+    );
     background:
       radial-gradient(circle closest-side, var(--cream) 0 12%, transparent 12%),
       radial-gradient(
@@ -387,17 +389,26 @@
         var(--cream) 80% 88%,
         var(--straw) 88%
       ),
-      repeating-conic-gradient(
+      var(--lines),
+      var(--segments);
+  }
+
+  /* Explicit sRGB avoids Firefox's conic artefact; hex colours keep the fallback in sRGB. */
+  @supports (background: conic-gradient(in srgb, red, red)) {
+    .slice-segments {
+      --lines: repeating-conic-gradient(
         in srgb from -15deg,
         var(--cream) 0 0.5deg,
         transparent 0.8deg 29.2deg,
         var(--cream) 29.5deg 30deg
-      ),
-      repeating-conic-gradient(in srgb from -15deg, var(--mango) 0 30deg, var(--lemon) 0 60deg);
+      );
+      --segments: repeating-conic-gradient(
+        in srgb from -15deg, var(--mango) 0 30deg, var(--lemon) 0 60deg
+      );
+    }
   }
 
-  /* The highlight depicts the light, so it stays put while the segments turn.
-     Positioned, so it paints above the segments, which rotate turns into a stacking context. */
+  /* A fixed highlight depicts light; positioning puts it above the turning segments. */
   .slice::after {
     position: relative;
     grid-area: 1 / 1;
@@ -419,6 +430,10 @@
 
   /* Nothing turns under reduced motion, so there is nothing to pause. */
   @media (prefers-reduced-motion: reduce) {
+    .slice {
+      cursor: default;
+    }
+
     .slice-switch,
     .slice-name,
     .slice-hint {
@@ -516,25 +531,16 @@
     display: grid;
     align-items: center;
     gap: 2rem;
-    inline-size: var(--content);
-    margin-inline: auto;
   }
 
   .band-text {
     container-type: inline-size;
   }
 
-  /* 2.2 is 1 / 0.45: the widest name averages 0.41em a letter, with room for the fallback face. */
+  /* The letter count fits each name; the cap keeps KIWI shorter than its photo. */
   .band-name {
-    font-size: calc(100cqi / var(--letters) * 2.2);
-    white-space: nowrap;
-
-    /* KIWI would stand taller than its photo on a wide column, so wide columns cap it. */
-    @container (width >= 30rem) {
-      & {
-        font-size: min(100cqi / var(--letters) * 2.2, 16rem);
-      }
-    }
+    font-size: min(100cqi / var(--letters) * 2.2, 16rem);
+    overflow-wrap: anywhere;
   }
 
   .band-text p {
@@ -556,7 +562,7 @@
     object-fit: cover;
   }
 
-  /* The same widths as the sizes attribute, so the browser picks the file it shows. */
+  /* Match sizes so the browser downloads the displayed width. */
   @media (width >= 48rem) {
     .band-inner {
       grid-template-columns: minmax(0, 1fr) auto;
@@ -586,8 +592,6 @@
     display: grid;
     justify-items: start;
     gap: 1.5rem;
-    inline-size: var(--content);
-    margin-inline: auto;
   }
 
   .files-title {
@@ -649,8 +653,7 @@
     background-color: transparent;
   }
 
-  /* @supports keeps the text box flush only where the trim exists; elsewhere 0.86 line height.
-     Lines are trimmed one by one and the grid sets the gap, so engines space them alike. */
+  /* Per-line text-box trimming and a grid gap keep title spacing equal across engines. */
   @supports (text-box: trim-both cap alphabetic) {
     .band-name,
     .hero-title span,
@@ -676,8 +679,6 @@
   .footer-inner {
     display: grid;
     gap: 1rem;
-    inline-size: var(--content);
-    margin-inline: auto;
     container-type: inline-size;
   }
 
@@ -744,11 +745,12 @@
 }
 
 @layer inspector {
+  /* A compact panel leaves the wide Files heading visible beside it. */
   .inspector {
     --ink: var(--cream);
     position: fixed;
     inset: auto 1rem 1rem auto;
-    inline-size: min(100vw - 2rem, 30rem);
+    inline-size: min(100vw - 2rem, 22rem);
     max-block-size: min(60vh, 32rem);
     margin: 0;
     padding: 1.25rem;
@@ -761,6 +763,10 @@
     color: var(--cream);
     background-color: var(--cocoa);
     color-scheme: dark;
+  }
+
+  .inspector-left {
+    inset-inline: 1rem auto;
   }
 
   .inspector-close {
@@ -789,7 +795,7 @@
     font: inherit;
   }
 
-  /* The halo follows the element's box through its anchor, with no scroll or resize listener. */
+  /* Anchors keep the halo aligned during scroll without a listener. */
   @supports (anchor-name: --inspected) {
     .inspector-halo {
       position: absolute;
@@ -808,7 +814,7 @@
 }
 
 @layer motion {
-  /* screen keeps print static; every row here starts by itself, with no click. */
+  /* screen keeps print static. */
   @media screen and (prefers-reduced-motion: no-preference) {
     @keyframes title-squeeze {
       from {
@@ -820,6 +826,7 @@
       animation: title-squeeze 900ms var(--ease-out-expo) both;
     }
 
+    /* Staggering separates the three title squeezes without extra classes. */
     @supports (order: sibling-index()) {
       .hero-title span {
         animation-delay: calc((sibling-index() - 1) * 80ms);
@@ -836,7 +843,6 @@
       animation: slice-turn 60s linear infinite;
     }
 
-    /* A checked switch pauses both turns: time and scroll. */
     .hero:has(.slice-switch:checked) .slice-segments {
       animation-play-state: paused;
     }
@@ -907,33 +913,35 @@
         animation-timeline: view();
         animation-range: entry 10% entry 60%;
       }
+    }
 
-      /* Each letter starts 6% later along its own entry than the one before. */
-      @supports (order: sibling-index()) {
-        .footer-word span {
-          animation-range:
-            entry calc((sibling-index() - 1) * 6%)
-            entry calc(50% + (sibling-index() - 1) * 6%);
-        }
+    /* Staggering lets the footer word rise as a wave rather than one block. */
+    @supports (animation-timeline: view()) and (order: sibling-index()) {
+      .footer-word span {
+        animation-range:
+          entry calc((sibling-index() - 1) * 6%)
+          entry calc(50% + (sibling-index() - 1) * 6%);
       }
     }
   }
 
-  /* The flood changes colour only, so it also runs under reduced motion. */
-  @supports (animation-timeline: view()) {
-    @keyframes flood {
-      from {
-        --flood: 0%;
+  /* Screen-only floods keep print final; colour changes also run under reduced motion. */
+  @media screen {
+    @supports (animation-timeline: view()) {
+      @keyframes flood {
+        from {
+          --flood: 0%;
+        }
       }
-    }
 
-    .band-kiwi,
-    .band-pineapple,
-    .band-blueberries,
-    .files {
-      animation: flood linear both;
-      animation-timeline: view();
-      animation-range: entry 0% entry 100%;
+      .band-kiwi,
+      .band-pineapple,
+      .band-blueberries,
+      .files {
+        animation: flood linear both;
+        animation-timeline: view();
+        animation-range: entry 0% entry 100%;
+      }
     }
   }
 }

@@ -33,9 +33,9 @@ Everything moves by itself: on arrival, or when a part scrolls into view. Nothin
 - **Light and dark.** The page follows your system setting. Dark grounds keep each fruit's hue at
   one fixed lightness, built with relative color (`oklch(from ...)`) and picked with
   `light-dark()`. On a wide-gamut screen the fruit colors take more chroma (`color-gamut: p3`).
-- **Files.** The Files section shows the compressed size of each of the three files, as your
-  browser received them on this visit, and a running total of every file the visit loaded. It
-  reads Resource Timing through a `PerformanceObserver`.
+- **Files.** The Files section shows recorded sizes for this visit, compressed only when the
+  server compresses them, and a running total. It reads Resource Timing through a
+  `PerformanceObserver`. Some browsers omit sizes, so the total can be incomplete.
 - **Inspect the CSS.** A popover that shows the size, padding, text contrast and matching CSS
   rules of the element you point at or tab to, with each rule's `@layer`, `@media`, `@supports`
   and `@container` chain. A dashed outline follows the element through CSS anchor positioning.
@@ -52,6 +52,8 @@ without it.
 | `shape()` | No drip, a straight edge |
 | `light-dark()` or relative color | The light theme |
 | `text-box` | Headings keep a 0.86 line height |
+| Gradient color-space syntax | Plain conic gradients still draw the slice |
+| `text-wrap: pretty` | Paragraphs use normal wrapping |
 | Anchor positioning | No outline; the inspector still names the element and its box |
 | Popover | No **Inspect the CSS** button |
 | JavaScript | All text, photos and links; the slice still turns and pauses on Space or a click; no sizes and no inspector |
@@ -68,9 +70,9 @@ python3 -m http.server 8000
 ```
 
 Then open http://localhost:8000/. Opening `index.html` straight from the disk also works, with
-two gaps: the browser treats a local file as a separate origin and blocks `cssRules`, so
-**Inspect the CSS** shows the measurements but not the rules, and file sizes read 0, so the
-Files section shows no sizes.
+some limits: browser security may block the fonts or CSS rules. **Inspect the CSS** still
+shows measurements, and the Files section shows no sizes. Serve the folder over HTTP for
+the full page. Blocked or late fonts leave readable native text; headings can wrap.
 
 ## Check the palette
 

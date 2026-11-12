@@ -35,9 +35,10 @@ kliknięcia.
   każdego owocu przy jednej stałej jasności: buduje je kolor względny (`oklch(from ...)`), a
   wybiera `light-dark()`. Na ekranie z szeroką gamą kolory owoców są bardziej nasycone
   (`color-gamut: p3`).
-- **Pliki.** Sekcja Files pokazuje skompresowany rozmiar każdego z trzech plików, tak jak
-  przeglądarka pobrała je przy tej wizycie, oraz bieżącą sumę wszystkich plików, które ta wizyta
-  pobrała. Dane pochodzą z Resource Timing, czytanego przez `PerformanceObserver`.
+- **Pliki.** Sekcja Files pokazuje zapisane rozmiary z tej wizyty oraz ich bieżącą sumę.
+  Rozmiary są skompresowane tylko wtedy, gdy serwer kompresuje pliki. Dane pochodzą
+  z Resource Timing, czytanego przez `PerformanceObserver`. Niektóre przeglądarki
+  pomijają rozmiary, więc suma może być niepełna.
 - **Inspect the CSS.** Okienko (popover), które pokazuje rozmiar, padding, kontrast tekstu
   i pasujące reguły CSS elementu pod kursorem albo z fokusem, razem z łańcuchem `@layer`,
   `@media`, `@supports` i `@container` każdej reguły. Przerywana ramka idzie za elementem dzięki
@@ -55,6 +56,8 @@ jest kompletna.
 | `shape()` | Brak kapiącego soku, prosta krawędź |
 | `light-dark()` albo koloru względnego | Jasny motyw |
 | `text-box` | Nagłówki mają wysokość linii 0,86 |
+| Składni przestrzeni kolorów gradientu | Zwykłe gradienty stożkowe nadal rysują plaster |
+| `text-wrap: pretty` | Akapity mają zwykłe łamanie wierszy |
 | Pozycjonowania względem kotwicy | Brak ramki; inspektor nadal podaje element i jego wymiary |
 | Popover | Brak przycisku **Inspect the CSS** |
 | JavaScriptu | Cały tekst, zdjęcia i linki; plaster nadal się obraca i staje po spacji albo kliknięciu; brak rozmiarów i inspektora |
@@ -71,9 +74,10 @@ python3 -m http.server 8000
 ```
 
 Potem otwórz http://localhost:8000/. Plik `index.html` otwarty prosto z dysku też działa,
-z dwiema lukami: przeglądarka traktuje plik lokalny jak inne pochodzenie i blokuje `cssRules`,
-więc **Inspect the CSS** pokazuje pomiary, ale nie reguły, a rozmiary plików wynoszą 0, więc
-sekcja Files ich nie pokazuje.
+z ograniczeniami: zabezpieczenia przeglądarki mogą blokować fonty lub reguły CSS.
+**Inspect the CSS** nadal pokazuje pomiary, a sekcja Files nie pokazuje rozmiarów.
+Pełna strona działa po udostępnieniu folderu przez HTTP. Gdy font jest zablokowany lub
+dociera za późno, przeglądarka używa fontu systemowego. Nagłówki mogą się zawijać.
 
 ## Sprawdzenie palety
 
