@@ -1,280 +1,917 @@
-@font-face{font-family:Bricolage Grotesque;src:url(fonts/bricolage-grotesque.woff2)format("woff2");font-weight:800;font-stretch:75% 100%;font-display:swap;unicode-range:U+20-7E,U+A0,U+A9,U+B0,U+B7,U+D7,U+2018-201D,U+2026}
-@font-face{font-family:Hanken Grotesk;src:url(fonts/hanken-grotesk.woff2)format("woff2");font-weight:400;font-display:swap;unicode-range:U+20-7E,U+A0,U+A9,U+B0,U+B7,U+D7,U+2018-201D,U+2026}
-@font-face{font-family:Martian Mono;src:url(fonts/martian-mono.woff2)format("woff2");font-weight:400;font-display:swap;unicode-range:U+20-7E,U+A0,U+A9,U+B0,U+B7,U+D7,U+2018-201D,U+2026}
-@font-face{font-family:Bricolage fallback;src:local(Arial Black),local(Arial-Black);font-weight:800;size-adjust:55%}
-:root{--mango:#ffa732;--lemon:#ffd166;--cream:#ffe9cf;--straw:#ef4040;--magenta:#b0107f;--midnight:#001a66;--plum:#0b0510;--cocoa:#1a0c05;--kiwi:#5ce1a0;--mango-ground:var(--mango);--lemon-ground:var(--lemon);--cream-ground:var(--cream);--straw-ground:var(--straw);--kiwi-ground:var(--kiwi);--ink:var(--cocoa);--on-ink:var(--cream);--display:"Bricolage Grotesque","Bricolage fallback","Arial Black",sans-serif;--text:"Hanken Grotesk",system-ui,sans-serif;--micro:"Martian Mono",ui-monospace,monospace;--shadow-x:.71px;--shadow-y:.71px;--ease:cubic-bezier(.16,1,.3,1);--wrap:min(100% - 8vw,1240px);--bar:88px}
-*,:before,:after{box-sizing:border-box}
-[hidden]{display:none!important}
-html{scroll-behavior:smooth;background:var(--plum);overflow-x:clip;scroll-padding-top:calc(var(--bar-h,var(--bar)) + 6px)}
-body{font-family:var(--text);color:var(--ink);background:var(--plum);margin:0;font-size:1rem;line-height:1.6;overflow-x:clip}
-img{max-width:100%}
-main{overflow-x:clip}
-.hero,.fruits,.files,.cta{isolation:isolate;position:relative}
-.hero:after,.fruits:after,.files:after,.cta:after{content:"";z-index:-1;mix-blend-mode:multiply;opacity:.16;pointer-events:none;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");position:absolute;inset:0}
-h1,h2,h3{font-family:var(--display);margin:0;font-weight:800}
-p{margin:0}
-ul{margin:0;padding:0;list-style:none}
-.wrap{width:var(--wrap);margin-inline:auto}
-:is(a,button,input):focus-visible{outline:3px solid var(--ink);outline-offset:4px}
-.cta a:focus-visible,footer a:focus-visible,.ticker button:focus-visible,.probe button:focus-visible{outline-color:var(--cream)}
-.skip-link{z-index:20;color:var(--cream);background:var(--cocoa);padding:14px 20px;text-decoration:none;position:absolute;top:0;left:-9999px}
-.skip-link:focus{left:0}
-.bar{z-index:10;background:var(--mango-ground);border-bottom:6px solid var(--ink);position:sticky;top:0}
-.bar-inner{width:var(--wrap);min-height:var(--bar);flex-wrap:wrap;align-items:center;gap:0 28px;margin-inline:auto;display:flex}
-.wordmark{font-family:var(--display);letter-spacing:-.02em;color:var(--ink);align-items:center;gap:10px;margin-right:auto;padding:11px 0;font-size:1.5rem;font-weight:800;text-decoration:none;display:inline-flex}
-.mark{flex:none;width:28px;height:28px}
-.bar-links{gap:24px;display:flex}
-.bar-links a{color:var(--ink);padding:12px 0;text-decoration:none;display:inline-block}
-@media (hover:hover){
- .bar-links a:hover{text-underline-offset:4px;text-decoration:underline 2px}
+/* The width axis (wdth 75 to 100) stays in the file, so font-stretch drives it. */
+@font-face {
+  font-family: 'Bricolage Grotesque';
+  src: url('fonts/bricolage-grotesque.woff2') format('woff2');
+  font-weight: 800;
+  font-stretch: 75% 100%;
+  font-display: swap;
+  unicode-range: U+20-7E, U+A0, U+A9, U+B0, U+B7, U+D7, U+2018-201D, U+2026;
 }
-.pill-ink{white-space:nowrap;min-height:44px;color:var(--on-ink);background:var(--ink);border-radius:999px;justify-content:center;align-items:center;padding:0 22px;text-decoration:none;transition:background .2s,color .2s;display:inline-flex}
-@media (hover:hover){
- .pill-ink:hover{background:var(--straw);color:var(--cocoa)}
+
+/* optional: a text face that arrives late is skipped, so it never re-wraps the text. */
+@font-face {
+  font-family: 'Hanken Grotesk';
+  src: url('fonts/hanken-grotesk.woff2') format('woff2');
+  font-weight: 400;
+  font-display: optional;
+  unicode-range: U+20-7E, U+A0, U+A9, U+B0, U+B7, U+D7, U+2018-201D, U+2026;
 }
-.pill-ink.big{white-space:normal;text-align:center;max-width:100%;min-height:52px;padding:8px 32px;font-size:1.125rem}
-.sticker{aspect-ratio:1;pointer-events:none;height:auto;rotate:var(--tilt,0deg);filter:drop-shadow(calc(var(--shadow-x) * 12) calc(var(--shadow-y) * 12) 0 #1a0c0547);position:absolute}
-.cut{aspect-ratio:auto;display:block}
-.cut img{width:100%;height:auto;display:block}
-.cut-pineapple{--tilt:9deg;--drift:-70px;--spin:-12deg;width:19%;top:-16%;right:4%}
-.cut-kiwi{--tilt:-10deg;--drift:-120px;--spin:18deg;width:46%;bottom:-6%;left:-16%}
-.cut-pint{--tilt:8deg;--drift:-40px;--spin:-10deg;width:36%;bottom:-4%;right:2%}
-.cut-strawberry{--tilt:-14deg;--drift:-90px;--spin:22deg;width:calc(var(--title) * 1.05);margin:0 0 calc(var(--title) * .85) calc(var(--title) * .95);place-self:end start;position:relative}
-.hero{background:radial-gradient(circle clamp(220px,42vw,540px) at 24.5% 22%,oklch(97% .09 95/.7),transparent 72%),var(--mango-ground);padding:clamp(40px,5vw,64px) 0 clamp(56px,10vw,120px)}
-.hero-grid{grid-template-columns:repeat(12,1fr);align-items:center;row-gap:48px;display:grid}
-.hero-copy{--title:clamp(4rem,min(26vw,21vh),11rem);grid-column:1/8;display:grid}
-.hero-title,.cut-strawberry{grid-area:1/1}
-.hero-title{font-size:var(--title);letter-spacing:0;text-transform:uppercase;font-variation-settings:"wdth" 75;text-wrap:balance;color:var(--ink);line-height:.86}
-.hero-title .line,.files-title .line{display:block}
-.lead{text-wrap:pretty;max-width:34rem;margin-top:28px;font-size:clamp(1.125rem,1.6vw,1.375rem);line-height:1.45}
-.hero-actions{flex-wrap:wrap;align-items:center;gap:16px 28px;margin-top:36px;display:flex}
-.ghost-link{text-underline-offset:4px;min-height:44px;color:var(--ink);align-items:center;font-size:1.125rem;text-decoration:underline 2px;display:inline-flex}
-@media (hover:hover){
- .ghost-link:hover{text-decoration-thickness:4px}
+
+/* Arial Black at 55% matches the display face's width, so the swap barely moves a line. */
+@font-face {
+  font-family: 'Bricolage fallback';
+  src: local('Arial Black'), local('Arial-Black');
+  font-weight: 800;
+  size-adjust: 55%;
 }
-.hero-disc{--dial:clamp(260px,34vw,520px);grid-column:8/-1;justify-self:end;min-width:min(26rem,100%)}
-.dial{width:var(--dial);margin-right:-4vw;position:relative}
-.citrus{aspect-ratio:1;border:12px solid var(--straw);background:var(--cream);width:100%;box-shadow:calc(var(--shadow-x) * 10) calc(var(--shadow-y) * 14) 0 -4px #1a0c0538;border-radius:50%;display:block;position:relative}
-.citrus:before,.citrus:after{content:"";border-radius:50%;position:absolute;inset:0}
-.citrus:before{background:radial-gradient(circle closest-side,var(--cream) 0 12%,transparent 12%),radial-gradient(circle closest-side,transparent 0 88%,var(--cream) 88% 100%),repeating-conic-gradient(from -15deg,var(--cream) 0 .5deg,transparent .8deg 29.2deg,var(--cream) 29.5deg 30deg),repeating-conic-gradient(from -15deg,var(--mango) 0 30deg,var(--lemon) 0 60deg)}
-.citrus:after{background:radial-gradient(circle at 30% 30%,oklch(100% 0 0/.32),#0000 42%)}
-.ticker{z-index:2;background:var(--cocoa);align-items:center;gap:20px;height:68px;margin:-18px -3vw;padding-left:3vw;display:flex;position:relative;overflow:hidden;rotate:-1.5deg;box-shadow:0 10px 0 -2px #1a0c052e}
-.ticker-marquee{flex:1;min-width:0;overflow:hidden;mask-image:linear-gradient(90deg,#0000,#000 32px calc(100% - 32px),#0000)}
-.ticker-track{width:max-content;display:flex}
-.ticker-run{white-space:nowrap;min-width:34vw;font-family:var(--display);font-variation-settings:"wdth" 85;color:var(--cream);flex:none;padding-right:2ch;font-size:1.375rem;font-weight:800}
-.tick-icon{vertical-align:-.32em;filter:drop-shadow(2px 2px #00000059);width:1.35em;height:1.35em;margin-inline:.1em}
-.ticker-ctls{flex:none;gap:8px;padding-right:calc(3vw + max(4vw,16px));display:flex}
-.ticker-ctl,.motion-ctl{min-height:36px;font:inherit;color:var(--cream);border:2px solid var(--cream);cursor:pointer;background:0 0;border-radius:999px;padding:0 16px;transition:background .2s,color .2s}
-.ticker-ctl[aria-pressed=true]{color:var(--cocoa);background:var(--cream)}
-.motion-ctl{margin-top:calc(var(--dial) * .06 + 12px);margin-left:calc(var(--dial) / 2);white-space:nowrap;color:var(--ink);border-color:var(--ink);translate:-50%}
-@media (hover:hover){
- .ticker-ctl:hover{color:var(--cocoa);background:var(--cream)}
- .motion-ctl:hover{color:var(--on-ink);background:var(--ink)}
+
+/* Registered, so the mix can animate; an unregistered property would jump at 50%. */
+@property --flood {
+  syntax: '<percentage>';
+  inherits: false;
+  initial-value: 100%;
 }
-.fruits{background:var(--straw-ground);padding:clamp(56px,9vw,112px) 0}
-.fruits-title{letter-spacing:-.02em;font-variation-settings:"wdth" 85;text-wrap:balance;color:var(--ink);font-size:clamp(2.25rem,6vw,4.5rem);line-height:.95}
-.field{grid-template-columns:1.4fr 1fr 1fr;gap:clamp(12px,1.4vw,18px);margin-top:clamp(36px,5vw,64px);display:grid}
-.blk{view-timeline:--tile;box-shadow:calc(var(--shadow-x) * 10) calc(var(--shadow-y) * 12) 0 #1a0c0538;border-radius:clamp(20px,2.4vw,32px);display:grid;position:relative;container-type:inline-size}
-.tile-sticker{--tilt:9deg;z-index:1;width:clamp(84px,9vw,128px);top:clamp(-36px,-2.8vw,-20px);left:clamp(-16px,-1vw,-8px)}
-.blk-in{border-radius:inherit;grid-template-columns:45% 1fr;min-height:12rem;display:grid;overflow:clip}
-.blk picture{position:relative;overflow:clip}
-.blk-in img{object-fit:cover;width:100%;height:100%;position:absolute;inset:0}
-.blk-text{align-content:center;gap:10px;padding:clamp(16px,6cqi,28px);display:grid}
-.blk h3{overflow-wrap:anywhere;hyphens:auto;letter-spacing:-.02em;font-variation-settings:"wdth" 85;font-size:clamp(1.25rem,7.4cqi,2rem);line-height:1}
-.blk p{text-wrap:pretty;font-size:1rem}
-@container (width<36rem){
- .blk-in{grid-template-rows:auto 1fr;grid-template-columns:none}
- .blk:not(.blk-tall) picture{aspect-ratio:4/3}
- .blk-tall .blk-in{grid-template-rows:1fr auto}
- .blk-tall picture{min-height:60cqi}
- .blk-tall .blk-text{padding:clamp(20px,6cqi,32px)}
- .blk-tall h3{font-size:clamp(2rem,10cqi,4rem)}
+
+/* Registered as an angle, so the mask can sweep; it inherits so the highlight follows the cut. */
+@property --cut {
+  syntax: '<angle>';
+  inherits: true;
+  initial-value: 360deg;
 }
-@container (width>=36rem){
- .blk-in{grid-template-columns:1fr 50%}
- .blk-in picture{order:1;min-height:37.5cqi}
- .blk-text{padding:32px}
- .blk h3{font-size:clamp(2rem,6cqi,3.5rem)}
-}
-.blk-tall{background:var(--magenta);color:var(--cream);grid-area:1/1/span 2}
-.blk-kiwi{background:var(--kiwi-ground);grid-column:2}
-.blk-kiwi img{object-position:50% 55%}
-.blk-pineapple{background:var(--lemon-ground);grid-column:3}
-.blk-pineapple img{object-position:50% 72%;transform-origin:60% 90%;scale:1.55}
-.blk-tall .blk-in img{transform-origin:50% 100%;scale:1.35}
-.blk-wide{background:var(--mango-ground);grid-column:2/span 2}
-.files{view-timeline:--files;background:var(--cream-ground);padding:calc(clamp(56px,8vw,96px) + 64px) 0 clamp(64px,9vw,112px)}
-.files:before{content:"";background:var(--straw-ground);transform-origin:top;pointer-events:none;height:120px;position:absolute;inset:-1px 0 auto;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 120'%3E%3Cpath d='M0 0H1440V20Q1350 32 1260 20T1080 20T900 20T720 20T540 20T360 20T180 20T0 20Z'/%3E%3Cpath d='M41 11.8V15.8C53 15.8 53 21.8 53 29.8L55 39.3A8.5 8.5 0 1 0 65 39.3L67 28.1C67 20.1 67 14.1 79 14.1V10.1Z'/%3E%3Cpath d='M150 12.7V16.7C162 16.7 162 22.7 162 30.7L165 85.5A11.9 11.9 0 1 0 179 85.5L182 35.7C182 27.7 182 21.7 194 21.7V17.7Z'/%3E%3Cpath d='M266 22V26C278 26 278 32 278 40L280 59.4A10.2 10.2 0 1 0 292 59.4L294 39C294 31 294 25 306 25V21Z'/%3E%3Cpath d='M389 12.8V16.8C401 16.8 401 22.8 401 30.8L403.5 67.2A11 11 0 1 0 416.5 67.2L419 28.3C419 20.3 419 14.3 431 14.3V10.3Z'/%3E%3Cpath d='M503 12.1V16.1C515 16.1 515 22.1 515 30.1L517 46.5A8.5 8.5 0 1 0 527 46.5L529 34.1C529 26.1 529 20.1 541 20.1V16.1Z'/%3E%3Cpath d='M618 21.9V25.9C630 25.9 630 31.9 630 39.9L633 66.4A11.9 11.9 0 1 0 647 66.4L650 39.2C650 31.2 650 25.2 662 25.2V21.2Z'/%3E%3Cpath d='M749 12.8V16.8C761 16.8 761 22.8 761 30.8L763.5 79.2A11 11 0 1 0 776.5 79.2L779 28.3C779 20.3 779 14.3 791 14.3V10.3Z'/%3E%3Cpath d='M865 12.2V16.2C877 16.2 877 22.2 877 30.2L879 42.7A8.5 8.5 0 1 0 889 42.7L891 34.4C891 26.4 891 20.4 903 20.4V16.4Z'/%3E%3Cpath d='M980 21.9V25.9C992 25.9 992 31.9 992 39.9L994 65.5A10.2 10.2 0 1 0 1006 65.5L1008 39.3C1008 31.3 1008 25.3 1020 25.3V21.3Z'/%3E%3Cpath d='M1108 12.8V16.8C1120 16.8 1120 22.8 1120 30.8L1123 83.7A11.9 11.9 0 1 0 1137 83.7L1140 28.2C1140 20.2 1140 14.2 1152 14.2V10.2Z'/%3E%3Cpath d='M1243 13.9V17.9C1255 17.9 1255 23.9 1255 31.9L1257 50.9A8.5 8.5 0 1 0 1267 50.9L1269 36.5C1269 28.5 1269 22.5 1281 22.5V18.5Z'/%3E%3Cpath d='M1349 22V26C1361 26 1361 32 1361 40L1363.5 73.7A11 11 0 1 0 1376.5 73.7L1379 38.8C1379 30.8 1379 24.8 1391 24.8V20.8Z'/%3E%3C/svg%3E") 0 0/1440px 120px repeat-x}
-.files-grid{gap:clamp(28px,4vw,48px);display:grid}
-.files-title{letter-spacing:-.025em;font-variation-settings:"wdth" 85;text-wrap:balance;font-size:clamp(2rem,5vw,3.75rem);line-height:.98}
-.chips li{font-family:var(--micro);flex-wrap:wrap;align-items:center;gap:8px 28px;font-size:.8125rem;display:flex}
-.chips li+li{margin-top:12px}
-.chips a{border:2px solid var(--ink);min-width:calc(10ch + 52px);color:var(--ink);border-radius:999px;padding:16px 24px;text-decoration:none;transition:background .2s,color .2s;display:block}
-@media (hover:hover){
- .chips a:hover{color:var(--on-ink);background:var(--ink)}
-}
-.chips span{min-width:8ch}
-.chips.measured li:after{content:"";background:var(--fill);height:20px;clip-path:inset(0 calc((1 - var(--share,0)) * 100%) 0 0 round 999px);border-radius:999px;flex:14rem}
-.chips li:first-child{--fill:var(--straw)}
-.chips li:nth-child(2){--fill:var(--magenta)}
-.chips li:nth-child(3){--fill:var(--kiwi)}
-.files-note{max-width:34rem}
-.cta{--scallop:clamp(14px,1.6vw,22px);view-timeline:--cta;background:var(--midnight);padding:clamp(64px,10vw,128px) 0}
-.cta:before{content:"";height:var(--scallop);background:var(--midnight);mask:radial-gradient(var(--scallop) at 50% 100%,#000 98%,#0000) 50% 100% / calc(2 * var(--scallop)) var(--scallop) repeat-x;position:absolute;inset:auto 0 calc(100% - 1px)}
-.badge{z-index:2;top:calc(var(--badge) * -.5);--badge:clamp(128px,14vw,190px);width:var(--badge);aspect-ratio:1;filter:drop-shadow(calc(var(--shadow-x) * 5) calc(var(--shadow-y) * 5) 0 #00000059);position:absolute;right:6vw}
-.badge circle{fill:var(--lemon)}
-.badge text{font-family:var(--display);font-variation-settings:"wdth" 85;text-transform:uppercase;fill:var(--cocoa);font-size:18px;font-weight:800}
-.cta-grid{grid-template-columns:1.3fr 1fr;align-items:center;gap:clamp(36px,5vw,72px);display:grid}
-.cta-title{letter-spacing:-.025em;font-variation-settings:"wdth" 85;text-wrap:balance;color:var(--cream);font-size:clamp(2.25rem,6vw,4rem);line-height:.95}
-.cta-side{justify-self:start}
-.press{min-height:64px;color:var(--cocoa);background:var(--mango);box-shadow:8px 8px 0 var(--cocoa);border-radius:999px;justify-content:center;align-items:center;padding:0 40px;font-size:1.25rem;text-decoration:none;transition:transform .18s,box-shadow .18s;display:inline-flex}
-@media (hover:hover){
- .press:hover{box-shadow:4px 4px 0 var(--cocoa);transform:translate(4px,4px)}
-}
-.press:active{box-shadow:0 0 0 var(--cocoa);transform:translate(8px,8px)}
-.note{color:var(--cream);margin-top:20px;line-height:1.6}
-footer{background:var(--plum);color:var(--cream);padding-top:clamp(56px,8vw,96px)}
-.foot-grid{flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:32px;display:flex}
-.foot-links{flex-wrap:wrap;column-gap:32px;display:flex}
-.foot-links a{color:var(--kiwi);padding:12px 0;text-decoration:none;transition:color .2s;display:inline-block}
-@media (hover:hover){
- .foot-links a:hover{color:var(--mango);text-underline-offset:4px;text-decoration:underline}
-}
-.foot-copy{color:var(--cream);padding-block:12px}
-.foot-mark{--mark:clamp(5rem,30vw,26rem);--head:clamp(28px,5vw,72px);view-timeline:--foot;width:var(--wrap);height:calc(var(--mark) * .62 + var(--head));padding-top:var(--head);margin:clamp(8px,2vw,24px) auto 0;position:relative;overflow:clip}
-.foot-mark .sticker{z-index:0}
-.fm-strawberry{--tilt:-18deg;width:12%;top:2%;left:27%}
-.fm-kiwi{--tilt:10deg;width:12%;top:2%;right:3%}
-.foot-word{z-index:1;font-family:var(--display);font-size:var(--mark);letter-spacing:-.01em;text-transform:uppercase;font-variation-settings:"wdth" 75;color:var(--mango);font-weight:800;line-height:.78;display:block;position:relative}
-.foot-word span{display:inline-block}
-.probe{border:2px solid var(--kiwi);background:var(--cocoa);width:min(92vw,30rem);max-height:min(60vh,32rem);color:var(--cream);font-family:var(--micro);border-radius:28px;margin:0;padding:20px;font-size:.75rem;line-height:1.6;position:fixed;inset:auto 24px 24px auto;overflow:auto}
-.probe:popover-open{display:block}
-.probe-target{color:var(--kiwi)}
-.probe-box{margin-top:12px}
-.probe-close{float:right;width:32px;height:32px;color:var(--cream);border:2px solid var(--cream);cursor:pointer;background:0 0;border-radius:999px;margin:-8px -8px 8px 12px;font-size:1.125rem;line-height:1;transition:background .2s,color .2s}
-@media (hover:hover){
- .probe-close:hover{color:var(--cocoa);background:var(--cream)}
-}
-.probe-label{color:var(--kiwi);margin-top:12px}
-.probe-rules{white-space:pre-wrap;overflow-wrap:anywhere;font:inherit;color:var(--cream);opacity:.82;margin:12px 0 0}
-.probe-halo{z-index:15;outline:2px dashed var(--kiwi);outline-offset:1px;box-shadow:0 0 0 3px var(--cocoa);pointer-events:none;position:fixed;inset:0 auto auto 0}
-@media (width<=1000px){
- .hero-grid{grid-template-columns:1fr}
- .hero-copy,.hero-disc{grid-column:1}
- .hero-disc{--dial:clamp(220px,56vw,420px);width:var(--dial);justify-self:center;min-width:0}
- .dial{margin-inline:auto}
- .cta-grid{grid-template-columns:1fr}
- .field{grid-template-columns:1fr 1fr}
- .blk-tall{grid-area:auto/1/auto/-1}
- .blk-kiwi{grid-column:1}
- .blk-pineapple{grid-column:2}
- .blk-wide{grid-column:1/-1}
-}
-@media (width<=640px){
- :root{--bar:72px}
- .hero{padding-top:28px}
- .hero-copy{--title:clamp(4rem,min(22vw,21vh),11rem)}
- .hero-grid{row-gap:28px}
- .hero-actions{column-gap:20px}
- .bar-inner,.bar-links{gap:12px}
- .wordmark{font-size:1.25rem}
- .mark{width:24px;height:24px}
- .pill-ink{padding:0 14px}
- .ticker{flex-wrap:wrap;row-gap:12px;height:auto;padding-block:18px 14px}
- .ticker-marquee{flex-basis:100%}
- .ticker-ctls{padding-inline:4vw}
- .field{grid-template-columns:1fr}
- .blk-kiwi,.blk-pineapple,.blk-wide,.blk-tall{grid-column:1}
- .probe{width:auto;max-height:40vh;inset:auto 8px 8px}
-}
-@media (width<=374px){
- .wordmark-text{clip-path:inset(50%);white-space:nowrap;width:1px;height:1px;position:absolute;overflow:hidden}
-}
-@media (pointer:coarse){
- .ticker-ctl,.motion-ctl{min-height:44px}
- .probe-close{width:44px;height:44px}
-}
-@media (forced-colors:active){
- .citrus{border-color:graytext}
- .chips.measured li:after{background-image:linear-gradient(canvastext 0 0)}
-}
-@media (prefers-reduced-motion:no-preference){
- @keyframes rise{
-  0%{clip-path:inset(0 0 100%);transform:translateY(24px)}
-  to{clip-path:inset(-25% -15%);transform:none}
- }
- @keyframes fade-up{
-  0%{opacity:0;transform:translateY(20px)}
-  to{opacity:1;transform:none}
- }
- @keyframes disc-in{
-  0%{opacity:0;transform:scale(.94)}
-  to{opacity:1;transform:none}
- }
- @keyframes slide{
-  to{transform:translate(-25%)}
- }
- .bar,.hero-title .line,.lead,.hero-actions{animation:rise .4s var(--ease) both}
- .bar{animation-name:fade-up}
- .hero-title .line:nth-child(2){animation-delay:60ms}
- .hero-title .line:nth-child(3){animation-delay:.12s}
- .lead{animation-delay:.16s}
- .hero-actions{animation-delay:.2s}
- .hero-disc{animation:disc-in .5s var(--ease) both}
- @keyframes spin{
-  to{rotate:1turn}
- }
- @keyframes float{
-  to{translate:0 -6px;rotate:2deg}
- }
- .is-ready .ticker-track{animation:26s linear infinite slide}
- .is-ready .citrus:before{animation:48s linear infinite spin}
- .is-ready .cut img{animation:float calc(7s + var(--i) * 2s) ease-in-out infinite alternate}
- .paused .ticker-track,.paused .citrus:before,.paused .cut img{animation-play-state:paused}
- @keyframes stick{
-  0%{opacity:0;scale:.3;rotate:calc(var(--tilt) - 40deg)}
- }
- .hero .sticker{animation:stick .7s var(--ease) both;animation-delay:calc(.38s + var(--i) * 90ms)}
- @supports (animation-timeline:view()){
-  @keyframes drift{
-   to{transform:translateY(var(--drift)) rotate(var(--spin))}
+
+@layer reset, tokens, base, sections, inspector, motion;
+
+@layer reset {
+  *,
+  ::before,
+  ::after {
+    box-sizing: border-box;
   }
-  .hero .sticker{animation:stick .7s var(--ease) both,drift linear both;animation-delay:calc(.38s + var(--i) * 90ms),0s;animation-timeline:auto,scroll(root);animation-range:normal,0 90vh}
-  @keyframes settle{
-   0%{transform:scale(1.12)}
+
+  body,
+  h1,
+  h2,
+  p,
+  ul,
+  pre {
+    margin: 0;
   }
-  .blk-in img{animation:linear both settle --tile;animation-range:entry cover 50%}
-  @keyframes slap{
-   0%{scale:1.4;rotate:calc(var(--tilt) + 16deg)}
+
+  ul {
+    padding: 0;
+    list-style: none;
   }
-  .tile-sticker{transform-origin:20% 20%;animation:slap var(--ease) both;animation-timeline:--tile;animation-range:entry 40px entry 260px}
-  @keyframes rise-letter{
-   0%{translate:0 75%}
+
+  /* Important in the first layer beats display in every later layer. */
+  [hidden] {
+    display: none !important;
   }
-  .foot-word span{animation:rise-letter var(--ease) both;animation-timeline:--foot;animation-range:entry calc(var(--i) * 5%) entry calc(55% + var(--i) * 5%)}
-  .foot-mark .sticker{animation:slap var(--ease) both;animation-timeline:--foot;animation-range:entry 40% entry 95%}
-  @keyframes drip{
-   0%{scale:1 .3}
+
+  .visually-hidden {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    overflow: hidden;
+    white-space: nowrap;
+    clip-path: inset(50%);
   }
-  .files:before{animation:drip var(--ease) both;animation-timeline:--files;animation-range:entry cover 30%}
-  @keyframes grow{
-   0%{clip-path:inset(0 100% 0 0 round 999px)}
-  }
-  .chips.measured li:after{animation:grow var(--ease) both;animation-timeline:--files;animation-range:entry 40% cover 45%}
-  @keyframes turn{
-   0%{rotate:-100deg}
-   to{rotate:80deg}
-  }
-  .badge{animation:linear both turn --cta}
- }
 }
-@media (prefers-reduced-motion:reduce){
- html{scroll-behavior:auto}
- *,:before,:after{transition-duration:.01ms!important}
- #motion-toggle{display:none}
+
+@layer tokens {
+  /* Four decimals keep each colour inside sRGB; check-palette.mjs reads these lines. */
+  :root {
+    --mango: oklch(79.7793% 0.1595 68.2298);
+    --straw: oklch(63.2685% 0.2116 25.6559);
+    --kiwi: oklch(81.9214% 0.1500 159.0051);
+    --lemon: oklch(88.0303% 0.1348 86.0616);
+    --bloom: oklch(80% 0.06 255);
+    --cream: oklch(94.5041% 0.0418 71.9115);
+    --cocoa: oklch(17.2682% 0.0287 49.8106);
+    --plum: oklch(13.2502% 0.0280 309.9580);
+    --dark-lightness: 0.28;
+    --dark-chroma: 0.35;
+    --fruit: var(--mango);
+    --previous: var(--fruit);
+    --ground: var(--cream);
+    --ink: var(--cocoa);
+    --name: var(--cocoa);
+    --display-font: 'Bricolage Grotesque', 'Bricolage fallback', 'Arial Black', sans-serif;
+    --text-font: 'Hanken Grotesk', system-ui, sans-serif;
+    --code-font: ui-monospace, monospace;
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+    --content: min(100% - 8vw, 76rem);
+    color-scheme: light;
+  }
+
+  /* 95% of the Display P3 chroma limit at each colour's lightness and hue. */
+  @media (color-gamut: p3) {
+    :root {
+      --mango: oklch(79.7793% 0.19 68.2298);
+      --straw: oklch(63.2685% 0.27 25.6559);
+      --kiwi: oklch(81.9214% 0.245 159.0051);
+      --lemon: oklch(88.0303% 0.158 86.0616);
+    }
+  }
+
+  /* The dark theme needs both: light-dark() picks, relative colour builds the dark ground. */
+  @supports (color: light-dark(red, red)) and (color: oklch(from red l c h)) {
+    :root {
+      color-scheme: light dark;
+    }
+  }
 }
-@media print{
- *,:before,:after{transition:none!important;animation:none!important}
- .bar{position:static}
- .probe:popover-open,.probe-halo{display:none}
+
+@layer base {
+  body {
+    font-family: var(--text-font);
+    font-size: 1.125rem;
+    line-height: 1.55;
+    color: var(--ink);
+    background-color: var(--plum);
+  }
+
+  h1,
+  h2 {
+    font-family: var(--display-font);
+    font-weight: 800;
+    font-stretch: 75%;
+    line-height: 0.86;
+    text-transform: uppercase;
+    text-wrap: balance;
+    color: var(--name);
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  a {
+    color: inherit;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.2em;
+  }
+
+  a:hover {
+    text-decoration-thickness: 4px;
+  }
+
+  button {
+    min-block-size: 2.25rem;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--ink);
+    outline-offset: 4px;
+  }
+
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    min-block-size: 3.25rem;
+    padding-inline: 1.75rem;
+    border-radius: 999px;
+    text-decoration: none;
+    color: var(--ground);
+    background-color: var(--ink);
+  }
+
+  .skip-link {
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline-start: 0;
+    z-index: 2;
+    padding: 0.75rem 1.25rem;
+    color: var(--cream);
+    background-color: var(--cocoa);
+  }
+
+  .skip-link:not(:focus) {
+    clip-path: inset(50%);
+  }
+
+  /* A minimum size has no effect on an inline box, so links and buttons become inline-flex. */
+  @media (pointer: coarse) {
+    a,
+    button {
+      display: inline-flex;
+      align-items: center;
+      min-block-size: 2.75rem;
+      min-inline-size: 2.75rem;
+    }
+  }
+}
+
+@layer sections {
+  .site-header,
+  .hero {
+    --fruit: var(--mango);
+    --previous: var(--mango);
+  }
+
+  .band-strawberries {
+    --fruit: var(--straw);
+    --previous: var(--straw);
+    --letters: 12;
+  }
+
+  .band-kiwi {
+    --fruit: var(--kiwi);
+    --previous: var(--straw);
+    --letters: 4;
+  }
+
+  .band-pineapple {
+    --fruit: var(--lemon);
+    --previous: var(--kiwi);
+    --letters: 9;
+  }
+
+  .band-blueberries {
+    --fruit: var(--bloom);
+    --previous: var(--lemon);
+    --letters: 11;
+  }
+
+  .files {
+    --fruit: var(--cream);
+    --previous: var(--bloom);
+  }
+
+  /* One ground for every coloured part; --flood 100% holds the colour where nothing animates it. */
+  .site-header,
+  .hero,
+  .band,
+  .files {
+    --flood: 100%;
+    --tint: color-mix(in oklch, var(--previous), var(--fruit) var(--flood));
+    --ground: var(--tint);
+    --ink: var(--cocoa);
+    --name: var(--cocoa);
+    color: var(--ink);
+    background-color: var(--ground);
+
+    /* A fixed dark lightness keeps cream text above 11.9:1 on every fruit's hue. */
+    @supports (color: light-dark(red, red)) and (color: oklch(from red l c h)) {
+      --ground: light-dark(
+        var(--tint),
+        oklch(from var(--tint) var(--dark-lightness) calc(c * var(--dark-chroma)) h)
+      );
+      --ink: light-dark(var(--cocoa), var(--cream));
+      --name: light-dark(var(--cocoa), var(--tint));
+    }
+  }
+
+  .header-inner {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem 1.5rem;
+    inline-size: var(--content);
+    margin-inline: auto;
+    padding-block: 1rem;
+    font-size: 1rem;
+  }
+
+  .wordmark {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-inline-end: auto;
+    font-family: var(--display-font);
+    font-size: 1.5rem;
+    font-weight: 800;
+    text-decoration: none;
+    color: var(--name);
+  }
+
+  .mark {
+    flex: none;
+    inline-size: 1.75rem;
+    block-size: 1.75rem;
+  }
+
+  /* Below 25rem the mark alone fits one line; the name stays for screen readers. */
+  @media (width < 25rem) {
+    .wordmark-text {
+      position: absolute;
+      inline-size: 1px;
+      block-size: 1px;
+      overflow: hidden;
+      white-space: nowrap;
+      clip-path: inset(50%);
+    }
+  }
+
+  .header-links {
+    display: flex;
+    gap: 1.25rem;
+  }
+
+  .hero {
+    position: relative;
+    display: grid;
+    align-content: center;
+    min-block-size: 100vh;
+    padding-block: 2rem 5rem;
+  }
+
+  .hero-inner {
+    display: grid;
+    align-items: center;
+    gap: 3rem;
+    inline-size: var(--content);
+    margin-inline: auto;
+  }
+
+  .hero-copy {
+    container-type: inline-size;
+  }
+
+  /* THIS SITE is 4.07em wide at font-stretch 100%, so the line fits before the squeeze. */
+  .hero-title {
+    font-size: min(100cqi / 4.3, 10rem);
+  }
+
+  /* nowrap, start-aligned lines: the squeeze never re-wraps or moves a line start. */
+  .hero-title span {
+    display: block;
+    white-space: nowrap;
+  }
+
+  .lead {
+    max-inline-size: 34rem;
+    margin-block-start: 2rem;
+    font-size: clamp(1.125rem, 1.6vw, 1.375rem);
+    line-height: 1.45;
+  }
+
+  .hero-links {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem 2rem;
+    margin-block-start: 2rem;
+  }
+
+  .hero-slice {
+    display: grid;
+    justify-items: center;
+    gap: 1.25rem;
+  }
+
+  .slice {
+    position: relative;
+    display: grid;
+    inline-size: min(84vw, 26rem);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+
+  /* Hub, pith and rind, the segment lines, then the mango and lemon segments. */
+  .slice-segments {
+    grid-area: 1 / 1;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle closest-side, var(--cream) 0 12%, transparent 12%),
+      radial-gradient(
+        circle closest-side,
+        transparent 0 80%,
+        var(--cream) 80% 88%,
+        var(--straw) 88%
+      ),
+      repeating-conic-gradient(
+        from -15deg,
+        var(--cream) 0 0.5deg,
+        transparent 0.8deg 29.2deg,
+        var(--cream) 29.5deg 30deg
+      ),
+      repeating-conic-gradient(from -15deg, var(--mango) 0 30deg, var(--lemon) 0 60deg);
+  }
+
+  /* The highlight depicts the light, so it stays put while the segments turn. */
+  .slice::after {
+    grid-area: 1 / 1;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, oklch(100% 0 0 / 0.32), transparent 42%);
+    pointer-events: none;
+    content: '';
+  }
+
+  .slice:has(.slice-switch:focus-visible) {
+    outline: 3px solid var(--ink);
+    outline-offset: 6px;
+  }
+
+  .slice-hint {
+    font-size: 1rem;
+    text-align: center;
+  }
+
+  /* Nothing turns under reduced motion, so there is nothing to pause. */
+  @media (prefers-reduced-motion: reduce) {
+    .slice-switch,
+    .slice-name,
+    .slice-hint {
+      display: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .slice {
+      border: 2px solid CanvasText;
+    }
+  }
+
+  @media (width >= 48rem) {
+    .hero-inner {
+      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    }
+
+    .slice {
+      inline-size: min(100%, 34rem);
+    }
+  }
+
+  .drip {
+    position: absolute;
+    inset-block-start: 100%;
+    inset-inline: 0;
+    z-index: 1;
+    display: none;
+    block-size: 7rem;
+    background-color: var(--mango);
+    transform-origin: top;
+    pointer-events: none;
+  }
+
+  /* Percent units, so the five drops stretch with the page width. */
+  @supports (clip-path: shape(from 0 0, move to 0 0)) {
+    .drip {
+      display: block;
+      clip-path: shape(
+        from 0% 0%,
+        hline to 100%,
+        vline to 16%,
+        hline to 91%,
+        curve to 89.2% 28% with 89.4% 16%,
+        line to 89.4% 58%,
+        curve to 88% 72% with 89.6% 72%,
+        curve to 86.6% 58% with 86.4% 72%,
+        line to 86.8% 28%,
+        curve to 85% 16% with 86.6% 16%,
+        hline to 73%,
+        curve to 71.2% 28% with 71.4% 16%,
+        line to 71.4% 34%,
+        curve to 70% 48% with 71.6% 48%,
+        curve to 68.6% 34% with 68.4% 48%,
+        line to 68.8% 28%,
+        curve to 67% 16% with 68.6% 16%,
+        hline to 55%,
+        curve to 53.2% 28% with 53.4% 16%,
+        line to 53.4% 86%,
+        curve to 52% 100% with 53.6% 100%,
+        curve to 50.6% 86% with 50.4% 100%,
+        line to 50.8% 28%,
+        curve to 49% 16% with 50.6% 16%,
+        hline to 34%,
+        curve to 32.2% 28% with 32.4% 16%,
+        line to 32.4% 48%,
+        curve to 31% 62% with 32.6% 62%,
+        curve to 29.6% 48% with 29.4% 62%,
+        line to 29.8% 28%,
+        curve to 28% 16% with 29.6% 16%,
+        hline to 15%,
+        curve to 13.2% 28% with 13.4% 16%,
+        line to 13.4% 72%,
+        curve to 12% 86% with 13.6% 86%,
+        curve to 10.6% 72% with 10.4% 86%,
+        line to 10.8% 28%,
+        curve to 9% 16% with 10.6% 16%,
+        hline to 0%,
+        close
+      );
+    }
+  }
+
+  .band {
+    padding-block: clamp(4rem, 10vw, 8rem);
+  }
+
+  /* The drip hangs 7rem into the first band, so its text starts below the longest drop. */
+  .band-strawberries {
+    padding-block-start: 10rem;
+  }
+
+  .band-inner {
+    display: grid;
+    align-items: center;
+    gap: 2rem;
+    inline-size: var(--content);
+    margin-inline: auto;
+  }
+
+  .band-text {
+    container-type: inline-size;
+  }
+
+  /* 2.2 is 1 / 0.45: the widest name averages 0.41em a letter, with room for the fallback face. */
+  .band-name {
+    font-size: calc(100cqi / var(--letters) * 2.2);
+    white-space: nowrap;
+
+    /* KIWI would stand taller than its photo on a wide column, so wide columns cap it. */
+    @container (width >= 30rem) {
+      & {
+        font-size: min(100cqi / var(--letters) * 2.2, 16rem);
+      }
+    }
+  }
+
+  .band-text p {
+    max-inline-size: 30rem;
+    margin-block-start: 1.5rem;
+    font-size: 1.25rem;
+  }
+
+  .band-photo {
+    justify-self: end;
+  }
+
+  .band-photo img {
+    display: block;
+    inline-size: min(80vw, 22rem);
+    block-size: auto;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  /* The same widths as the sizes attribute, so the browser picks the file it shows. */
+  @media (width >= 48rem) {
+    .band-inner {
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 4rem;
+    }
+
+    .band-strawberries .band-inner,
+    .band-pineapple .band-inner {
+      grid-template-columns: auto minmax(0, 1fr);
+    }
+
+    .band-strawberries .band-photo,
+    .band-pineapple .band-photo {
+      order: -1;
+    }
+
+    .band-photo img {
+      inline-size: min(36vw, 25rem);
+    }
+  }
+
+  .files {
+    padding-block: clamp(4rem, 10vw, 8rem);
+  }
+
+  .files-inner {
+    display: grid;
+    justify-items: start;
+    gap: 1.5rem;
+    inline-size: var(--content);
+    margin-inline: auto;
+  }
+
+  .files-title {
+    font-size: clamp(2.5rem, 7vw, 5.5rem);
+  }
+
+  .files-title span {
+    display: block;
+  }
+
+  .file-list {
+    display: grid;
+    gap: 0.75rem;
+    inline-size: min(100%, 40rem);
+    font-family: var(--code-font);
+    font-size: 1rem;
+  }
+
+  .file-list li {
+    display: grid;
+    grid-template-columns: 7.5rem 4.5rem minmax(0, 1fr);
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .file-size {
+    text-align: end;
+  }
+
+  .file-bar {
+    --share: 0;
+    inline-size: calc(var(--share) * 100%);
+    block-size: 0.75rem;
+    border-radius: 999px;
+    background-color: var(--ink);
+    transform-origin: left;
+  }
+
+  @media (forced-colors: active) {
+    .file-bar {
+      background-color: CanvasText;
+      forced-color-adjust: none;
+    }
+  }
+
+  .inspect-button {
+    padding-inline: 1.25rem;
+    border: 2px solid currentColor;
+    border-radius: 999px;
+    background-color: transparent;
+  }
+
+  /* @supports keeps the text box flush only where the trim exists; elsewhere 0.86 line height. */
+  @supports (text-box: trim-both cap alphabetic) {
+    .hero-title,
+    .band-name,
+    .files-title {
+      text-box: trim-both cap alphabetic;
+    }
+  }
+
+  .site-footer {
+    --ink: var(--cream);
+    padding-block-start: clamp(3rem, 8vw, 6rem);
+    color: var(--cream);
+    background-color: var(--plum);
+    color-scheme: dark;
+  }
+
+  .footer-inner {
+    display: grid;
+    gap: 1rem;
+    inline-size: var(--content);
+    margin-inline: auto;
+    container-type: inline-size;
+  }
+
+  .footer-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 2rem;
+  }
+
+  .footer-links a {
+    color: var(--kiwi);
+  }
+
+  .footer-mark {
+    position: relative;
+    margin-block-start: clamp(2rem, 6vw, 5rem);
+  }
+
+  /* FRUITEND is 2.97em wide at font-stretch 75%. The clip hides letters that start below. */
+  .footer-word {
+    overflow: clip;
+    font-family: var(--display-font);
+    font-size: calc(100cqi / 3.1);
+    font-weight: 800;
+    font-stretch: 75%;
+    line-height: 0.78;
+    text-transform: uppercase;
+    color: var(--mango);
+  }
+
+  .footer-word span {
+    display: inline-block;
+  }
+
+  .sticker {
+    position: absolute;
+    inline-size: clamp(3rem, 11%, 8rem);
+    block-size: auto;
+  }
+
+  .sticker-strawberry {
+    inset-block-start: -12%;
+    inset-inline-start: 8%;
+    rotate: -18deg;
+  }
+
+  .sticker-kiwi {
+    inset-block-start: -18%;
+    inset-inline-start: 38%;
+    rotate: 10deg;
+  }
+
+  .sticker-pineapple {
+    inset-block-start: -10%;
+    inset-inline-start: 62%;
+    rotate: -8deg;
+  }
+
+  .sticker-blueberries {
+    inset-block-start: -16%;
+    inset-inline-end: 2%;
+    rotate: 14deg;
+  }
+}
+
+@layer inspector {
+  .inspector {
+    --ink: var(--cream);
+    position: fixed;
+    inset: auto 1rem 1rem auto;
+    inline-size: min(100vw - 2rem, 30rem);
+    max-block-size: min(60vh, 32rem);
+    margin: 0;
+    padding: 1.25rem;
+    overflow: auto;
+    border: 0;
+    border-radius: 1.5rem;
+    font-family: var(--code-font);
+    font-size: 0.8125rem;
+    line-height: 1.6;
+    color: var(--cream);
+    background-color: var(--cocoa);
+    color-scheme: dark;
+  }
+
+  .inspector-close {
+    float: inline-end;
+    inline-size: 2.25rem;
+    margin: -0.5rem -0.5rem 0.5rem 0.75rem;
+    border: 2px solid currentColor;
+    border-radius: 50%;
+    font-size: 1.125rem;
+    line-height: 1;
+    background-color: transparent;
+  }
+
+  .inspector-target {
+    color: var(--kiwi);
+  }
+
+  .inspector-box {
+    margin-block-start: 0.75rem;
+  }
+
+  .inspector-rules {
+    margin-block-start: 0.75rem;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    font: inherit;
+  }
+
+  /* The halo follows the element's box through its anchor, with no scroll or resize listener. */
+  @supports (anchor-name: --inspected) {
+    .inspector-halo {
+      position: absolute;
+      position-anchor: --inspected;
+      top: anchor(top);
+      right: anchor(right);
+      bottom: anchor(bottom);
+      left: anchor(left);
+      z-index: 3;
+      outline: 2px dashed var(--kiwi);
+      outline-offset: 1px;
+      box-shadow: 0 0 0 3px var(--cocoa);
+      pointer-events: none;
+    }
+  }
+}
+
+@layer motion {
+  /* screen keeps print static; every row here starts by itself, with no click. */
+  @media screen and (prefers-reduced-motion: no-preference) {
+    @keyframes title-squeeze {
+      from {
+        font-stretch: 100%;
+      }
+    }
+
+    .hero-title span {
+      animation: title-squeeze 900ms var(--ease-out-expo) both;
+    }
+
+    @supports (order: sibling-index()) {
+      .hero-title span {
+        animation-delay: calc((sibling-index() - 1) * 80ms);
+      }
+    }
+
+    @keyframes slice-turn {
+      to {
+        rotate: 1turn;
+      }
+    }
+
+    .slice-segments {
+      animation: slice-turn 60s linear infinite;
+    }
+
+    /* A checked switch pauses both turns: time and scroll. */
+    .hero:has(.slice-switch:checked) .slice-segments {
+      animation-play-state: paused;
+    }
+
+    @supports (animation-timeline: view()) {
+      /* Runs on time, not scroll. It sits here because @property has no CSS test,
+         and every browser with scroll timelines ships @property. */
+      @keyframes slice-cut {
+        from {
+          --cut: 0deg;
+        }
+      }
+
+      .slice {
+        animation: slice-cut 900ms var(--ease-out-quart) 120ms both;
+      }
+
+      .slice-segments,
+      .slice::after {
+        mask: conic-gradient(#000 var(--cut), transparent 0);
+      }
+
+      /* rotate (time) and transform (scroll) add up, so the two turns never fight. */
+      @keyframes slice-tilt {
+        to {
+          transform: rotate(90deg);
+        }
+      }
+
+      .slice-segments {
+        animation: slice-turn 60s linear infinite, slice-tilt linear both;
+        animation-timeline: auto, view();
+        animation-range: normal, cover 50% cover 100%;
+      }
+
+      @keyframes drip-grow {
+        from {
+          scale: 1 0.35;
+        }
+      }
+
+      .drip {
+        animation: drip-grow var(--ease-out-expo) both;
+        animation-timeline: view();
+        animation-range: cover 20% cover 60%;
+      }
+
+      @keyframes bar-grow {
+        from {
+          scale: 0 1;
+        }
+      }
+
+      .file-bar {
+        animation: bar-grow var(--ease-out-expo) both;
+        animation-timeline: view();
+        animation-range: entry 25% cover 50%;
+      }
+
+      @keyframes letter-rise {
+        from {
+          translate: 0 0.75em;
+        }
+      }
+
+      .footer-word span {
+        animation: letter-rise var(--ease-out-expo) both;
+        animation-timeline: view();
+        animation-range: entry 10% entry 60%;
+      }
+
+      /* Each letter starts 6% later along its own entry than the one before. */
+      @supports (order: sibling-index()) {
+        .footer-word span {
+          animation-range:
+            entry calc((sibling-index() - 1) * 6%)
+            entry calc(50% + (sibling-index() - 1) * 6%);
+        }
+      }
+    }
+  }
+
+  /* The flood changes colour only, so it also runs under reduced motion. */
+  @supports (animation-timeline: view()) {
+    @keyframes flood {
+      from {
+        --flood: 0%;
+      }
+    }
+
+    .band-kiwi,
+    .band-pineapple,
+    .band-blueberries,
+    .files {
+      animation: flood linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 100%;
+    }
+  }
 }
