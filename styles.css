@@ -371,7 +371,9 @@
     cursor: pointer;
   }
 
-  /* Hub, pith and rind, the segment lines, then the mango and lemon segments. */
+  /* Hub, pith and rind, the segment lines, then the mango and lemon segments.
+     The conic layers interpolate in srgb: Firefox draws a repeating conic gradient wrongly
+     in the default oklab space that oklch colours select. */
   .slice-segments {
     grid-area: 1 / 1;
     border-radius: 50%;
@@ -384,12 +386,12 @@
         var(--straw) 88%
       ),
       repeating-conic-gradient(
-        from -15deg,
+        in srgb from -15deg,
         var(--cream) 0 0.5deg,
         transparent 0.8deg 29.2deg,
         var(--cream) 29.5deg 30deg
       ),
-      repeating-conic-gradient(from -15deg, var(--mango) 0 30deg, var(--lemon) 0 60deg);
+      repeating-conic-gradient(in srgb from -15deg, var(--mango) 0 30deg, var(--lemon) 0 60deg);
   }
 
   /* The highlight depicts the light, so it stays put while the segments turn. */
