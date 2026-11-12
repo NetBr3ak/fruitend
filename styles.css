@@ -640,12 +640,19 @@
     background-color: transparent;
   }
 
-  /* @supports keeps the text box flush only where the trim exists; elsewhere 0.86 line height. */
+  /* @supports keeps the text box flush only where the trim exists; elsewhere 0.86 line height.
+     Lines are trimmed one by one and the grid sets the gap, so engines space them alike. */
   @supports (text-box: trim-both cap alphabetic) {
-    .hero-title,
     .band-name,
-    .files-title {
+    .hero-title span,
+    .files-title span {
       text-box: trim-both cap alphabetic;
+    }
+
+    .hero-title,
+    .files-title {
+      display: grid;
+      row-gap: calc(0.86em - 1cap);
     }
   }
 
