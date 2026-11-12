@@ -1,209 +1,254 @@
-document.addEventListener('DOMContentLoaded', function () {
- const root = document.documentElement;
- const open = el => {
-  if (!el.matches(':popover-open')) el.showPopover();
- };
- const close = el => {
-  if (el.matches(':popover-open')) el.hidePopover();
- };
- const bar = document.querySelector('.bar');
- if ('ResizeObserver' in window) {
-  new ResizeObserver(() => root.style.setProperty('--bar-h', `${bar.offsetHeight}px`)).observe(bar);
- }
- const motionBtn = document.getElementById('motion-toggle');
- let paused = false;
- let resumeMotion = false;
- function setPaused(on) {
-  paused = on;
-  root.classList.toggle('paused', paused);
-  motionBtn.textContent = paused ? 'Play motion' : 'Pause motion';
- }
- motionBtn.addEventListener('click', () => {
-  resumeMotion = false;
-  setPaused(!paused);
- });
- root.classList.add('is-ready');
- motionBtn.hidden = false;
- if ('getEntriesByType' in performance) {
-  const entries = performance.getEntriesByType('resource');
-  const timing = file =>
-   file === 'index.html'
-    ? performance.getEntriesByType('navigation')[0]
-    : entries.find(resource => new URL(resource.name).pathname.endsWith('/' + file));
+'use strict';
+
+// The slice switch: Space is native to a checkbox; the ARIA switch pattern adds Enter.
+const sliceSwitch = document.querySelector('.slice-switch');
+sliceSwitch.addEventListener('keydown', event => {
+  if (event.key !== 'Enter') return;
+  event.preventDefault();
+  sliceSwitch.click();
+});
+
+// The visit measurement, from Resource Timing.
+const entriesByUrl = new Map();
+const kilobytes = new Intl.NumberFormat(undefined, {
+  minimumFractionDigits: 1,
+  maximumFractionDigits: 1
+});
+const formatKilobytes = bytes => `${kilobytes.format(bytes / 1000)} kB`;
+
+function fileNameOf(entry) {
+  if (entry.entryType === 'navigation') return 'index.html';
+  return new URL(entry.name).pathname.split('/').pop();
+}
+
+function kindOf(entry) {
+  const name = fileNameOf(entry);
+  if (/\.(html|css|js)$/.test(name)) return 'code';
+  if (name.endsWith('.woff2')) return 'fonts';
+  return 'images';
+}
+
+function childOf(row, className) {
+  const element = row.querySelector(`.${className}`);
+  return element ?? row.appendChild(Object.assign(document.createElement('span'), { className }));
+}
+
+function showFileSizes(entries) {
   const sizes = new Map();
-  const chips = document.querySelector('.chips');
-  chips.querySelectorAll('li').forEach(li => {
-   const entry = timing(li.textContent.trim());
-   if (!entry?.decodedBodySize) return;
-   for (const text of [
-    `${(entry.decodedBodySize / 1000).toFixed(1)} kB`,
-    `${Math.round(entry.responseEnd - entry.startTime)} ms`
-   ]) {
-    const cell = document.createElement('span');
-    cell.textContent = text;
-    li.append(cell);
-   }
-   sizes.set(li, entry.decodedBodySize);
-  });
+  for (const row of document.querySelectorAll('.file-list li')) {
+    const entry = entries.find(item => fileNameOf(item) === row.dataset.file);
+    if (entry) sizes.set(row, entry.encodedBodySize);
+  }
+  if (sizes.size === 0) return;
   const largest = Math.max(...sizes.values());
-  sizes.forEach((size, li) => li.style.setProperty('--share', (size / largest).toFixed(3)));
-  chips.classList.toggle('measured', sizes.size > 0);
-  document.querySelector('.files-note').hidden = !sizes.size;
- }
- if (!('popover' in HTMLElement.prototype)) return;
- const probe = document.getElementById('probe');
- const halo = document.getElementById('probe-halo');
- const probeBtn = document.getElementById('probe-toggle');
- const probeTarget = probe.querySelector('.probe-target');
- const probeBox = probe.querySelector('.probe-box');
- const probeLabel = probe.querySelector('.probe-label');
- const probeRules = probe.querySelector('.probe-rules');
- probe.hidden = false;
- probeBtn.parentElement.hidden = false;
- probeBtn.hidden = false;
- const swatch = document.createElement('canvas').getContext('2d', { willReadFrequently: true });
- let inspecting = false;
- let inspected = null;
- let frame = 0;
- const linear = c => (c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4);
- const luminance = ([r, g, b]) => 0.2126 * linear(r) + 0.7152 * linear(g) + 0.0722 * linear(b);
- function paint(color) {
+  for (const [row, size] of sizes) {
+    childOf(row, 'file-size').textContent = formatKilobytes(size);
+    childOf(row, 'file-bar').style.setProperty('--share', (size / largest).toFixed(3));
+  }
+  document.querySelector('.files-note').hidden = false;
+}
+
+function showVisitTotal(entries) {
+  const sum = list => list.reduce((total, entry) => total + entry.encodedBodySize, 0);
+  const groups = Object.groupBy(entries, kindOf);
+  const parts = ['code', 'fonts', 'images']
+    .filter(kind => groups[kind])
+    .map(kind => `${kind} ${formatKilobytes(sum(groups[kind]))}`);
+  const line = document.querySelector('.visit-total');
+  line.textContent =
+    `So far this visit has loaded ${entries.length} files, ` +
+    `${formatKilobytes(sum(entries))} in all: ${parts.join(', ')}.`;
+  line.hidden = false;
+}
+
+// Opened from the disk, every size reads 0, so nothing shows.
+const observer = new PerformanceObserver(list => {
+  for (const entry of list.getEntries()) entriesByUrl.set(entry.name, entry);
+  const measured = [...entriesByUrl.values()].filter(entry => entry.encodedBodySize > 0);
+  if (measured.length === 0) return;
+  showFileSizes(measured);
+  showVisitTotal(measured);
+});
+observer.observe({ type: 'navigation', buffered: true });
+observer.observe({ type: 'resource', buffered: true });
+
+// The inspector: a manual popover that describes the pointed or focused element.
+const inspector = document.getElementById('inspector');
+const inspectButton = document.querySelector('.inspect-button');
+const halo = document.querySelector('.inspector-halo');
+const targetLine = inspector.querySelector('.inspector-target');
+const boxLine = inspector.querySelector('.inspector-box');
+const rulesBlock = inspector.querySelector('.inspector-rules');
+// From the markup; the third is the note for a page opened from the disk.
+const startTexts = [targetLine.textContent, boxLine.textContent, rulesBlock.textContent];
+const anchorsWork = CSS.supports('anchor-name: --inspected');
+const swatch = document.createElement('canvas').getContext('2d', { willReadFrequently: true });
+let inspected = null;
+let listeners = null;
+
+function toRgba(color) {
   swatch.clearRect(0, 0, 1, 1);
   swatch.fillStyle = color;
   swatch.fillRect(0, 0, 1, 1);
   return [...swatch.getImageData(0, 0, 1, 1).data].map(channel => channel / 255);
- }
- function contrast(a, b) {
-  const [hi, lo] = [luminance(a), luminance(b)].sort((x, y) => y - x);
-  return (hi + 0.05) / (lo + 0.05);
- }
- function groundOf(el) {
-  for (let node = el; node; node = node.parentElement) {
-   const style = getComputedStyle(node);
-   if (style.backgroundImage !== 'none') return null;
-   const color = paint(style.backgroundColor);
-   if (color[3] === 1) return color;
-   if (color[3] > 0) return null;
+}
+
+function luminance([red, green, blue]) {
+  const linear = c => (c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4);
+  return 0.2126 * linear(red) + 0.7152 * linear(green) + 0.0722 * linear(blue);
+}
+
+function contrastRatio(a, b) {
+  const [high, low] = [luminance(a), luminance(b)].sort((x, y) => y - x);
+  return (high + 0.05) / (low + 0.05);
+}
+
+// The nearest solid background; over an image or a translucent layer, no ratio.
+function groundOf(element) {
+  for (let node = element; node; node = node.parentElement) {
+    const style = getComputedStyle(node);
+    if (style.backgroundImage !== 'none') return null;
+    const color = toRgba(style.backgroundColor);
+    if (color[3] === 1) return color;
+    if (color[3] > 0) return null;
   }
   return null;
- }
- function textContrast(el, style) {
-  const ink = paint(style.color);
-  const ground = groundOf(el);
-  if (ink[3] < 1 || !ground || style.opacity !== '1') return 'text contrast not calculated for this background';
-  return `text ${contrast(ink, ground).toFixed(2)}:1`;
- }
- const inContainer = rule => rule.constructor.name === 'CSSContainerRule';
- const live = rule =>
-  rule.media
-   ? matchMedia(rule.conditionText).matches
-   : inContainer(rule) || rule.conditionText === undefined
-     ? true
-     : CSS.supports(rule.conditionText);
- const ruleText = rule =>
-  rule.parentRule && inContainer(rule.parentRule)
-   ? `@container ${rule.parentRule.conditionText} {\n${rule.cssText}\n}`
-   : rule.cssText;
- const flatten = rules =>
-  [...rules].flatMap(rule => (rule.cssRules ? (live(rule) ? [rule, ...flatten(rule.cssRules)] : []) : [rule]));
- function authoredRules(el) {
-  return [...document.styleSheets]
-   .flatMap(sheet => {
-    try {
-     return flatten(sheet.cssRules);
-    } catch {
-     return [];
-    }
-   })
-   .filter(rule => {
-    if (!rule.selectorText) return false;
-    try {
-     return el.matches(rule.selectorText);
-    } catch {
-     return false;
-    }
-   });
- }
- function place(rect) {
-  halo.style.translate = `${rect.left}px ${rect.top}px`;
-  halo.style.width = `${rect.width}px`;
-  halo.style.height = `${rect.height}px`;
-  halo.hidden = false;
- }
- const track = () => {
-  if (inspected) place(inspected.getBoundingClientRect());
- };
- function refresh() {
-  if (!inspected || frame) return;
-  frame = requestAnimationFrame(() => {
-   frame = 0;
-   if (inspected) describe(inspected);
-  });
- }
- function describe(el) {
-  const style = getComputedStyle(el);
-  const rect = el.getBoundingClientRect();
-  const matched = authoredRules(el);
-  inspected = el;
-  place(rect);
-  probeTarget.textContent = el.tagName.toLowerCase() + [...el.classList].map(name => '.' + name).join('');
-  probeBox.textContent = [
-   `${Math.round(rect.width)} x ${Math.round(rect.height)} px`,
-   `padding ${style.padding}`,
-   `radius ${style.borderRadius}`,
-   style.display.includes('flex') || style.display.includes('grid') ? `gap ${style.gap}` : null,
-   textContrast(el, style)
-  ]
-   .filter(Boolean)
-   .join('  |  ');
-  probeLabel.hidden = false;
-  probeRules.textContent = matched.length
-   ? matched
-      .slice(-6)
-      .map(rule => ruleText(rule).slice(0, 320))
-      .join('\n\n')
-   : 'No authored rules readable. Opened from the disk, the browser treats styles.css ' +
-     'as another origin and cssRules throws, so only the computed values above survive. ' +
-     'Serve the folder over http and this fills in.';
- }
- function look(event) {
-  const el = event.target;
-  if (!(el instanceof Element) || probe.contains(el)) return;
-  describe(el);
- }
- function setInspecting(on) {
-  inspecting = on;
-  probeBtn.setAttribute('aria-pressed', String(on));
-  const bind = on ? 'addEventListener' : 'removeEventListener';
-  document[bind]('pointerover', look);
-  document[bind]('focusin', look);
-  document[bind]('scroll', track, { passive: true });
-  window[bind]('resize', refresh);
-  if (!on) {
-   cancelAnimationFrame(frame);
-   frame = 0;
-   close(probe);
-   halo.hidden = true;
-   inspected = null;
-   if (resumeMotion) setPaused(false);
-   return;
+}
+
+function describeContrast(element, style) {
+  const text = toRgba(style.color);
+  const ground = groundOf(element);
+  if (text[3] < 1 || !ground) return 'text contrast not measured on this background';
+  return `text ${contrastRatio(text, ground).toFixed(2)}:1`;
+}
+
+// & is the parent; a nested selector without & sits inside it.
+function resolveSelector(selector, parent) {
+  if (!parent) return selector;
+  if (selector.includes('&')) return selector.replaceAll('&', `:is(${parent})`);
+  return `:is(${parent}) :is(${selector})`;
+}
+
+function matchesSafely(element, selector) {
+  // matches() throws on a selector this browser cannot parse; such a rule cannot apply.
+  try {
+    return element.matches(selector);
+  } catch {
+    return false;
   }
-  probeTarget.textContent = 'Point at anything';
-  probeBox.textContent = matchMedia('(hover: hover)').matches
-   ? 'Hover or tab to an element and its real box lands here.'
-   : 'Tap an element and its real box lands here.';
-  probeLabel.hidden = true;
-  probeRules.textContent = '';
-  open(probe);
-  resumeMotion = !paused;
-  setPaused(true);
- }
- probeBtn.addEventListener('click', () => setInspecting(!inspecting));
- probe.querySelector('.probe-close').addEventListener('click', () => {
-  setInspecting(false);
-  probeBtn.focus();
- });
- addEventListener('keydown', event => {
-  if (event.key === 'Escape' && inspecting) setInspecting(false);
- });
-});
+}
+
+// Group rules whose condition fails drop out; the rest add a step to the chain.
+function collectRules(rules, element, context, found) {
+  const descend = (rule, step) =>
+    collectRules(rule.cssRules, element, { ...context, chain: [...context.chain, step] }, found);
+  for (const rule of rules) {
+    if (rule instanceof CSSLayerBlockRule) {
+      descend(rule, `@layer ${rule.name}`);
+    } else if (rule instanceof CSSMediaRule) {
+      if (matchMedia(rule.conditionText).matches) descend(rule, `@media ${rule.conditionText}`);
+    } else if (rule instanceof CSSSupportsRule) {
+      if (CSS.supports(rule.conditionText)) descend(rule, `@supports ${rule.conditionText}`);
+    } else if (rule instanceof CSSContainerRule) {
+      descend(rule, `@container ${rule.conditionText} (container condition not checked)`);
+    } else if (rule instanceof CSSStyleRule) {
+      const selector = resolveSelector(rule.selectorText, context.parent);
+      if (matchesSafely(element, selector)) found.push({ chain: context.chain, selector, rule });
+      collectRules(rule.cssRules, element, { ...context, parent: selector }, found);
+    }
+  }
+}
+
+function matchingRules(element) {
+  const found = [];
+  for (const sheet of document.styleSheets) {
+    // cssRules throws a SecurityError on a page opened from the disk.
+    try {
+      collectRules(sheet.cssRules, element, { chain: [], parent: null }, found);
+    } catch {
+      return null;
+    }
+  }
+  return found;
+}
+
+function formatRule({ chain, selector, rule }) {
+  const declarations = rule.style.cssText.replaceAll('; ', ';\n  ');
+  return [...chain, `${selector} {\n  ${declarations}\n}`].join('\n');
+}
+
+function describeBox(element, style) {
+  // offsetWidth ignores transforms, so a turning slice reads steady. SVG has none.
+  const { width, height } = element instanceof HTMLElement
+    ? { width: element.offsetWidth, height: element.offsetHeight }
+    : element.getBoundingClientRect();
+  const box = `${Math.round(width)} x ${Math.round(height)} px`;
+  const isFlexOrGrid = /flex|grid/.test(style.display);
+  return [
+    box,
+    `padding ${style.padding}`,
+    `radius ${style.borderRadius}`,
+    isFlexOrGrid ? `gap ${style.gap}` : null,
+    describeContrast(element, style)
+  ]
+    .filter(Boolean)
+    .join('  |  ');
+}
+
+function moveHalo(element) {
+  if (!anchorsWork) return;
+  inspected?.style.removeProperty('anchor-name');
+  element.style.setProperty('anchor-name', '--inspected');
+  halo.hidden = false;
+}
+
+function describeElement(element) {
+  const style = getComputedStyle(element);
+  const rules = matchingRules(element);
+  moveHalo(element);
+  inspected = element;
+  targetLine.textContent =
+    element.tagName.toLowerCase() + [...element.classList].map(name => `.${name}`).join('');
+  boxLine.textContent = describeBox(element, style);
+  rulesBlock.textContent = rules
+    ? rules.slice(-6).map(formatRule).join('\n\n')
+    : startTexts[2];
+}
+
+function inspectTarget(event) {
+  const element = event.target;
+  if (!(element instanceof Element) || inspector.contains(element) || element === halo) return;
+  describeElement(element);
+}
+
+function startInspecting() {
+  targetLine.textContent = matchMedia('(hover: none)').matches ? 'Tap any element.' : startTexts[0];
+  boxLine.textContent = startTexts[1];
+  rulesBlock.textContent = '';
+  listeners = new AbortController();
+  const { signal } = listeners;
+  document.addEventListener('pointerover', inspectTarget, { signal });
+  document.addEventListener('focusin', inspectTarget, { signal });
+  // A manual popover has no light dismiss.
+  document.addEventListener('keydown', event => {
+    if (event.key !== 'Escape') return;
+    inspector.hidePopover();
+    inspectButton.focus();
+  }, { signal });
+}
+
+function stopInspecting() {
+  listeners.abort();
+  inspected?.style.removeProperty('anchor-name');
+  inspected = null;
+  halo.hidden = true;
+}
+
+if ('popover' in HTMLElement.prototype) {
+  inspector.hidden = false;
+  inspectButton.hidden = false;
+  inspector.addEventListener('toggle', event => {
+    if (event.newState === 'open') startInspecting();
+    else stopInspecting();
+  });
+}
