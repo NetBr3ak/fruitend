@@ -2,9 +2,9 @@
 
 Czytaj w: [English](README.md) | **Polski**
 
-Statyczna strona demo w owocowych kolorach. Plaster cytrusa na górze strony jest narysowany
-gradientami CSS i powoli się obraca, jak wyciskarka do cytrusów. Wycięte owoce wokół niego
-unoszą się w miejscu.
+Jednostronicowe demo w owocowych kolorach, zrobione z trzech plików: `index.html`, `styles.css`
+i `script.js`. Plaster cytrusa jest narysowany gradientami CSS. Gdy przewijasz, każdy pas strony
+przybiera kolor swojego owocu.
 
 Strona na żywo: https://netbr3ak.github.io/fruitend/
 
@@ -12,27 +12,55 @@ Strona na żywo: https://netbr3ak.github.io/fruitend/
 
 ## Co robi strona
 
-- Plaster cytrusa robi pełny obrót w 48 sekund. Obracają się jego cząstki, ale odblask zostaje
-  w lewym górnym rogu, więc światło wydaje się stać w miejscu. Cztery wycięte owoce unoszą się
-  o 6 px i przechylają o 2 stopnie, a potem wracają. Każdy owoc ma własne tempo (jeden ruch
-  trwa 7, 9, 11 albo 13 sekund), więc po chwili nie ruszają się już razem. Ruch zmienia tylko
-  `rotate` i `translate`.
-- Światło pada z lewego górnego rogu: poświata na górze strony, odblask na plastrze i cienie
-  naklejek oraz bloków z owocami.
-- "Three files" pokazuje rozmiar i czas pobrania każdego pliku, zmierzone przez twoją
-  przeglądarkę przy tej wizycie, z paskiem rozmiaru każdego pliku względem największego.
-- **Inspect styles** pokazuje rozmiar, padding, kontrast tekstu i pasujące reguły CSS elementu pod
-  kursorem albo z fokusem. Potrzebuje Popover API; bez niego przycisk zostaje ukryty.
-- Pod plastrem jest przycisk **Pause motion**. Zatrzymuje trzy zapętlone ruchy: pasek z
-  tekstem, plaster i owoce. **Inspect styles** na pasku też je zatrzymuje, dopóki jest
-  włączony. Jeśli system prosi o ograniczenie ruchu, nic na stronie się nie rusza, a przycisk
-  jest ukryty.
-- Każdy link działa bez JavaScriptu. "Fruits", "Files" i "See the fruits" przewijają do
-  swojej sekcji; "Source", "View source" i "Make it your own" otwierają to repozytorium. Bez
-  JavaScriptu animacja wejścia i efekty przewijania nadal działają, ale nic się nie zapętla:
-  pasek, plaster i owoce stoją, a przyciski, które potrzebują skryptu, zostają ukryte.
+Wszystko rusza samo: po wejściu na stronę albo gdy dana część wjedzie w widok. Nic nie wymaga
+kliknięcia.
 
-Nie ma frameworka, budowania ani zapytań do innego serwera. Fonty leżą obok strony.
+| Co się rusza | Kiedy rusza | Jak |
+|---|---|---|
+| Tytuł zwęża się z pełnej szerokości do wąskiej, linia po linii | Po wejściu | `font-stretch` steruje osią szerokości fontu; `sibling-index()` ustala opóźnienie każdej linii |
+| Plaster sam się rozcina | Po wejściu | Zarejestrowany kąt `--cut` przesuwa maskę stożkową |
+| Plaster robi pełny obrót raz na minutę | Po wejściu | `rotate`, bez końca |
+| Plaster obraca się o kolejne 90 stopni, gdy znika z widoku | Przewijanie | `animation-timeline: view()` na `transform` |
+| Z góry strony kapie sok | Przewijanie | Ścieżka `shape()` w procentach, wydłużana przez `scale` |
+| Każdy pas przechodzi od koloru poprzedniego owocu do swojego | Przewijanie | Zarejestrowany procent `--flood` w `color-mix(in oklch, ...)` |
+| Paski rozmiarów plików rosną | Przewijanie | Oś czasu `view()` na `scale` |
+| Litery słowa w stopce wychodzą po kolei | Przewijanie | Oś czasu `view()`, przesunięta przez `sibling-index()` |
+
+- **Pauza.** Plaster to jedyny ruch, który się zapętla. Kliknij go albo naciśnij spację lub
+  Enter, gdy ma fokus, a się zatrzyma; kolejne naciśnięcie go wznawia. To zwykłe pole wyboru
+  z rolą przełącznika, więc pauza działa bez JavaScriptu (Enter dodaje `script.js`).
+- **Ograniczony ruch.** Jeśli system prosi o ograniczenie ruchu, nic się nie rusza. Pasy nadal
+  zmieniają kolor przy przewijaniu, a przełącznik pauzy i podpowiedź pod nim się nie pokazują.
+- **Jasny i ciemny motyw.** Strona idzie za ustawieniem systemu. Ciemne tła trzymają odcień
+  każdego owocu przy jednej stałej jasności: buduje je kolor względny (`oklch(from ...)`), a
+  wybiera `light-dark()`. Na ekranie z szeroką gamą kolory owoców są bardziej nasycone
+  (`color-gamut: p3`).
+- **Pliki.** Sekcja Files pokazuje skompresowany rozmiar każdego z trzech plików, tak jak
+  przeglądarka pobrała je przy tej wizycie, oraz bieżącą sumę wszystkich plików, które ta wizyta
+  pobrała. Dane pochodzą z Resource Timing, czytanego przez `PerformanceObserver`.
+- **Inspect the CSS.** Okienko (popover), które pokazuje rozmiar, padding, kontrast tekstu
+  i pasujące reguły CSS elementu pod kursorem albo z fokusem, razem z łańcuchem `@layer`,
+  `@media`, `@supports` i `@container` każdej reguły. Przerywana ramka idzie za elementem dzięki
+  pozycjonowaniu względem kotwicy (anchor positioning) w CSS.
+
+### Gdy przeglądarka czegoś nie ma
+
+Każda nowsza funkcja siedzi za `@supports` albo za testem w skrypcie, a strona bez niej nadal
+jest kompletna.
+
+| Brakuje | Co widać |
+|---|---|
+| Animacji sterowanych przewijaniem | Każdy pas w swoim kolorze, sok w pełnej długości, nieruchome paski i litery, cały plaster bez wejścia |
+| `sibling-index()` | Linie tytułu i litery w stopce ruszają razem |
+| `shape()` | Brak kapiącego soku, prosta krawędź |
+| `light-dark()` albo koloru względnego | Jasny motyw |
+| `text-box` | Nagłówki mają wysokość linii 0,86 |
+| Pozycjonowania względem kotwicy | Brak ramki; inspektor nadal podaje element i jego wymiary |
+| Popover | Brak przycisku **Inspect the CSS** |
+| JavaScriptu | Cały tekst, zdjęcia i linki; plaster nadal się obraca i staje po spacji albo kliknięciu; brak rozmiarów i inspektora |
+
+Nie ma frameworka, budowania ani zapytań do innego serwera. Fonty leżą obok strony. Content
+Security Policy pozwala tylko na własne pliki strony i wymaga Trusted Types.
 
 ## Jak uruchomić
 
@@ -43,8 +71,9 @@ python3 -m http.server 8000
 ```
 
 Potem otwórz http://localhost:8000/. Plik `index.html` otwarty prosto z dysku też działa,
-z jedną luką: przeglądarka traktuje plik lokalny jak inne pochodzenie i blokuje `cssRules`,
-więc **Inspect styles** pokazuje pomiary, ale nie reguły źródłowe.
+z dwiema lukami: przeglądarka traktuje plik lokalny jak inne pochodzenie i blokuje `cssRules`,
+więc **Inspect the CSS** pokazuje pomiary, ale nie reguły, a rozmiary plików wynoszą 0, więc
+sekcja Files ich nie pokazuje.
 
 ## Sprawdzenie palety
 
@@ -52,21 +81,23 @@ więc **Inspect styles** pokazuje pomiary, ale nie reguły źródłowe.
 node check-palette.mjs
 ```
 
-Skrypt sprawdza 14 par tekstu i tła z palety względem progu kontrastu WCAG: 4,5:1 albo 3:1 dla
-dużego tekstu. Kończy się kodem 1, jeśli któraś para nie spełnia progu. CI uruchamia
-go przy każdym pushu do `main` i przy każdym pull requeście.
+Skrypt czyta paletę z `styles.css`. Sprawdza, czy każdy kolor mieści się w sRGB (a wartości dla
+szerokiej gamy w Display P3), każdą parę tekstu i tła ze strony w jasnym i ciemnym motywie
+względem progu kontrastu WCAG (4,5:1 albo 3:1 dla nagłówków) oraz każdy krok co 5% w każdym
+przejściu koloru. Wypisuje jedną linię na sprawdzenie i kończy się kodem 1, jeśli któreś nie
+przejdzie. CI uruchamia go przy każdym pushu do `main` i przy każdym pull requeście.
 
 ## Pliki
 
 ```
 fruitend/
 ├── .github/workflows/  # CI: uruchamia check-palette.mjs
-├── fonts/              # Trzy fonty, okrojone do znaków i jednej grubości ze strony, i OFL.txt
-├── images/             # Cztery zdjęcia owoców, cztery wycięte owoce, cztery rysunki naklejek (SVG) i obraz podglądu powyżej
+├── fonts/              # Dwa fonty, okrojone do znaków i jednej grubości ze strony, i OFL.txt
+├── images/             # Cztery zdjęcia owoców, cztery rysunki naklejek (SVG) i obraz podglądu powyżej
 ├── index.html          # Strona
-├── styles.css          # Wszystkie style, razem z paletą
-├── script.js           # Przycisk Pause motion, rozmiary plików, inspektor
-├── check-palette.mjs   # Sprawdzenie kontrastu palety
+├── styles.css          # Wszystkie style, razem z paletą i całym ruchem
+├── script.js           # Enter dla przełącznika plastra, rozmiary plików, inspektor
+├── check-palette.mjs   # Sprawdzenie gamy i kontrastu palety
 ├── favicon.svg
 ├── sitemap.xml
 ├── LICENSE
@@ -88,19 +119,9 @@ mniejszy plik tam, gdzie wystarczy.
 | `images/pineapple-*` | [Ananas bozor rastasida](https://commons.wikimedia.org/wiki/File:Ananas_bozor_rastasida.jpg) | Usmonov Gayrat | CC0 1.0 |
 | `images/blueberries-*` | [Aberdeenshire blueberries](https://commons.wikimedia.org/wiki/File:Aberdeenshire_blueberries.jpg) | Mx. Granger | CC0 1.0 |
 
-Cztery wycięte owoce wokół plastra (`images/cut-*`) też pochodzą z Wikimedia Commons. Framework
-Vision od Apple (`VNGenerateForegroundInstanceMaskRequest`) oddzielił każdy owoc od tła, a potem
-dodano wokół niego kremową obwódkę. Każdy plik ma najwyżej 480 px na dłuższym boku, w AVIF i WebP.
-
-| Plik | Zdjęcie | Autor | Licencja |
-|---|---|---|---|
-| `images/cut-strawberry-*` | [Strawberry on white background](https://commons.wikimedia.org/wiki/File:Strawberry_on_white_background.jpg) | Joselodos | CC0 1.0 |
-| `images/cut-kiwi-*` | [Kiwi](https://commons.wikimedia.org/wiki/File:Kiwi.jpg) | Renee Comet, National Cancer Institute | domena publiczna |
-| `images/cut-pineapple-*` | [Pineapple on white table](https://commons.wikimedia.org/wiki/File:Pineapple_on_white_table.jpg) | Julien Pianetti | CC0 1.0 |
-| `images/cut-pint-*` | [Blueberries-In-Pack](https://commons.wikimedia.org/wiki/File:Blueberries-In-Pack.jpg) | Evan-Amos | CC0 1.0 |
-
-Trzy fonty to Bricolage Grotesque, Hanken Grotesk i Martian Mono, wszystkie na licencji SIL Open
-Font License. Zobacz [fonts/OFL.txt](fonts/OFL.txt).
+Dwa fonty to Bricolage Grotesque i Hanken Grotesk, oba na licencji SIL Open Font License.
+Zobacz [fonts/OFL.txt](fonts/OFL.txt). Bricolage Grotesque to wersja z rozmiarem optycznym
+ustalonym na 96; oś szerokości zostaje, więc CSS może zwężać nagłówki.
 
 ## Licencja
 
