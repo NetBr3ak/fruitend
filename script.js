@@ -247,7 +247,7 @@ function stopInspecting() {
 if ('popover' in HTMLElement.prototype) {
   inspector.hidden = false;
   inspectButton.hidden = false;
-  inspector.addEventListener('toggle', event => {
+  inspector.addEventListener('beforetoggle', event => {
     if (event.newState === 'open') startInspecting();
     else stopInspecting();
   });
