@@ -362,12 +362,14 @@
     gap: 1.25rem;
   }
 
+  /* clip: the turning square's corners would widen the page. */
   .slice {
     position: relative;
     display: grid;
     inline-size: min(84vw, 26rem);
     aspect-ratio: 1;
     border-radius: 50%;
+    overflow: clip;
     cursor: pointer;
   }
 
