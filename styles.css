@@ -633,6 +633,15 @@
     }
   }
 
+  .feature-list {
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  code {
+    font-family: var(--code-font);
+  }
+
   .inspect-button {
     padding-inline: 1.25rem;
     border: 2px solid currentColor;

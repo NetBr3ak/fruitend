@@ -7,13 +7,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Fruitend: a fruit page in plain HTML, CSS and JavaScript</title>
   <meta name="description"
-    content="Fruitend is a one-page demo in fruit colors, made of three files with no framework and no build step. The citrus slice is drawn with CSS gradients.">
+    content="Fruitend is a one-page demo in fruit colors, made of three files with no framework and no build step. Every animation runs on CSS alone, with no JavaScript.">
   <link rel="canonical" href="https://netbr3ak.github.io/fruitend/">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://netbr3ak.github.io/fruitend/">
   <meta property="og:title" content="Fruitend: a fruit page in plain HTML, CSS and JavaScript">
   <meta property="og:description"
-    content="Fruitend is a one-page demo in fruit colors, made of three files with no framework and no build step. The citrus slice is drawn with CSS gradients.">
+    content="Fruitend is a one-page demo in fruit colors, made of three files with no framework and no build step. Every animation runs on CSS alone, with no JavaScript.">
   <meta property="og:image" content="https://netbr3ak.github.io/fruitend/images/preview.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -25,7 +25,7 @@
       "@type": "WebSite",
       "name": "Fruitend",
       "url": "https://netbr3ak.github.io/fruitend/",
-      "description": "Fruitend is a one-page demo in fruit colors, made of three files with no framework and no build step. The citrus slice is drawn with CSS gradients.",
+      "description": "Fruitend is a one-page demo in fruit colors, made of three files with no framework and no build step. Every animation runs on CSS alone, with no JavaScript.",
       "inLanguage": "en"
     }
   </script>
@@ -66,7 +66,7 @@
       <div class="hero-inner">
         <div class="hero-copy">
           <h1 class="hero-title"><span>This site</span> <span>is</span> <span>juicy</span></h1>
-          <p class="lead">A demo landing page in fruit colors. The citrus slice is drawn with CSS gradients.</p>
+          <p class="lead">A demo landing page in fruit colors. Every animation runs on CSS alone, with no JavaScript.</p>
           <p class="hero-links">
             <a class="pill" href="#fruits">See the fruits</a>
             <a href="#files">See the three files</a>
@@ -160,6 +160,22 @@
           <li data-file="index.html"><a href="https://github.com/NetBr3ak/fruitend/blob/main/index.html">index.html</a></li>
           <li data-file="styles.css"><a href="https://github.com/NetBr3ak/fruitend/blob/main/styles.css">styles.css</a></li>
           <li data-file="script.js"><a href="https://github.com/NetBr3ak/fruitend/blob/main/script.js">script.js</a></li>
+        </ul>
+        <p>What the page uses, and the fallback:</p>
+        <ul class="feature-list">
+          <li><code>animation-timeline</code> drives the scroll motion. Without: final colors.</li>
+          <li><code>@property</code> lets the floods and slice cut animate.</li>
+          <li><code>color-mix(in oklch)</code> mixes each flood through hues, not grey.</li>
+          <li><code>oklch(from)</code> keeps fruit hues on dark bands. Without: light theme.</li>
+          <li><code>light-dark()</code> holds both themes in one value. Without: light theme.</li>
+          <li><code>color-gamut: p3</code> deepens colors on wide-gamut screens.</li>
+          <li><code>font-stretch</code> squeezes the title.</li>
+          <li><code>text-box</code> trims the titles flush. Without: tight lines.</li>
+          <li><code>shape()</code> draws the drip. Without: no drip.</li>
+          <li><code>sibling-index()</code> staggers the letters. Without: no stagger.</li>
+          <li><code>:has()</code> makes the slice a pause switch, even without JavaScript.</li>
+          <li><code>popover</code> and anchors run the inspector. Without: no inspector.</li>
+          <li><code>PerformanceObserver</code> measures the sizes. Without JavaScript: none.</li>
         </ul>
         <p class="files-note" hidden>Compressed sizes, as your browser received them on this visit. 1 kB is 1000 bytes.</p>
         <p class="visit-total" hidden></p>
