@@ -769,6 +769,13 @@
     inset-inline: 1rem auto;
   }
 
+  /* On the right the panel sits under the turning slice; a short one keeps the slice in view. */
+  @media (width >= 64rem) {
+    .inspector:not(.inspector-left) {
+      max-block-size: 22vh;
+    }
+  }
+
   .inspector-close {
     float: inline-end;
     inline-size: 2.25rem;
