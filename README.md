@@ -22,13 +22,8 @@ Live page: https://netbr3ak.github.io/fruitend/
   this visit, with a bar for each file's size against the largest one.
 - **Inspect styles** shows the size, padding, text contrast and matching CSS rules of the element
   you hover or focus. It needs the Popover API; without it the button stays hidden.
-- A **Pause motion** button sits under the slice. It stops the three loops: the ticker, the
-  slice and the fruits. **Inspect styles**, in the ticker, also stops them while it is on. If
-  your system asks for reduced motion, nothing on the page moves and the button is hidden.
-- Every link works without JavaScript. "Fruits", "Files" and "See the fruits" jump to their
-  section; "Source", "View source" and "Make it your own" open this repository. Without
-  JavaScript the entrance animation and the scroll effects still run, but nothing loops: the
-  ticker, the slice and the fruits stand still, and the controls that need a script stay hidden.
+- The loops start in CSS, even without JavaScript. **Pause motion** under the slice stops them. The browser’s reduced-motion setting replaces the spinning slice, moving ticker and floating fruit with a slow change in opacity. The same pause control works with a pointer or the Space key.
+- **Inspect styles** pauses the loops while you read. Closing it restores your previous choice. The inspector and file measurements need JavaScript; the links and pause control do not.
 
 There is no framework, no build step and no request to another server. The fonts ship with
 the page.
@@ -64,7 +59,7 @@ fruitend/
 ├── images/             # Four fruit photos, four cut-out fruits, four sticker drawings (SVG) and the preview image above
 ├── index.html          # The page
 ├── styles.css          # All styles, including the palette
-├── script.js           # Pause motion button, file sizes, inspector
+├── script.js           # file sizes and inspector
 ├── check-palette.mjs   # Contrast check for the palette
 ├── favicon.svg
 ├── sitemap.xml

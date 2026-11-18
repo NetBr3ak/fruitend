@@ -66,11 +66,15 @@ ul{margin:0;padding:0;list-style:none}
 .ticker-ctls{flex:none;gap:8px;padding-right:calc(3vw + max(4vw,16px));display:flex}
 .ticker-ctl,.motion-ctl{min-height:36px;font:inherit;color:var(--cream);border:2px solid var(--cream);cursor:pointer;background:0 0;border-radius:999px;padding:0 16px;transition:background .2s,color .2s}
 .ticker-ctl[aria-pressed=true]{color:var(--cocoa);background:var(--cream)}
-.motion-ctl:disabled{cursor:default}
-.motion-ctl{margin-top:calc(var(--dial) * .06 + 12px);margin-left:calc(var(--dial) / 2);white-space:nowrap;color:var(--ink);border-color:var(--ink);translate:-50%}
+.motion-ctl input{opacity:0;position:absolute;inset:0;width:100%;height:100%;margin:0;cursor:inherit}
+.motion-ctl:has(input:focus-visible){outline:3px solid var(--ink);outline-offset:4px}
+.motion-ctl:has(input:disabled){cursor:default}
+.play-label,.motion-ctl:has(input:is(:checked,:disabled)) .pause-label{display:none}
+.motion-ctl:has(input:is(:checked,:disabled)) .play-label{display:inline}
+.motion-ctl{display:inline-grid;place-items:center;position:relative;margin-top:calc(var(--dial) * .06 + 12px);margin-left:calc(var(--dial) / 2);white-space:nowrap;color:var(--ink);border-color:var(--ink);translate:-50%}
 @media (hover:hover){
  .ticker-ctl:hover{color:var(--cocoa);background:var(--cream)}
- .motion-ctl:enabled:hover{color:var(--on-ink);background:var(--ink)}
+ .motion-ctl:not(:has(input:disabled)):hover{color:var(--on-ink);background:var(--ink)}
 }
 .fruits{background:var(--straw-ground);padding:clamp(56px,9vw,112px) 0}
 .fruits-title{letter-spacing:-.02em;font-variation-settings:"wdth" 85;text-wrap:balance;color:var(--ink);font-size:clamp(2.25rem,6vw,4.5rem);line-height:.95}
@@ -199,6 +203,20 @@ footer{background:var(--plum);color:var(--cream);padding-top:clamp(56px,8vw,96px
  .citrus{border-color:graytext}
  .chips.measured li:after{background-image:linear-gradient(canvastext 0 0)}
 }
+@keyframes slide{
+ to{transform:translate(-25%)}
+}
+@keyframes spin{
+ to{rotate:1turn}
+}
+@keyframes float{
+ to{translate:0 -6px;rotate:2deg}
+}
+.ticker-track{animation:26s linear infinite slide}
+.citrus:before{animation:48s linear infinite spin}
+.cut img{animation:float calc(7s + var(--i) * 2s) ease-in-out infinite alternate}
+:root:has(#motion-toggle:is(:checked,:disabled)){--loop-state:paused}
+.ticker-track,.citrus:before,.cut img{animation-play-state:var(--loop-state,running)}
 @media (prefers-reduced-motion:no-preference){
  @keyframes rise{
   0%{clip-path:inset(0 0 100%);transform:translateY(24px)}
@@ -212,9 +230,6 @@ footer{background:var(--plum);color:var(--cream);padding-top:clamp(56px,8vw,96px
   0%{opacity:0;transform:scale(.94)}
   to{opacity:1;transform:none}
  }
- @keyframes slide{
-  to{transform:translate(-25%)}
- }
  .bar,.hero-title .line,.lead,.hero-actions{animation:rise .4s var(--ease) both}
  .bar{animation-name:fade-up}
  .hero-title .line:nth-child(2){animation-delay:60ms}
@@ -222,16 +237,6 @@ footer{background:var(--plum);color:var(--cream);padding-top:clamp(56px,8vw,96px
  .lead{animation-delay:.16s}
  .hero-actions{animation-delay:.2s}
  .hero-disc{animation:disc-in .5s var(--ease) both}
- @keyframes spin{
-  to{rotate:1turn}
- }
- @keyframes float{
-  to{translate:0 -6px;rotate:2deg}
- }
- .is-ready .ticker-track{animation:26s linear infinite slide}
- .is-ready .citrus:before{animation:48s linear infinite spin}
- .is-ready .cut img{animation:float calc(7s + var(--i) * 2s) ease-in-out infinite alternate}
- .paused .ticker-track,.paused .citrus:before,.paused .cut img{animation-play-state:paused}
  @keyframes stick{
   0%{opacity:0;scale:.3;rotate:calc(var(--tilt) - 40deg)}
  }
@@ -272,7 +277,9 @@ footer{background:var(--plum);color:var(--cream);padding-top:clamp(56px,8vw,96px
 @media (prefers-reduced-motion:reduce){
  html{scroll-behavior:auto}
  *,:before,:after{transition-duration:.01ms!important}
- #motion-toggle{display:none}
+ .ticker-track{animation-direction:alternate;animation-duration:18s;animation-name:breathe}
+ .cut img,.citrus:before{animation-name:breathe;animation-direction:alternate}
+ @keyframes breathe{from{opacity:.93}to{opacity:1}}
 }
 @media print{
  *,:before,:after{transition:none!important;animation:none!important}

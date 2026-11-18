@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function () {
+(() => {
  const root = document.documentElement;
  const open = el => {
   if (!el.matches(':popover-open')) el.showPopover();
@@ -11,18 +11,6 @@ document.addEventListener('DOMContentLoaded', function () {
   new ResizeObserver(() => root.style.setProperty('--bar-h', `${bar.offsetHeight}px`)).observe(bar);
  }
  const motionBtn = document.getElementById('motion-toggle');
- let pausedByUser = false;
- function updateMotion() {
-  const paused = pausedByUser || motionBtn.disabled;
-  root.classList.toggle('paused', paused);
-  motionBtn.textContent = paused ? 'Play motion' : 'Pause motion';
- }
- motionBtn.addEventListener('click', () => {
-  pausedByUser = !pausedByUser;
-  updateMotion();
- });
- root.classList.add('is-ready');
- motionBtn.hidden = false;
  if ('getEntriesByType' in performance) {
   const entries = performance.getEntriesByType('resource');
   const timing = file =>
@@ -60,13 +48,19 @@ document.addEventListener('DOMContentLoaded', function () {
  probe.hidden = false;
  probeBtn.parentElement.hidden = false;
  probeBtn.hidden = false;
- const swatch = document.createElement('canvas').getContext('2d', { willReadFrequently: true });
+ let swatch;
  let inspecting = false;
  let inspected = null;
  let frame = 0;
  const linear = c => (c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4);
  const luminance = ([r, g, b]) => 0.2126 * linear(r) + 0.7152 * linear(g) + 0.0722 * linear(b);
  function paint(color) {
+  if (!swatch) {
+   const pixel = document.createElement('canvas');
+   pixel.width = 1;
+   pixel.height = 1;
+   swatch = pixel.getContext('2d', { willReadFrequently: true });
+  }
   swatch.clearRect(0, 0, 1, 1);
   swatch.fillStyle = color;
   swatch.fillRect(0, 0, 1, 1);
@@ -129,21 +123,25 @@ document.addEventListener('DOMContentLoaded', function () {
   halo.style.height = `${rect.height}px`;
   halo.hidden = false;
  }
- const track = () => {
-  if (inspected) place(inspected.getBoundingClientRect());
- };
- function refresh() {
-  if (!inspected || frame) return;
+ let needsDescription = false;
+ function track() {
+  if (!inspected) return;
+  if (frame) return;
   frame = requestAnimationFrame(() => {
    frame = 0;
-   if (inspected) describe(inspected);
+   if (needsDescription) describe(inspected);
+   else place(inspected.getBoundingClientRect());
+   needsDescription = false;
   });
+ }
+ function refresh() {
+  needsDescription = true;
+  track();
  }
  function describe(el) {
   const style = getComputedStyle(el);
   const rect = el.getBoundingClientRect();
   const matched = authoredRules(el);
-  inspected = el;
   place(rect);
   probeTarget.textContent = el.tagName.toLowerCase() + [...el.classList].map(name => '.' + name).join('');
   probeBox.textContent = [
@@ -168,12 +166,13 @@ document.addEventListener('DOMContentLoaded', function () {
  function look(event) {
   const el = event.target;
   if (!(el instanceof Element) || probe.contains(el)) return;
-  describe(el);
+  if (el === inspected) return;
+  inspected = el;
+  refresh();
  }
  function setInspecting(on) {
   inspecting = on;
   motionBtn.disabled = on;
-  updateMotion();
   probeBtn.setAttribute('aria-pressed', String(on));
   const bind = on ? 'addEventListener' : 'removeEventListener';
   document[bind]('pointerover', look);
@@ -207,4 +206,4 @@ document.addEventListener('DOMContentLoaded', function () {
   setInspecting(false);
   if (returnFocus) probeBtn.focus();
  });
-});
+})();

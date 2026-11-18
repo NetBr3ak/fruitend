@@ -25,6 +25,7 @@ content="Fruitend is a static demo landing page in fruit colors. Its citrus slic
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preload" href="fonts/bricolage-grotesque.woff2" as="font" crossorigin type="font/woff2">
 <link rel="stylesheet" href="styles.css">
+<script src="script.js" defer></script>
 </head>
 <body id="top">
 <a class="skip-link" href="#main">Skip to content</a>
@@ -98,7 +99,10 @@ sizes="(max-width: 1000px) min(21vw, 151px), min(12vw, 187px)" src="images/cut-p
 srcset="images/cut-pint-240.webp 240w, images/cut-pint-480.webp 480w" width="480">
 </picture>
 </div>
-<button class="motion-ctl" hidden id="motion-toggle" type="button">Pause motion</button>
+<label class="motion-ctl">
+<input id="motion-toggle" type="checkbox" autocomplete="off" aria-label="Pause motion">
+<span class="pause-label">Pause motion</span><span class="play-label">Play motion</span>
+</label>
 </div>
 </div>
 </section>
@@ -239,6 +243,5 @@ width="120">
 <p class="probe-label" hidden>Matching CSS rules</p>
 <pre class="probe-rules"></pre>
 </aside>
-<script src="script.js"></script>
 </body>
 </html>

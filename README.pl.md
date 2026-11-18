@@ -23,14 +23,8 @@ Strona na żywo: https://netbr3ak.github.io/fruitend/
   przeglądarkę przy tej wizycie, z paskiem rozmiaru każdego pliku względem największego.
 - **Inspect styles** pokazuje rozmiar, padding, kontrast tekstu i pasujące reguły CSS elementu pod
   kursorem albo z fokusem. Potrzebuje Popover API; bez niego przycisk zostaje ukryty.
-- Pod plastrem jest przycisk **Pause motion**. Zatrzymuje trzy zapętlone ruchy: pasek z
-  tekstem, plaster i owoce. **Inspect styles** na pasku też je zatrzymuje, dopóki jest
-  włączony. Jeśli system prosi o ograniczenie ruchu, nic na stronie się nie rusza, a przycisk
-  jest ukryty.
-- Każdy link działa bez JavaScriptu. "Fruits", "Files" i "See the fruits" przewijają do
-  swojej sekcji; "Source", "View source" i "Make it your own" otwierają to repozytorium. Bez
-  JavaScriptu animacja wejścia i efekty przewijania nadal działają, ale nic się nie zapętla:
-  pasek, plaster i owoce stoją, a przyciski, które potrzebują skryptu, zostają ukryte.
+- Animacje uruchamia CSS, również bez JavaScriptu. Pole **Pause motion** pod plastrem zatrzymuje ruch. Przy systemowym ograniczeniu ruchu plaster, pasek i owoce delikatnie zmieniają krycie zamiast obracać się i przesuwać. Pauzę można przełączyć kliknięciem lub spacją.
+- **Inspect styles** zatrzymuje ruch na czas odczytu. Po zamknięciu wraca poprzedni stan. Inspektor i pomiar plików wymagają JavaScriptu, ale odnośniki i pauza działają również bez niego.
 
 Nie ma frameworka, budowania ani zapytań do innego serwera. Fonty leżą obok strony.
 
@@ -65,7 +59,7 @@ fruitend/
 ├── images/             # Cztery zdjęcia owoców, cztery wycięte owoce, cztery rysunki naklejek (SVG) i obraz podglądu powyżej
 ├── index.html          # Strona
 ├── styles.css          # Wszystkie style, razem z paletą
-├── script.js           # Przycisk Pause motion, rozmiary plików, inspektor
+├── script.js           # rozmiary plików i inspektor
 ├── check-palette.mjs   # Sprawdzenie kontrastu palety
 ├── favicon.svg
 ├── sitemap.xml
