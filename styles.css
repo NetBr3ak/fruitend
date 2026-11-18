@@ -66,10 +66,11 @@ ul{margin:0;padding:0;list-style:none}
 .ticker-ctls{flex:none;gap:8px;padding-right:calc(3vw + max(4vw,16px));display:flex}
 .ticker-ctl,.motion-ctl{min-height:36px;font:inherit;color:var(--cream);border:2px solid var(--cream);cursor:pointer;background:0 0;border-radius:999px;padding:0 16px;transition:background .2s,color .2s}
 .ticker-ctl[aria-pressed=true]{color:var(--cocoa);background:var(--cream)}
+.motion-ctl:disabled{cursor:default}
 .motion-ctl{margin-top:calc(var(--dial) * .06 + 12px);margin-left:calc(var(--dial) / 2);white-space:nowrap;color:var(--ink);border-color:var(--ink);translate:-50%}
 @media (hover:hover){
  .ticker-ctl:hover{color:var(--cocoa);background:var(--cream)}
- .motion-ctl:hover{color:var(--on-ink);background:var(--ink)}
+ .motion-ctl:enabled:hover{color:var(--on-ink);background:var(--ink)}
 }
 .fruits{background:var(--straw-ground);padding:clamp(56px,9vw,112px) 0}
 .fruits-title{letter-spacing:-.02em;font-variation-settings:"wdth" 85;text-wrap:balance;color:var(--ink);font-size:clamp(2.25rem,6vw,4.5rem);line-height:.95}

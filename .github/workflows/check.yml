@@ -16,3 +16,6 @@ jobs:
         with:
           persist-credentials: false
       - run: node check-palette.mjs
+      - run: npm ci --prefix .github/checks --ignore-scripts
+      - run: .github/checks/node_modules/.bin/playwright install --with-deps --only-shell chromium
+      - run: node .github/checks/controls.cjs

@@ -11,16 +11,15 @@ document.addEventListener('DOMContentLoaded', function () {
   new ResizeObserver(() => root.style.setProperty('--bar-h', `${bar.offsetHeight}px`)).observe(bar);
  }
  const motionBtn = document.getElementById('motion-toggle');
- let paused = false;
- let resumeMotion = false;
- function setPaused(on) {
-  paused = on;
+ let pausedByUser = false;
+ function updateMotion() {
+  const paused = pausedByUser || motionBtn.disabled;
   root.classList.toggle('paused', paused);
   motionBtn.textContent = paused ? 'Play motion' : 'Pause motion';
  }
  motionBtn.addEventListener('click', () => {
-  resumeMotion = false;
-  setPaused(!paused);
+  pausedByUser = !pausedByUser;
+  updateMotion();
  });
  root.classList.add('is-ready');
  motionBtn.hidden = false;
@@ -173,6 +172,8 @@ document.addEventListener('DOMContentLoaded', function () {
  }
  function setInspecting(on) {
   inspecting = on;
+  motionBtn.disabled = on;
+  updateMotion();
   probeBtn.setAttribute('aria-pressed', String(on));
   const bind = on ? 'addEventListener' : 'removeEventListener';
   document[bind]('pointerover', look);
@@ -185,7 +186,6 @@ document.addEventListener('DOMContentLoaded', function () {
    close(probe);
    halo.hidden = true;
    inspected = null;
-   if (resumeMotion) setPaused(false);
    return;
   }
   probeTarget.textContent = 'Point at anything';
@@ -195,8 +195,6 @@ document.addEventListener('DOMContentLoaded', function () {
   probeLabel.hidden = true;
   probeRules.textContent = '';
   open(probe);
-  resumeMotion = !paused;
-  setPaused(true);
  }
  probeBtn.addEventListener('click', () => setInspecting(!inspecting));
  probe.querySelector('.probe-close').addEventListener('click', () => {
@@ -204,6 +202,9 @@ document.addEventListener('DOMContentLoaded', function () {
   probeBtn.focus();
  });
  addEventListener('keydown', event => {
-  if (event.key === 'Escape' && inspecting) setInspecting(false);
+  if (event.key !== 'Escape' || !inspecting) return;
+  const returnFocus = probe.contains(document.activeElement);
+  setInspecting(false);
+  if (returnFocus) probeBtn.focus();
  });
 });
