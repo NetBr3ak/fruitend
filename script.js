@@ -1,5 +1,6 @@
 (() => {
  const root = document.documentElement;
+ const polish = root.lang === 'pl';
  const open = el => {
   if (!el.matches(':popover-open')) el.showPopover();
  };
@@ -83,8 +84,8 @@
  function textContrast(el, style) {
   const ink = paint(style.color);
   const ground = groundOf(el);
-  if (ink[3] < 1 || !ground || style.opacity !== '1') return 'text contrast not calculated for this background';
-  return `text ${contrast(ink, ground).toFixed(2)}:1`;
+  if (ink[3] < 1 || !ground || style.opacity !== '1') return polish ? 'kontrast tekstu na tym tle nie został obliczony' : 'text contrast not calculated for this background';
+  return `${polish ? 'tekst' : 'text'} ${contrast(ink, ground).toFixed(2)}:1`;
  }
  const inContainer = rule => rule.constructor.name === 'CSSContainerRule';
  const live = rule =>
@@ -159,9 +160,11 @@
       .slice(-6)
       .map(rule => ruleText(rule).slice(0, 320))
       .join('\n\n')
-   : 'No authored rules readable. Opened from the disk, the browser treats styles.css ' +
-     'as another origin and cssRules throws, so only the computed values above survive. ' +
-     'Serve the folder over http and this fills in.';
+   : polish
+    ? 'Nie można odczytać reguł. Po otwarciu z dysku przeglądarka blokuje dostęp do styles.css. Uruchom stronę przez HTTP, aby je zobaczyć.'
+    : 'No authored rules readable. Opened from the disk, the browser treats styles.css ' +
+      'as another origin and cssRules throws, so only the computed values above survive. ' +
+      'Serve the folder over http and this fills in.';
  }
  function look(event) {
   const el = event.target;
@@ -187,10 +190,10 @@
    inspected = null;
    return;
   }
-  probeTarget.textContent = 'Point at anything';
+  probeTarget.textContent = polish ? 'Wskaż dowolny element' : 'Point at anything';
   probeBox.textContent = matchMedia('(hover: hover)').matches
-   ? 'Hover or tab to an element and its real box lands here.'
-   : 'Tap an element and its real box lands here.';
+   ? polish ? 'Najedź na element lub wybierz go klawiszem Tab, aby zobaczyć jego wymiary.' : 'Hover or tab to an element and its real box lands here.'
+   : polish ? 'Dotknij elementu, aby zobaczyć jego wymiary.' : 'Tap an element and its real box lands here.';
   probeLabel.hidden = true;
   probeRules.textContent = '';
   open(probe);
