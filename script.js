@@ -43,15 +43,19 @@
  const halo = document.getElementById('probe-halo');
  const probeBtn = document.getElementById('probe-toggle');
  const probeTarget = probe.querySelector('.probe-target');
+ const probeSelect = document.getElementById('probe-select');
  const probeBox = probe.querySelector('.probe-box');
  const probeLabel = probe.querySelector('.probe-label');
  const probeRules = probe.querySelector('.probe-rules');
+ const targetPrompt = probeTarget.textContent;
+ const boxPrompt = probeBox.textContent;
  probe.hidden = false;
  probeBtn.parentElement.hidden = false;
  probeBtn.hidden = false;
  let swatch;
  let inspecting = false;
  let inspected = null;
+ let inspectable = [];
  let frame = 0;
  const linear = c => (c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4);
  const luminance = ([r, g, b]) => 0.2126 * linear(r) + 0.7152 * linear(g) + 0.0722 * linear(b);
@@ -169,17 +173,33 @@
       .slice(-6)
       .map(rule => ruleText(rule).slice(0, 320))
       .join('\n\n')
-   : polish
-    ? 'Nie można odczytać reguł. Po otwarciu z dysku przeglądarka blokuje dostęp do styles.css. Uruchom stronę przez HTTP, aby je zobaczyć.'
-    : 'No authored rules readable. Opened from the disk, the browser treats styles.css ' +
-      'as another origin and cssRules throws, so only the computed values above survive. ' +
-      'Serve the folder over http and this fills in.';
+   : probeRules.dataset.unavailable;
  }
+ function populateElements() {
+  inspectable = [...document.querySelectorAll('*')].filter(el =>
+   !probe.contains(el) && el.getClientRects().length && getComputedStyle(el).visibility !== 'hidden'
+  );
+  probeSelect.replaceChildren(probeSelect.options[0]);
+  inspectable.forEach((el, index) => {
+   const name = el.tagName.toLowerCase() + (el.id ? '#' + el.id : '') + [...el.classList].map(value => '.' + value).join('');
+   const description = (el.getAttribute('alt') || el.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 60);
+   probeSelect.add(new Option(description ? `${name}: ${description}` : name, String(index + 1)));
+  });
+  probeSelect.value = '';
+ }
+ probeSelect.addEventListener('change', () => {
+  const el = inspectable[Number(probeSelect.value) - 1];
+  if (!el) return;
+  inspected = el;
+  refresh();
+ });
  function look(event) {
   const el = event.target;
   if (!(el instanceof Element) || probe.contains(el)) return;
   if (el === inspected) return;
   inspected = el;
+  const index = inspectable.indexOf(el);
+  probeSelect.value = index < 0 ? '' : String(index + 1);
   refresh();
  }
  function setInspecting(on) {
@@ -199,10 +219,9 @@
    inspected = null;
    return;
   }
-  probeTarget.textContent = polish ? 'Wskaż dowolny element' : 'Point at anything';
-  probeBox.textContent = matchMedia('(hover: hover)').matches
-   ? polish ? 'Najedź na element lub wybierz go klawiszem Tab, aby zobaczyć jego wymiary.' : 'Hover or tab to an element and its real box lands here.'
-   : polish ? 'Dotknij elementu, aby zobaczyć jego wymiary.' : 'Tap an element and its real box lands here.';
+  populateElements();
+  probeTarget.textContent = targetPrompt;
+  probeBox.textContent = boxPrompt;
   probeLabel.hidden = true;
   probeRules.textContent = '';
   open(probe);

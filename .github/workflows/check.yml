@@ -21,3 +21,4 @@ jobs:
       - run: node .github/checks/controls.cjs
       - run: node .github/checks/motion-labels.cjs
       - run: node .github/checks/inspector.cjs
+      - run: node .github/checks/inspector-keyboard.cjs

@@ -242,10 +242,12 @@ width="120">
 <div aria-hidden="true" class="probe-halo" hidden id="probe-halo"></div>
 <aside aria-label="Element inspector" class="probe" hidden id="probe" popover="manual">
 <button aria-label="Close inspector" class="probe-close" type="button">&times;</button>
-<p class="probe-target"></p>
-<p class="probe-box"></p>
+<label class="probe-select-label" for="probe-select">Element to inspect</label>
+<select class="probe-select" id="probe-select"><option value="" disabled>Choose an element</option></select>
+<p class="probe-target">Point at or select an element</p>
+<p class="probe-box">Hover, tap, use Tab or choose an element from the list.</p>
 <p class="probe-label" hidden>Matching selectors. Container conditions are not checked.</p>
-<pre class="probe-rules"></pre>
+<pre class="probe-rules" data-unavailable="Matching rules are unavailable. Open the page over HTTP to read styles.css."></pre>
 </aside>
 </body>
 </html>

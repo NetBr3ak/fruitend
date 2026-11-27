@@ -240,10 +240,12 @@ width="120">
 <div aria-hidden="true" class="probe-halo" hidden id="probe-halo"></div>
 <aside aria-label="Inspektor elementów" class="probe" hidden id="probe" popover="manual">
 <button aria-label="Zamknij inspektor" class="probe-close" type="button">&times;</button>
-<p class="probe-target"></p>
-<p class="probe-box"></p>
+<label class="probe-select-label" for="probe-select">Element do sprawdzenia</label>
+<select class="probe-select" id="probe-select"><option value="" disabled>Wybierz element</option></select>
+<p class="probe-target">Wskaż lub wybierz element</p>
+<p class="probe-box">Najedź, dotknij, użyj Tab lub wybierz element z listy.</p>
 <p class="probe-label" hidden>Pasujące selektory. Warunki kontenerów nie są sprawdzane.</p>
-<pre class="probe-rules"></pre>
+<pre class="probe-rules" data-unavailable="Nie można odczytać reguł. Otwórz stronę przez HTTP, aby odczytać styles.css."></pre>
 </aside>
 </body>
 </html>

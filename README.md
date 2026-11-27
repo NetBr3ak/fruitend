@@ -21,7 +21,7 @@ Live page: https://netbr3ak.github.io/fruitend/
 - "Three files" shows the size and load time of each file, as your browser measured them on
   this visit, with a bar for each file's size against the largest one.
 - **Inspect styles** shows the size, padding, text contrast and matching CSS selectors of the
-  element you hover or focus. Container query conditions are shown but not evaluated. Contrast is
+  element you hover, focus or select from the list. Container query conditions are shown but not evaluated. Contrast is
   omitted when the background or transparency makes it uncertain. The inspector needs the Popover
   API; without it the button stays hidden.
 - The loops start in CSS, even without JavaScript. **Pause motion** under the slice stops them. The browser’s reduced-motion setting replaces the spinning slice, moving ticker and floating fruit with a slow change in opacity. The same pause control works with a pointer or the Space key.
