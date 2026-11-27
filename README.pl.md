@@ -21,8 +21,10 @@ Strona na żywo: https://netbr3ak.github.io/fruitend/
   naklejek oraz bloków z owocami.
 - "Three files" pokazuje rozmiar i czas pobrania każdego pliku, zmierzone przez twoją
   przeglądarkę przy tej wizycie, z paskiem rozmiaru każdego pliku względem największego.
-- **Inspect styles** pokazuje rozmiar, padding, kontrast tekstu i pasujące reguły CSS elementu pod
-  kursorem albo z fokusem. Potrzebuje Popover API; bez niego przycisk zostaje ukryty.
+- **Inspect styles** pokazuje rozmiar, padding, kontrast tekstu i pasujące selektory CSS elementu
+  pod kursorem albo z fokusem. Pokazuje warunki kontenerów, ale ich nie sprawdza. Pomija kontrast,
+  gdy tło lub przezroczystość nie pozwalają go pewnie obliczyć. Potrzebuje Popover API; bez niego
+  przycisk zostaje ukryty.
 - Animacje uruchamia CSS, również bez JavaScriptu. Pole **Pause motion** pod plastrem zatrzymuje ruch. Przy systemowym ograniczeniu ruchu plaster, pasek i owoce delikatnie zmieniają krycie zamiast obracać się i przesuwać. Pauzę można przełączyć kliknięciem lub spacją.
 - **Inspect styles** zatrzymuje ruch na czas odczytu. Po zamknięciu wraca poprzedni stan. Inspektor i pomiar plików wymagają JavaScriptu, ale odnośniki i pauza działają również bez niego.
 

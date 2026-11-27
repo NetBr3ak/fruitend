@@ -72,19 +72,28 @@
   return (hi + 0.05) / (lo + 0.05);
  }
  function groundOf(el) {
+  let ground = null;
   for (let node = el; node; node = node.parentElement) {
    const style = getComputedStyle(node);
+   if (style.opacity !== '1') return null;
+   if (ground) continue;
    if (style.backgroundImage !== 'none') return null;
+   for (const pseudo of [':before', ':after']) {
+    const layer = getComputedStyle(node, pseudo);
+    if (layer.content !== 'none' && layer.backgroundImage !== 'none') return null;
+   }
    const color = paint(style.backgroundColor);
-   if (color[3] === 1) return color;
-   if (color[3] > 0) return null;
+   if (color[3] > 0) {
+    if (color[3] < 1) return null;
+    ground = color;
+   }
   }
-  return null;
+  return ground;
  }
  function textContrast(el, style) {
   const ink = paint(style.color);
   const ground = groundOf(el);
-  if (ink[3] < 1 || !ground || style.opacity !== '1') return polish ? 'kontrast tekstu na tym tle nie został obliczony' : 'text contrast not calculated for this background';
+  if (ink[3] < 1 || !ground) return polish ? 'kontrast tekstu na tym tle nie został obliczony' : 'text contrast not calculated for this background';
   return `${polish ? 'tekst' : 'text'} ${contrast(ink, ground).toFixed(2)}:1`;
  }
  const inContainer = rule => rule.constructor.name === 'CSSContainerRule';

@@ -20,3 +20,4 @@ jobs:
       - run: .github/checks/node_modules/.bin/playwright install --with-deps --only-shell chromium
       - run: node .github/checks/controls.cjs
       - run: node .github/checks/motion-labels.cjs
+      - run: node .github/checks/inspector.cjs
